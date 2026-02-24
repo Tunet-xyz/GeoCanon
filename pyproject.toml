@@ -1,0 +1,128 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/geo_canon"]
+
+[project]
+name = "GeoCanon"
+version = "0.1.0"
+description = "Global-ready Django apps from day one. Jurisdictions, dial codes, flags, holidays, timezones, languages & more."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = [
+  "django",
+  "i18n",
+  "l10n",
+  "internationalization",
+  "localization",
+  "jurisdiction",
+  "dial-codes",
+  "flags",
+  "holidays",
+  "timezones",
+  "languages",
+  "global",
+  "locale",
+]
+authors = [
+  { name = "Alex C", email = "alex@coded.uk" },
+]
+classifiers = [
+  "Framework :: Django",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "Framework :: Django :: 5.1",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Internationalization",
+  "Topic :: Software Development :: Localization",
+  "Intended Audience :: Developers",
+]
+dependencies = [
+  "Django>=4.2",
+]
+
+[project.urls]
+Homepage = "https://github.com/Tunet-xyz/geo_canon"
+Documentation = "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md"
+Repository = "https://github.com/Tunet-xyz/geo_canon"
+Issues = "https://github.com/Tunet-xyz/geo_canon/issues"
+Changelog = "https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md"
+
+[project.optional-dependencies]
+holidays = ["holidays>=0.40"]
+timezones = ["pytz>=2023.3"]
+all = [
+  "holidays>=0.40",
+  "pytz>=2023.3",
+]
+dev = [
+  "pytest>=7.0.0",
+  "pytest-cov>=4.0.0",
+  "pytest-django>=4.5.0",
+  "mypy>=1.0.0",
+  "ruff>=0.1.0",
+  "django-stubs>=4.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+plugins = ["mypy_django_plugin.main"]
+ignore_missing_imports = true
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = [
+  "E",   # pycodestyle errors
+  "W",   # pycodestyle warnings
+  "F",   # pyflakes
+  "I",   # isort
+  "B",   # flake8-bugbear
+  "C4",  # flake8-comprehensions
+  "UP",  # pyupgrade
+]
+ignore = [
+  "E501",  # line too long (handled by formatter)
+  "B008",  # do not perform function calls in argument defaults
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["geo_canon"]
+
+[tool.coverage.run]
+source = ["src/geo_canon"]
+branch = true
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "raise NotImplementedError",
+  "if TYPE_CHECKING:",
+]
+fail_under = 80
+show_missing = true
