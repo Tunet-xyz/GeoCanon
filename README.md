@@ -1,1 +1,1 @@
-# geo_canon
+# GeoCanon
