@@ -10,6 +10,7 @@
 - [Duration](duration.md) — i18n-aware duration formatting
 - [Holidays](holidays.md) — Public holiday detection
 - [Currencies](currencies.md) — Jurisdiction currency mapping and formatting
+- [Address Formats](address-formats.md) — Postal address formats, validation, and field labels
 - [Settings](settings.md) — Configuration reference
 
 ## Quick Links

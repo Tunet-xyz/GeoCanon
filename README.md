@@ -1,7 +1,7 @@
 # GeoCanon
 ### Global-Ready Django Apps From Day One
 
-**Jurisdictions. Dial Codes. Flags. Timezones. Holidays. Languages. Currencies. One Package.**
+**Jurisdictions. Dial Codes. Flags. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
 
 ---
 
@@ -35,6 +35,11 @@ from geo_canon import (
     get_currency_code,             # "Romania" → "RON"
     format_currency,               # (1234.5, "Japan") → "¥1,235"
 )
+
+# Address-aware forms
+from geo_canon import validate_postal_code, get_state_label
+validate_postal_code("United Kingdom", "SW1A 1AA")  # True
+get_state_label("Japan")                             # "Prefecture"
 
 # Optional: holiday detection
 from geo_canon.holidays import is_public_holiday
@@ -143,6 +148,7 @@ MIDDLEWARE = [
 | **Duration** | Production | i18n-aware human-readable duration formatting |
 | **Holidays** | Production | Public holiday detection for 140+ countries |
 | **Currencies** | Production | ISO 4217 currency mapping, symbols, and formatting |
+| **Address Formats** | Production | Postal address formats, postal-code validation, and field labels |
 | **Settings** | Production | Pydantic-validated configuration |
 
 ---
@@ -155,6 +161,7 @@ MIDDLEWARE = [
 - **200+ timezones** — uses `zoneinfo` (3.9+) with `pytz` fallback
 - **Holiday detection** — powered by the battle-tested `holidays` library
 - **170+ currency mappings** — ISO 4217 codes, symbols, and locale-aware formatting
+- **170+ address formats** — postal-code validation, localised field labels, and `format_address()`
 - **75+ languages** — ISO 639-1 choices with jurisdiction → language mapping
 - **Duration formatting** — respects Django's active translation
 - **Jurisdiction middleware** — automatic `request.jurisdiction` on every request

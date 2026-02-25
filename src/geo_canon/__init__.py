@@ -2,7 +2,7 @@
 GeoCanon — Global-ready Django apps from day one.
 
 Jurisdictions, dial codes, flags, holidays, timezones, languages,
-currencies & more.
+currencies, address formats & more.
 
 Quick start::
 
@@ -19,7 +19,7 @@ Quick start::
 
 from __future__ import annotations
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 # ---------------------------------------------------------------------------
 # Jurisdictions
@@ -94,6 +94,21 @@ from .currencies import (
 )
 
 # ---------------------------------------------------------------------------
+# Address formats
+# ---------------------------------------------------------------------------
+from .address_formats import (
+    JURISDICTION_ADDRESS_FORMAT,
+    AddressFormat,
+    format_address,
+    get_address_format,
+    get_postal_code_label,
+    get_postal_code_regex,
+    get_state_label,
+    is_state_required,
+    validate_postal_code,
+)
+
+# ---------------------------------------------------------------------------
 # Settings
 # ---------------------------------------------------------------------------
 from .settings import GeoCanonSettings, get_geocanon_settings
@@ -162,6 +177,16 @@ __all__ = [
     "get_currency_choices",
     "get_currency_by_code",
     "format_currency",
+    # Address formats
+    "JURISDICTION_ADDRESS_FORMAT",
+    "AddressFormat",
+    "get_address_format",
+    "get_postal_code_regex",
+    "validate_postal_code",
+    "get_state_label",
+    "get_postal_code_label",
+    "format_address",
+    "is_state_required",
     # Settings
     "GeoCanonSettings",
     "get_geocanon_settings",
