@@ -1,7 +1,7 @@
 # GeoCanon
 ### Global-Ready Django Apps From Day One
 
-**Jurisdictions. Dial Codes. Flags. Timezones. Holidays. Languages. One Package.**
+**Jurisdictions. Dial Codes. Flags. Timezones. Holidays. Languages. Currencies. One Package.**
 
 ---
 
@@ -32,6 +32,8 @@ from geo_canon import (
     get_current_local_time,        # "Romania" → aware datetime in Europe/Bucharest
     get_language_for_jurisdiction,  # "Romania" → "ro"
     format_duration,               # 3661 → "1 hour, 1 minute, 1 second"
+    get_currency_code,             # "Romania" → "RON"
+    format_currency,               # (1234.5, "Japan") → "¥1,235"
 )
 
 # Optional: holiday detection
@@ -99,6 +101,13 @@ from geo_canon import format_duration
 format_duration(7200)  # "2 hours"
 ```
 
+# Currency formatting
+from geo_canon import format_currency, get_currency_code
+get_currency_code("Romania")                # "RON"
+format_currency(1234.50, "United Kingdom")  # "£1,234.50"
+format_currency(1234.5, "Japan")            # "¥1,235"
+```
+
 ### 4. Django Forms
 
 ```python
@@ -133,6 +142,7 @@ MIDDLEWARE = [
 | **Languages** | Production | Language choices + jurisdiction → default language |
 | **Duration** | Production | i18n-aware human-readable duration formatting |
 | **Holidays** | Production | Public holiday detection for 140+ countries |
+| **Currencies** | Production | ISO 4217 currency mapping, symbols, and formatting |
 | **Settings** | Production | Pydantic-validated configuration |
 
 ---
@@ -144,6 +154,7 @@ MIDDLEWARE = [
 - **Flag icons** — CSS class mapping compatible with [flag-icons](https://flagicons.lipis.dev/)
 - **200+ timezones** — uses `zoneinfo` (3.9+) with `pytz` fallback
 - **Holiday detection** — powered by the battle-tested `holidays` library
+- **170+ currency mappings** — ISO 4217 codes, symbols, and locale-aware formatting
 - **75+ languages** — ISO 639-1 choices with jurisdiction → language mapping
 - **Duration formatting** — respects Django's active translation
 - **Jurisdiction middleware** — automatic `request.jurisdiction` on every request

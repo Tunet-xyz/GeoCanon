@@ -1,7 +1,8 @@
 """
 GeoCanon — Global-ready Django apps from day one.
 
-Jurisdictions, dial codes, flags, holidays, timezones, languages & more.
+Jurisdictions, dial codes, flags, holidays, timezones, languages,
+currencies & more.
 
 Quick start::
 
@@ -11,13 +12,14 @@ Quick start::
         get_flag_css_class,
         get_current_local_time,
         get_language_for_jurisdiction,
+        get_currency_for_jurisdiction,
         format_duration,
     )
 """
 
 from __future__ import annotations
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 # ---------------------------------------------------------------------------
 # Jurisdictions
@@ -73,6 +75,22 @@ from .languages import (
     LANGUAGE_CHOICES,
     get_language_choices,
     get_language_for_jurisdiction,
+)
+
+# ---------------------------------------------------------------------------
+# Currencies
+# ---------------------------------------------------------------------------
+from .currencies import (
+    CURRENCY_BY_CODE,
+    CURRENCY_CHOICES,
+    JURISDICTION_CURRENCY,
+    CurrencyInfo,
+    format_currency,
+    get_currency_by_code,
+    get_currency_choices,
+    get_currency_code,
+    get_currency_for_jurisdiction,
+    get_currency_symbol,
 )
 
 # ---------------------------------------------------------------------------
@@ -133,6 +151,17 @@ __all__ = [
     "JURISDICTION_LANGUAGE",
     "get_language_choices",
     "get_language_for_jurisdiction",
+    # Currencies
+    "JURISDICTION_CURRENCY",
+    "CURRENCY_CHOICES",
+    "CURRENCY_BY_CODE",
+    "CurrencyInfo",
+    "get_currency_for_jurisdiction",
+    "get_currency_code",
+    "get_currency_symbol",
+    "get_currency_choices",
+    "get_currency_by_code",
+    "format_currency",
     # Settings
     "GeoCanonSettings",
     "get_geocanon_settings",

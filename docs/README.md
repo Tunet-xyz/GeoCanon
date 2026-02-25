@@ -9,6 +9,7 @@
 - [Languages](languages.md) — Language choices and jurisdiction mapping
 - [Duration](duration.md) — i18n-aware duration formatting
 - [Holidays](holidays.md) — Public holiday detection
+- [Currencies](currencies.md) — Jurisdiction currency mapping and formatting
 - [Settings](settings.md) — Configuration reference
 
 ## Quick Links
