@@ -5,7 +5,7 @@ import geo_canon
 
 class TestTopLevelImport:
     def test_version(self):
-        assert geo_canon.__version__ == "0.3.0"
+        assert geo_canon.__version__ == "0.4.0"
 
     def test_jurisdictions_importable(self):
         assert hasattr(geo_canon, "JURISDICTIONS")

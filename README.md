@@ -1,7 +1,7 @@
 # GeoCanon
 ### Global-Ready Django Apps From Day One
 
-**Jurisdictions. Dial Codes. Flags. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
+**Jurisdictions. Dial Codes. Flags. ISO Codes. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
 
 ---
 
@@ -40,6 +40,11 @@ from geo_canon import (
 from geo_canon import validate_postal_code, get_state_label
 validate_postal_code("United Kingdom", "SW1A 1AA")  # True
 get_state_label("Japan")                             # "Prefecture"
+
+# ISO country codes
+from geo_canon import get_alpha2, get_alpha3
+get_alpha2("Romania")  # "RO"
+get_alpha3("Romania")  # "ROU"
 
 # Optional: holiday detection
 from geo_canon.holidays import is_public_holiday
@@ -143,6 +148,7 @@ MIDDLEWARE = [
 | **Jurisdictions** | Production | 190+ countries with translatable names, forms, middleware |
 | **Dial Codes** | Production | International dial codes + per-country phone validation |
 | **Flags** | Production | Country → ISO-3166 flag CSS class mapping |
+| **ISO Codes** | Production | ISO 3166-1 alpha-2, alpha-3, and numeric codes |
 | **Timezones** | Production | 200+ jurisdiction → IANA timezone mappings |
 | **Languages** | Production | Language choices + jurisdiction → default language |
 | **Duration** | Production | i18n-aware human-readable duration formatting |
@@ -156,6 +162,7 @@ MIDDLEWARE = [
 ## Features
 
 - **190+ jurisdictions** — sorted, translatable, with O(1) lookups
+- **ISO 3166-1 codes** — alpha-2, alpha-3, and numeric with reverse lookups
 - **Phone validation** — per-country regex patterns for national number formats
 - **Flag icons** — CSS class mapping compatible with [flag-icons](https://flagicons.lipis.dev/)
 - **200+ timezones** — uses `zoneinfo` (3.9+) with `pytz` fallback

@@ -5,6 +5,7 @@
 - [Jurisdictions](jurisdictions.md) — Country registry, forms, and middleware
 - [Dial Codes](dial-codes.md) — International dial codes and phone validation
 - [Flags](flags.md) — Country flag CSS class mapping
+- [ISO Country Codes](iso-codes.md) — ISO 3166-1 alpha-2, alpha-3, and numeric codes
 - [Timezones](timezones.md) — Jurisdiction-aware local time
 - [Languages](languages.md) — Language choices and jurisdiction mapping
 - [Duration](duration.md) — i18n-aware duration formatting

@@ -1,8 +1,8 @@
 """
 GeoCanon — Global-ready Django apps from day one.
 
-Jurisdictions, dial codes, flags, holidays, timezones, languages,
-currencies, address formats & more.
+Jurisdictions, dial codes, flags, ISO country codes, holidays, timezones,
+languages, currencies, address formats & more.
 
 Quick start::
 
@@ -19,7 +19,7 @@ Quick start::
 
 from __future__ import annotations
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 # ---------------------------------------------------------------------------
 # Jurisdictions
@@ -50,6 +50,22 @@ from .flags import (
     annotate_flag_class,
     get_country_by_iso,
     get_flag_css_class,
+)
+
+# ---------------------------------------------------------------------------
+# ISO country codes
+# ---------------------------------------------------------------------------
+from .iso_codes import (
+    ISO_ALPHA2_TO_JURISDICTION,
+    ISO_ALPHA3_TO_JURISDICTION,
+    JURISDICTION_ISO,
+    ISOCountryInfo,
+    get_alpha2,
+    get_alpha3,
+    get_iso_codes,
+    get_jurisdiction_by_alpha2,
+    get_jurisdiction_by_alpha3,
+    get_numeric_code,
 )
 
 # ---------------------------------------------------------------------------
@@ -154,6 +170,17 @@ __all__ = [
     "get_flag_css_class",
     "get_country_by_iso",
     "annotate_flag_class",
+    # ISO country codes
+    "JURISDICTION_ISO",
+    "ISO_ALPHA2_TO_JURISDICTION",
+    "ISO_ALPHA3_TO_JURISDICTION",
+    "ISOCountryInfo",
+    "get_iso_codes",
+    "get_alpha2",
+    "get_alpha3",
+    "get_numeric_code",
+    "get_jurisdiction_by_alpha2",
+    "get_jurisdiction_by_alpha3",
     # Timezones
     "TIMEZONE_MAP",
     "get_timezone_name",

@@ -2,6 +2,8 @@
 
 Country → flag CSS class mapping, compatible with [flag-icons](https://flagicons.lipis.dev/).
 
+The `FLAG_CSS_CLASS` dictionary is derived from the [ISO Country Codes](iso-codes.md) module — each entry is `fi-{alpha_2.lower()}`.
+
 ## Functions
 
 ### `get_flag_css_class(country: str, default: str = "fi-un") -> str`
