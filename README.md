@@ -3,6 +3,8 @@
 
 **Jurisdictions. Dial Codes. Flags. ISO Codes. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
 
+Part of the [Tunet](https://github.com/Tunet-xyz) ecosystem — alongside [SwapLayer](https://github.com/Tunet-xyz/swap_layer) and [SessionArmor](https://github.com/Tunet-xyz/session_armor).
+
 ---
 
 ## What is GeoCanon?
@@ -109,7 +111,6 @@ get_language_for_jurisdiction("France")  # "fr"
 # Duration formatting (i18n-aware)
 from geo_canon import format_duration
 format_duration(7200)  # "2 hours"
-```
 
 # Currency formatting
 from geo_canon import format_currency, get_currency_code
@@ -193,7 +194,7 @@ MIDDLEWARE = [
 
 ## License
 
-MIT — Because global-ready Django should be free.
+MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](LICENSE).
 
 ---
 
