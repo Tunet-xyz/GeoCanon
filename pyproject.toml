@@ -28,7 +28,7 @@ keywords = [
   "locale",
 ]
 authors = [
-  { name = "Alex C", email = "alex@coded.uk" },
+  { name = "Tunet Ltd", email = "alex@tunet.xyz" },
 ]
 classifiers = [
   "Framework :: Django",
