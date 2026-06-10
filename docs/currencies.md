@@ -105,6 +105,24 @@ Most currencies use **2** decimal places, but there are important exceptions:
 
 The `format_currency` function automatically handles this.
 
+## Locale-Aware Formatting
+
+Install `geocanon[locale]` to format currencies with Babel/CLDR conventions:
+
+```bash
+pip install geocanon[locale]
+```
+
+```python
+from geo_canon import format_currency_locale
+
+format_currency_locale(1234.5, "United States")
+# "$1,234.50"
+```
+
+See [Locale Formatting](locale-formats.md) for number, date, time, percent,
+and list formatting helpers.
+
 ## Notes
 
 - All currency names use `gettext_lazy` for i18n support

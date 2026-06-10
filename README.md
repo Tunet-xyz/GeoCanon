@@ -51,6 +51,15 @@ get_alpha3("Romania")  # "ROU"
 # Optional: holiday detection
 from geo_canon.holidays import is_public_holiday
 is_public_holiday("Romania", date(2025, 12, 25))  # True
+
+# Optional: richer phone formatting with geocanon[phones]
+from geo_canon import format_phone_number, validate_phone_number
+validate_phone_number("6502530000", "United States")  # True
+format_phone_number("6502530000", "United States")    # "+16502530000"
+
+# Optional: locale-aware formatting with geocanon[locale]
+from geo_canon import format_currency_locale
+format_currency_locale(1234.5, "United States")       # "$1,234.50"
 ```
 
 ---
@@ -66,6 +75,8 @@ pip install geocanon
 # With optional extras
 pip install geocanon[holidays]     # Public holiday detection
 pip install geocanon[timezones]    # pytz fallback for Python <3.9
+pip install geocanon[phones]       # phonenumbers parsing/formatting
+pip install geocanon[locale]       # Babel locale-aware formatting
 pip install geocanon[all]          # Everything
 ```
 
@@ -74,6 +85,8 @@ pip install geocanon[all]          # Everything
 |-------|-------------|
 | `holidays` | Public holiday detection (140+ countries) |
 | `timezones` | `pytz` fallback for legacy Python |
+| `phones` | Robust phone parsing, validation, formatting, and number type detection |
+| `locale` | Babel-backed number, currency, date, time, datetime, percent, and list formatting |
 | `all` | Everything above |
 
 ### 2. Configure (optional)
@@ -156,6 +169,7 @@ MIDDLEWARE = [
 | **Holidays** | Production | Public holiday detection for 140+ countries |
 | **Currencies** | Production | ISO 4217 currency mapping, symbols, and formatting |
 | **Address Formats** | Production | Postal address formats, postal-code validation, and field labels |
+| **Locale Formatting** | Production | Optional Babel-backed number, currency, date, time, and list formatting |
 | **Settings** | Production | Pydantic-validated configuration |
 
 ---

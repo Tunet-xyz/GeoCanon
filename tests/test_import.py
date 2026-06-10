@@ -15,6 +15,8 @@ class TestTopLevelImport:
         assert hasattr(geo_canon, "DIAL_CODE_CHOICES")
         assert hasattr(geo_canon, "get_dial_code")
         assert hasattr(geo_canon, "validate_phone")
+        assert hasattr(geo_canon, "validate_phone_number")
+        assert hasattr(geo_canon, "format_phone_number")
 
     def test_flags_importable(self):
         assert hasattr(geo_canon, "FLAG_CSS_CLASS")
@@ -34,6 +36,11 @@ class TestTopLevelImport:
     def test_settings_importable(self):
         assert hasattr(geo_canon, "GeoCanonSettings")
         assert hasattr(geo_canon, "get_geocanon_settings")
+
+    def test_locale_formats_importable(self):
+        assert hasattr(geo_canon, "get_locale_for_jurisdiction")
+        assert hasattr(geo_canon, "format_currency_locale")
+        assert hasattr(geo_canon, "format_date_locale")
 
     def test_exceptions_importable(self):
         assert hasattr(geo_canon, "GeoCanonError")

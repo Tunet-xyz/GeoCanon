@@ -14,6 +14,8 @@
 - [Address Formats](address-formats.md) — Postal address formats, validation, and field labels
 - [Settings](settings.md) — Configuration reference
 
+- [Locale Formatting](locale-formats.md) - Optional Babel-backed number, currency, date, time, and list formatting
+
 ## Quick Links
 
 - [PyPI](https://pypi.org/project/GeoCanon/)

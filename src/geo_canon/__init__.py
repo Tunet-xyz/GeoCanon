@@ -37,9 +37,13 @@ from .jurisdictions import (
 from .dial_codes import (
     COUNTRY_DIAL_CODE,
     DIAL_CODE_CHOICES,
+    format_phone_number,
     get_dial_code,
     get_dial_code_choices,
+    get_phone_number_type,
+    is_phone_extra_available,
     validate_phone,
+    validate_phone_number,
 )
 
 # ---------------------------------------------------------------------------
@@ -110,6 +114,21 @@ from .currencies import (
 )
 
 # ---------------------------------------------------------------------------
+# Locale formatting
+# ---------------------------------------------------------------------------
+from .locale_formats import (
+    format_currency_locale,
+    format_date_locale,
+    format_datetime_locale,
+    format_decimal_locale,
+    format_list_locale,
+    format_percent_locale,
+    format_time_locale,
+    get_locale_for_jurisdiction,
+    is_locale_extra_available,
+)
+
+# ---------------------------------------------------------------------------
 # Address formats
 # ---------------------------------------------------------------------------
 from .address_formats import (
@@ -165,6 +184,10 @@ __all__ = [
     "get_dial_code_choices",
     "get_dial_code",
     "validate_phone",
+    "is_phone_extra_available",
+    "validate_phone_number",
+    "format_phone_number",
+    "get_phone_number_type",
     # Flags
     "FLAG_CSS_CLASS",
     "get_flag_css_class",
@@ -204,6 +227,16 @@ __all__ = [
     "get_currency_choices",
     "get_currency_by_code",
     "format_currency",
+    # Locale formatting
+    "is_locale_extra_available",
+    "get_locale_for_jurisdiction",
+    "format_decimal_locale",
+    "format_percent_locale",
+    "format_currency_locale",
+    "format_date_locale",
+    "format_time_locale",
+    "format_datetime_locale",
+    "format_list_locale",
     # Address formats
     "JURISDICTION_ADDRESS_FORMAT",
     "AddressFormat",

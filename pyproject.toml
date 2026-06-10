@@ -60,9 +60,13 @@ Changelog = "https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md"
 [project.optional-dependencies]
 holidays = ["holidays>=0.40"]
 timezones = ["pytz>=2023.3"]
+phones = ["phonenumbers>=8.13"]
+locale = ["Babel>=2.14"]
 all = [
   "holidays>=0.40",
   "pytz>=2023.3",
+  "phonenumbers>=8.13",
+  "Babel>=2.14",
 ]
 dev = [
   "pytest>=7.0.0",

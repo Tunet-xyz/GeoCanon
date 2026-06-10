@@ -1,12 +1,15 @@
 """Tests for geo_canon.dial_codes"""
 
 from geo_canon.dial_codes import (
-    COUNTRY_DIAL_CODE,
     DIAL_CODE_CHOICES,
     PHONE_PATTERNS,
+    format_phone_number,
     get_dial_code,
     get_dial_code_choices,
+    get_phone_number_type,
+    is_phone_extra_available,
     validate_phone,
+    validate_phone_number,
 )
 
 
@@ -56,3 +59,38 @@ class TestPhoneValidation:
 
         for code, pattern in PHONE_PATTERNS.items():
             assert isinstance(pattern, re.Pattern), f"Pattern for {code} is not compiled"
+
+
+class TestPhoneNumbersExtra:
+    def test_phone_extra_available_returns_bool(self):
+        assert isinstance(is_phone_extra_available(), bool)
+
+    def test_fallback_validation_without_phonenumbers(self, monkeypatch):
+        import geo_canon.dial_codes as dial_codes
+
+        monkeypatch.setattr(dial_codes, "_phonenumbers", None)
+        assert validate_phone_number("07123456789", "United Kingdom") is True
+        assert validate_phone_number("123", "United Kingdom") is False
+
+    def test_formatting_returns_none_without_phonenumbers(self, monkeypatch):
+        import geo_canon.dial_codes as dial_codes
+
+        monkeypatch.setattr(dial_codes, "_phonenumbers", None)
+        assert format_phone_number("07123456789", "United Kingdom") is None
+        assert get_phone_number_type("07123456789", "United Kingdom") is None
+
+    def test_phonenumbers_formatting_when_installed(self):
+        import pytest
+
+        pytest.importorskip("phonenumbers")
+
+        assert validate_phone_number("6502530000", "United States") is True
+        assert format_phone_number("6502530000", "United States") == "+16502530000"
+        assert (
+            format_phone_number("6502530000", "United States", phone_format="INTERNATIONAL")
+            == "+1 650-253-0000"
+        )
+        assert get_phone_number_type("6502530000", "United States") in {
+            "fixed_line",
+            "fixed_line_or_mobile",
+        }

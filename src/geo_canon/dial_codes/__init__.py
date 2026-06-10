@@ -8,9 +8,13 @@ mapping, and per-country phone-number validation patterns.
 from __future__ import annotations
 
 import re
-from typing import Pattern
 
 from django.utils.translation import gettext_lazy as _
+
+try:
+    import phonenumbers as _phonenumbers
+except ImportError:  # pragma: no cover - exercised indirectly by fallback tests
+    _phonenumbers = None
 
 # ---------------------------------------------------------------------------
 # Dial-code choices for Django ChoiceField / Select widgets
@@ -590,3 +594,147 @@ def validate_phone(phone: str, dial_code: str) -> bool:
     if pattern is None:
         return False
     return bool(pattern.match(phone))
+
+
+def is_phone_extra_available() -> bool:
+    """Return whether the optional ``phonenumbers`` dependency is installed."""
+    return _phonenumbers is not None
+
+
+def _get_region_code(jurisdiction: str | None = None, region: str | None = None) -> str | None:
+    if region:
+        return region.upper()
+    if not jurisdiction:
+        return None
+
+    from geo_canon.iso_codes import get_alpha2
+
+    return get_alpha2(jurisdiction)
+
+
+def _parse_phone_number(
+    phone: str,
+    jurisdiction: str | None = None,
+    region: str | None = None,
+):
+    if _phonenumbers is None:
+        return None
+
+    region_code = _get_region_code(jurisdiction, region)
+    try:
+        return _phonenumbers.parse(phone, region_code)
+    except _phonenumbers.NumberParseException:
+        return None
+
+
+def _national_digits_for_fallback(phone: str, dial_code: str) -> str:
+    digits = re.sub(r"\D", "", phone)
+    calling_code = dial_code.lstrip("+")
+
+    if phone.strip().startswith("+") and digits.startswith(calling_code):
+        digits = digits[len(calling_code):]
+
+    if digits.startswith("0"):
+        digits = digits[1:]
+
+    return digits
+
+
+def validate_phone_number(
+    phone: str,
+    jurisdiction: str | None = None,
+    *,
+    region: str | None = None,
+) -> bool:
+    """
+    Validate a phone number using ``phonenumbers`` when installed.
+
+    ``jurisdiction`` is converted to its ISO-3166 alpha-2 region code.  When
+    the optional dependency is not installed, this falls back to GeoCanon's
+    lightweight dial-code regex validation for known jurisdictions.
+    """
+    if _phonenumbers is not None:
+        parsed = _parse_phone_number(phone, jurisdiction, region)
+        return bool(parsed and _phonenumbers.is_valid_number(parsed))
+
+    dial_code = None
+    if jurisdiction is not None:
+        dial_code = get_dial_code(jurisdiction)
+    elif region is not None:
+        from geo_canon.iso_codes import get_jurisdiction_by_alpha2
+
+        region_jurisdiction = get_jurisdiction_by_alpha2(region)
+        if region_jurisdiction is not None:
+            dial_code = get_dial_code(region_jurisdiction)
+
+    if dial_code is None:
+        return False
+
+    return validate_phone(_national_digits_for_fallback(phone, dial_code), dial_code)
+
+
+def format_phone_number(
+    phone: str,
+    jurisdiction: str | None = None,
+    *,
+    region: str | None = None,
+    phone_format: str = "E164",
+) -> str | None:
+    """
+    Format a phone number with ``phonenumbers``.
+
+    Supported formats are ``E164``, ``INTERNATIONAL``, ``NATIONAL``, and
+    ``RFC3966``.  Returns ``None`` when the optional dependency is not
+    installed or the number cannot be parsed.
+    """
+    if _phonenumbers is None:
+        return None
+
+    parsed = _parse_phone_number(phone, jurisdiction, region)
+    if parsed is None or not _phonenumbers.is_possible_number(parsed):
+        return None
+
+    normalized_format = phone_format.upper().replace("-", "_")
+    format_value = getattr(_phonenumbers.PhoneNumberFormat, normalized_format, None)
+    if format_value is None:
+        return None
+
+    return _phonenumbers.format_number(parsed, format_value)
+
+
+def get_phone_number_type(
+    phone: str,
+    jurisdiction: str | None = None,
+    *,
+    region: str | None = None,
+) -> str | None:
+    """
+    Return the phone-number type reported by ``phonenumbers``.
+
+    Examples include ``"mobile"``, ``"fixed_line"``, and
+    ``"fixed_line_or_mobile"``.  Returns ``None`` when the optional dependency
+    is not installed or the number cannot be parsed.
+    """
+    if _phonenumbers is None:
+        return None
+
+    parsed = _parse_phone_number(phone, jurisdiction, region)
+    if parsed is None or not _phonenumbers.is_possible_number(parsed):
+        return None
+
+    phone_type = _phonenumbers.number_type(parsed)
+    type_names = {
+        _phonenumbers.PhoneNumberType.FIXED_LINE: "fixed_line",
+        _phonenumbers.PhoneNumberType.MOBILE: "mobile",
+        _phonenumbers.PhoneNumberType.FIXED_LINE_OR_MOBILE: "fixed_line_or_mobile",
+        _phonenumbers.PhoneNumberType.TOLL_FREE: "toll_free",
+        _phonenumbers.PhoneNumberType.PREMIUM_RATE: "premium_rate",
+        _phonenumbers.PhoneNumberType.SHARED_COST: "shared_cost",
+        _phonenumbers.PhoneNumberType.VOIP: "voip",
+        _phonenumbers.PhoneNumberType.PERSONAL_NUMBER: "personal_number",
+        _phonenumbers.PhoneNumberType.PAGER: "pager",
+        _phonenumbers.PhoneNumberType.UAN: "uan",
+        _phonenumbers.PhoneNumberType.VOICEMAIL: "voicemail",
+        _phonenumbers.PhoneNumberType.UNKNOWN: "unknown",
+    }
+    return type_names.get(phone_type, "unknown")
