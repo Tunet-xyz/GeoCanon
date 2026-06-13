@@ -1,0 +1,126 @@
+{
+  "schemaVersion": "tunet.opensource-agent-mcp.v1",
+  "offering": {
+    "id": "geo_canon",
+    "name": "GeoCanon",
+    "packageName": "GeoCanon",
+    "status": "production",
+    "license": "MIT",
+    "purpose": "Global-ready Django locale and jurisdiction toolkit for countries, dial codes, flags, ISO codes, timezones, holidays, languages, currencies, address formats, and locale formatting.",
+    "audiences": ["django-developer", "internationalization-engineer", "customer-agent", "integration-agent", "maintainer-agent"]
+  },
+  "server": {
+    "name": "geo-canon-public-contract-mcp",
+    "title": "GeoCanon Public Agent Contract",
+    "version": "0.1.0",
+    "transport": "stdio",
+    "required": true,
+    "hostedEndpoint": "https://github.com/Tunet-xyz/geo_canon/tree/main/mcp"
+  },
+  "instructions": "Agents should assume they do not have source-code access to a user's app unless explicitly granted. Use public docs, installed package APIs, user-provided examples, and browser-visible references. Treat jurisdiction, address, locale, and holiday behavior as configuration choices that should be verified with the user for regulated or legal workflows.",
+  "publicAccess": {
+    "mcpEndpoint": "public contract in repository mcp/; future hosted endpoint may expose the same resources",
+    "pythonPackage": "pip install GeoCanon",
+    "pythonApi": ["get_jurisdiction_choices()", "get_dial_code(jurisdiction)", "get_currency_code(jurisdiction)", "GeoCanonSettings(...)"],
+    "cli": [],
+    "docsUrl": "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md",
+    "pypiUrl": "https://pypi.org/project/GeoCanon/",
+    "repositoryUrl": "https://github.com/Tunet-xyz/geo_canon",
+    "supportedOperationModes": ["mcp-tools", "python-api", "browser-docs"],
+    "browserAutomation": {
+      "allowed": true,
+      "requiresAuthenticatedUserSession": false,
+      "preferredFor": ["reading documentation", "checking public reference tables", "opening GitHub issues"],
+      "mustNotDependOn": ["private source code", "local repository paths", "non-public customer address data", "legal advice about jurisdictional compliance"]
+    }
+  },
+  "resources": [
+    {
+      "uri": "opensource://geo_canon/overview",
+      "name": "overview",
+      "title": "Offering Overview",
+      "description": "What GeoCanon does and how agents should explain it.",
+      "mimeType": "text/markdown",
+      "content": "# GeoCanon\n\nGeoCanon is a Django toolkit for global-ready applications. It exposes consistent helpers for jurisdictions, dial codes, flag CSS classes, ISO country codes, timezones, holidays, languages, currencies, address formats, duration formatting, locale formatting, settings, forms, and middleware. Agents can help developers choose APIs, generate settings, design forms, verify localization assumptions, and map workflows to documented helpers without needing source-code access."
+    },
+    {
+      "uri": "opensource://geo_canon/public-apis",
+      "name": "public-apis",
+      "title": "Public APIs And Docs",
+      "description": "Package APIs, optional extras, and docs available to agents.",
+      "mimeType": "application/json",
+      "data": {
+        "modules": ["jurisdictions", "dial_codes", "flags", "iso_codes", "timezones", "languages", "duration", "holidays", "currencies", "address_formats", "locale_formats", "settings"],
+        "optionalExtras": ["holidays", "timezones", "phones", "locale", "all"],
+        "commonApis": ["get_jurisdiction_choices()", "get_dial_code(jurisdiction)", "validate_phone(...) or validate_phone_number(...) with phones extra", "get_flag_css_class(jurisdiction)", "get_current_local_time(jurisdiction)", "get_language_for_jurisdiction(jurisdiction)", "format_duration(seconds)", "get_currency_code(jurisdiction)", "format_currency(amount, jurisdiction)", "validate_postal_code(jurisdiction, postal_code)", "get_state_label(jurisdiction)", "GeoCanonSettings(...)"],
+        "docs": ["docs/README.md", "docs/jurisdictions.md", "docs/dial-codes.md", "docs/flags.md", "docs/iso-codes.md", "docs/timezones.md", "docs/languages.md", "docs/duration.md", "docs/holidays.md", "docs/currencies.md", "docs/address-formats.md", "docs/locale-formats.md", "docs/settings.md"],
+        "agentAccess": {
+          "canUse": ["public README/docs", "installed package imports", "user-provided examples", "public reference data exposed by package APIs"],
+          "cannotUse": ["private source code", "customer personal address records", "non-public compliance data", "legal advice about jurisdiction-specific obligations"]
+        }
+      }
+    },
+    {
+      "uri": "opensource://geo_canon/workflows",
+      "name": "workflows",
+      "title": "Agent Workflow Catalog",
+      "description": "Safe workflows an agent can perform or prepare for GeoCanon users.",
+      "mimeType": "application/json",
+      "data": [
+        {"id": "choose_locale_features", "goal": "Choose modules and optional extras needed for a global feature.", "modes": ["mcp-tools", "browser-docs"], "approval": "not required for read-only guidance"},
+        {"id": "generate_settings", "goal": "Generate GeoCanonSettings for defaults, timezone overrides, and language defaults.", "modes": ["mcp-tools", "python-api"], "approval": "user reviews before applying settings"},
+        {"id": "design_jurisdiction_form", "goal": "Prepare Django form and middleware guidance for jurisdiction context.", "modes": ["mcp-tools", "python-api"], "approval": "user reviews UX and default jurisdiction behavior"},
+        {"id": "validate_address_phone_locale", "goal": "Map address, phone, currency, and locale requirements to documented helpers.", "modes": ["mcp-tools", "python-api"], "approval": "required before regulated/legal workflows rely on results"},
+        {"id": "verify_reference_assumptions", "goal": "Confirm country, timezone, holiday, currency, or language assumptions.", "modes": ["mcp-tools", "browser-docs"], "approval": "recommended for customer-facing copy or compliance-sensitive behavior"}
+      ]
+    },
+    {
+      "uri": "opensource://geo_canon/browser-surfaces",
+      "name": "browser-surfaces",
+      "title": "Browser-Visible Surfaces",
+      "description": "Public browser surfaces agents can use without source-code access.",
+      "mimeType": "application/json",
+      "data": {
+        "entrypoints": ["https://github.com/Tunet-xyz/geo_canon", "https://pypi.org/project/GeoCanon/"],
+        "agentAssumptions": ["agent can read public docs and reference tables", "agent cannot inspect a user's app unless user provides a browser or snippet", "agent should ask before treating locale behavior as legal/compliance advice"],
+        "verification": ["confirm optional extras are installed for requested feature", "confirm jurisdiction names/codes with package APIs", "confirm customer-facing defaults with the user"]
+      }
+    },
+    {
+      "uri": "opensource://geo_canon/security-and-audit",
+      "name": "security-and-audit",
+      "title": "Security And Audit Rules",
+      "description": "Safety expectations for agent operation.",
+      "mimeType": "application/json",
+      "data": {
+        "sensitiveData": ["customer addresses", "phone numbers", "locale-derived personal preferences", "jurisdiction-linked personal records"],
+        "humanApprovalRequiredFor": ["customer-facing locale defaults", "regulated address/phone validation flows", "holiday/business-day compliance behavior", "legal or tax interpretation"],
+        "auditHints": ["record selected default jurisdiction", "record optional extras required", "record timezone/currency/language assumptions", "redact personal address and phone examples"]
+      }
+    }
+  ],
+  "tools": [
+    {"name": "describe_offering", "title": "Describe GeoCanon", "description": "Explain GeoCanon modules, APIs, optional extras, and safe agent operating model.", "executionMode": "contract", "inputSchema": {"type": "object", "properties": {}}, "annotations": {"readOnlyHint": true, "destructiveHint": false}},
+    {"name": "list_public_capabilities", "title": "List Public Capabilities", "description": "List package APIs, modules, optional extras, docs, and browser references.", "executionMode": "contract", "inputSchema": {"type": "object", "properties": {"surface": {"type": "string", "enum": ["all", "modules", "python-api", "extras", "browser-docs"]}}}, "annotations": {"readOnlyHint": true, "destructiveHint": false}},
+    {"name": "map_workflow_to_tools", "title": "Map Workflow To APIs", "description": "Map a GeoCanon goal to public package APIs, docs, extras, approval gates, and verification steps.", "executionMode": "contract", "inputSchema": {"type": "object", "properties": {"workflow": {"type": "string"}}, "required": ["workflow"]}, "annotations": {"readOnlyHint": true, "destructiveHint": false}},
+    {"name": "prepare_locale_configuration", "title": "Prepare Locale Configuration", "description": "Generate a GeoCanonSettings and integration plan for jurisdictions, languages, timezones, and overrides.", "executionMode": "contract", "inputSchema": {"type": "object", "properties": {"defaultJurisdiction": {"type": "string"}, "defaultLanguage": {"type": "string"}, "features": {"type": "array", "items": {"type": "string"}}}}, "annotations": {"readOnlyHint": true, "destructiveHint": false}},
+    {"name": "prepare_global_form", "title": "Prepare Global Form", "description": "Draft form/middleware guidance for jurisdiction, address, phone, currency, and locale behavior.", "executionMode": "contract", "inputSchema": {"type": "object", "properties": {"formGoal": {"type": "string"}, "jurisdictions": {"type": "array", "items": {"type": "string"}}}, "required": ["formGoal"]}, "annotations": {"readOnlyHint": true, "destructiveHint": false}},
+    {"name": "operate_browser_docs", "title": "Operate Browser Docs", "description": "Guide a user through public docs, PyPI, GitHub issues, or reference docs in a browser.", "executionMode": "browser-session-optional", "inputSchema": {"type": "object", "properties": {"task": {"type": "string"}, "targetUrl": {"type": "string"}}, "required": ["task"]}, "annotations": {"readOnlyHint": true, "destructiveHint": false, "openWorldHint": true}}
+  ],
+  "prompts": [
+    {"name": "agent_onboarding", "title": "GeoCanon Agent Onboarding", "description": "Orient an agent before helping a developer use GeoCanon.", "arguments": [{"name": "user_goal", "description": "What the user wants to do with GeoCanon.", "required": true}], "template": "You are helping a developer with GeoCanon for: {user_goal}. Use public docs, installed package APIs, and user-provided examples. Do not assume source-code access. Ask for approval before customer-facing locale defaults or compliance-sensitive recommendations."}
+  ],
+  "security": {
+    "tenantScoped": false,
+    "auditRequired": true,
+    "defaultMode": "read-and-generate-first",
+    "approvalRequiredFor": ["customer_facing_defaults", "regulated_validation_flow", "legal_or_tax_interpretation", "personal_data_examples"]
+  },
+  "acceptanceChecklist": [
+    "Agents can discover GeoCanon capabilities without source-code access.",
+    "All workflows map to public docs, package APIs, or user-provided examples.",
+    "Optional extras are documented for features that require them.",
+    "Browser workflows rely on public docs, PyPI, GitHub, or user-provided app sessions.",
+    "No workflow treats jurisdiction data as legal, tax, or regulatory advice without human approval."
+  ]
+}
