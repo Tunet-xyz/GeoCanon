@@ -24,6 +24,7 @@ except ImportError:  # pragma: no cover - exercised by fallback tests
     class UnknownLocaleError(Exception):  # type: ignore[no-redef]
         """Fallback exception used when Babel is not installed."""
 
+
 from geo_canon.currencies import format_currency, get_currency_code
 from geo_canon.iso_codes import get_alpha2
 from geo_canon.languages import get_language_for_jurisdiction
@@ -55,7 +56,9 @@ def get_locale_for_jurisdiction(
     return None
 
 
-def _resolve_locale(jurisdiction: str, locale: str | None, language: str | None = None) -> str | None:
+def _resolve_locale(
+    jurisdiction: str, locale: str | None, language: str | None = None
+) -> str | None:
     return locale or get_locale_for_jurisdiction(jurisdiction, language=language)
 
 
@@ -166,7 +169,9 @@ def format_datetime_locale(
     resolved_locale = _resolve_locale(jurisdiction, locale, language)
     if _babel_dates is not None and resolved_locale is not None:
         try:
-            return _babel_dates.format_datetime(value, format=datetime_format, locale=resolved_locale)
+            return _babel_dates.format_datetime(
+                value, format=datetime_format, locale=resolved_locale
+            )
         except (UnknownLocaleError, ValueError):
             pass
 

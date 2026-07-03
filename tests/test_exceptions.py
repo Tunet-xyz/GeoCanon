@@ -1,7 +1,5 @@
 """Tests for geo_canon.exceptions"""
 
-import pytest
-
 from geo_canon.exceptions import (
     ConfigurationError,
     DialCodeNotFoundError,

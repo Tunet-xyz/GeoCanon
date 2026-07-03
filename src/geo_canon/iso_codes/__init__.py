@@ -13,7 +13,6 @@ from typing import NamedTuple
 
 from django.utils.translation import gettext_lazy as _
 
-
 # ---------------------------------------------------------------------------
 # Data structure
 # ---------------------------------------------------------------------------
@@ -22,10 +21,10 @@ from django.utils.translation import gettext_lazy as _
 class ISOCountryInfo(NamedTuple):
     """ISO 3166-1 codes for a single jurisdiction."""
 
-    alpha_2: str   # Two-letter code  (e.g. "RO")
-    alpha_3: str   # Three-letter code (e.g. "ROU")
-    numeric: str   # Numeric code      (e.g. "642")
-    name: str      # English short name (translatable)
+    alpha_2: str  # Two-letter code  (e.g. "RO")
+    alpha_3: str  # Three-letter code (e.g. "ROU")
+    numeric: str  # Numeric code      (e.g. "642")
+    name: str  # English short name (translatable)
 
 
 # ---------------------------------------------------------------------------
@@ -82,7 +81,9 @@ JURISDICTION_ISO: dict[str, ISOCountryInfo] = {
     "Curacao": ISOCountryInfo("CW", "CUW", "531", _("Curaçao")),
     "Cyprus": ISOCountryInfo("CY", "CYP", "196", _("Cyprus")),
     "Czech Republic": ISOCountryInfo("CZ", "CZE", "203", _("Czech Republic")),
-    "Democratic Republic of Congo": ISOCountryInfo("CD", "COD", "180", _("Democratic Republic of Congo")),
+    "Democratic Republic of Congo": ISOCountryInfo(
+        "CD", "COD", "180", _("Democratic Republic of Congo")
+    ),
     "Denmark": ISOCountryInfo("DK", "DNK", "208", _("Denmark")),
     "Djibouti": ISOCountryInfo("DJ", "DJI", "262", _("Djibouti")),
     "Dominica": ISOCountryInfo("DM", "DMA", "212", _("Dominica")),
@@ -188,7 +189,9 @@ JURISDICTION_ISO: dict[str, ISOCountryInfo] = {
     "Rwanda": ISOCountryInfo("RW", "RWA", "646", _("Rwanda")),
     "Saint Kitts and Nevis": ISOCountryInfo("KN", "KNA", "659", _("Saint Kitts and Nevis")),
     "Saint Lucia": ISOCountryInfo("LC", "LCA", "662", _("Saint Lucia")),
-    "Saint Vincent and the Grenadines": ISOCountryInfo("VC", "VCT", "670", _("Saint Vincent and the Grenadines")),
+    "Saint Vincent and the Grenadines": ISOCountryInfo(
+        "VC", "VCT", "670", _("Saint Vincent and the Grenadines")
+    ),
     "Samoa": ISOCountryInfo("WS", "WSM", "882", _("Samoa")),
     "San Marino": ISOCountryInfo("SM", "SMR", "674", _("San Marino")),
     "Sao Tome and Principe": ISOCountryInfo("ST", "STP", "678", _("Sao Tome and Principe")),

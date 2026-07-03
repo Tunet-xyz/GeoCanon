@@ -10,7 +10,7 @@ Add ``geo_canon.jurisdictions.middleware.JurisdictionMiddleware`` to your
 
 from __future__ import annotations
 
-from typing import Callable
+from collections.abc import Callable
 
 from django.http import HttpRequest, HttpResponse
 

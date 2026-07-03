@@ -1,7 +1,5 @@
 """Tests for geo_canon.iso_codes."""
 
-import pytest
-
 from geo_canon.iso_codes import (
     ISO_ALPHA2_TO_JURISDICTION,
     ISO_ALPHA3_TO_JURISDICTION,
@@ -14,7 +12,6 @@ from geo_canon.iso_codes import (
     get_jurisdiction_by_alpha3,
     get_numeric_code,
 )
-
 
 # ---------------------------------------------------------------------------
 # Registry
@@ -171,8 +168,7 @@ class TestCrossModuleConsistency:
         for name, info in JURISDICTION_ISO.items():
             expected = f"fi-{info.alpha_2.lower()}"
             assert FLAG_CSS_CLASS.get(name) == expected, (
-                f"Flag mismatch for {name}: expected {expected}, "
-                f"got {FLAG_CSS_CLASS.get(name)}"
+                f"Flag mismatch for {name}: expected {expected}, got {FLAG_CSS_CLASS.get(name)}"
             )
 
     def test_get_country_by_iso_consistent(self):
@@ -181,6 +177,4 @@ class TestCrossModuleConsistency:
 
         for code, name in ISO_ALPHA2_TO_JURISDICTION.items():
             flag_name = get_country_by_iso(code.lower())
-            assert flag_name == name, (
-                f"Mismatch for {code}: iso_codes={name}, flags={flag_name}"
-            )
+            assert flag_name == name, f"Mismatch for {code}: iso_codes={name}, flags={flag_name}"

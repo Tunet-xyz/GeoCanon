@@ -2,14 +2,14 @@
 
 import datetime
 
+import pytest
+
+from geo_canon.exceptions import TimezoneNotFoundError
 from geo_canon.timezones import (
     TIMEZONE_MAP,
     get_current_local_time,
     get_timezone_name,
 )
-from geo_canon.exceptions import TimezoneNotFoundError
-
-import pytest
 
 
 class TestTimezones:

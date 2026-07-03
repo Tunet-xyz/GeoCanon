@@ -7,11 +7,11 @@ and Django form choices for currency selection.
 
 from __future__ import annotations
 
-from decimal import Decimal, ROUND_HALF_UP
-from typing import NamedTuple
+from decimal import ROUND_HALF_UP, Decimal
+from typing import Any, NamedTuple
 
+from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
-
 
 # ---------------------------------------------------------------------------
 # Currency data structure
@@ -53,7 +53,9 @@ JURISDICTION_CURRENCY: dict[str, CurrencyInfo] = {
     "Benin": CurrencyInfo("XOF", _("West African CFA Franc"), "CFA", 0),
     "Bhutan": CurrencyInfo("BTN", _("Bhutanese Ngultrum"), "Nu.", 2),
     "Bolivia": CurrencyInfo("BOB", _("Bolivian Boliviano"), "Bs.", 2),
-    "Bosnia and Herzegovina": CurrencyInfo("BAM", _("Bosnia-Herzegovina Convertible Mark"), "KM", 2),
+    "Bosnia and Herzegovina": CurrencyInfo(
+        "BAM", _("Bosnia-Herzegovina Convertible Mark"), "KM", 2
+    ),
     "Botswana": CurrencyInfo("BWP", _("Botswanan Pula"), "P", 2),
     "Brazil": CurrencyInfo("BRL", _("Brazilian Real"), "R$", 2),
     "Brunei": CurrencyInfo("BND", _("Brunei Dollar"), "B$", 2),
@@ -234,13 +236,19 @@ for _info in JURISDICTION_CURRENCY.values():
 
 
 # ---------------------------------------------------------------------------
-# Django form choices sorted by currency name
+# Django form choices sorted by currency name. Keep labels lazy so importing
+# geo_canon does not require Django settings to be configured.
 # ---------------------------------------------------------------------------
 
-CURRENCY_CHOICES: list[tuple[str, str]] = sorted(
-    {(info.code, f"{info.name} ({info.code})") for info in JURISDICTION_CURRENCY.values()},
-    key=lambda c: str(c[1]),
-)
+
+def _lazy_source_text(value: Any) -> str:
+    return value._args[0] if hasattr(value, "_args") and value._args else str(value)
+
+
+CURRENCY_CHOICES: list[tuple[str, Any]] = [
+    (info.code, format_lazy("{} ({})", info.name, info.code))
+    for info in sorted(CURRENCY_BY_CODE.values(), key=lambda item: _lazy_source_text(item.name))
+]
 
 
 # ---------------------------------------------------------------------------

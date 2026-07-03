@@ -30,6 +30,7 @@ def _require_holidays() -> None:
 # Jurisdiction name → holidays country class / instance
 # ---------------------------------------------------------------------------
 
+
 def _build_registry() -> dict[str, Any]:
     """Build the mapping lazily so the library is only imported when needed."""
     if not _HAS_HOLIDAYS:
@@ -249,7 +250,7 @@ def get_holidays_for_year(
         return {}
 
     country_holidays = holiday_factory(years=year)
-    return {k: v for k, v in country_holidays.items()}
+    return dict(country_holidays.items())
 
 
 def get_supported_holiday_jurisdictions() -> list[str]:

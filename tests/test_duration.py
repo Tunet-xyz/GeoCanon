@@ -1,8 +1,8 @@
 """Tests for geo_canon.duration"""
 
-from geo_canon.duration import format_duration
-
 import pytest
+
+from geo_canon.duration import format_duration
 
 
 class TestFormatDuration:

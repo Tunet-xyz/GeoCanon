@@ -1,14 +1,11 @@
 """Tests for geo_canon.holidays (requires holidays extra)."""
 
 import datetime
+import importlib.util
 
 import pytest
 
-try:
-    import holidays as _holidays_lib
-    HAS_HOLIDAYS = True
-except ImportError:
-    HAS_HOLIDAYS = False
+HAS_HOLIDAYS = importlib.util.find_spec("holidays") is not None
 
 pytestmark = pytest.mark.skipif(not HAS_HOLIDAYS, reason="holidays package not installed")
 

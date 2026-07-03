@@ -210,6 +210,13 @@ MIDDLEWARE = [
 ## Public Agent MCP Contract
 
 GeoCanon includes a public agent-operability contract in [`mcp/`](mcp/). It describes how external agents can safely discover package APIs, optional extras, locale/jurisdiction workflows, public docs, and browser-visible surfaces without requiring source-code access or customer personal data.
+
+From a checkout, run the dependency-free contract server with `python mcp/server.py`. After installation, agents can use the packaged stdio command:
+
+```bash
+geocanon-mcp
+```
+
 ## License
 
 MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](LICENSE).

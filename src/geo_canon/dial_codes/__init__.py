@@ -384,179 +384,179 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
 # ---------------------------------------------------------------------------
 
 PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
-    "+93": re.compile(r"^\d{9}$"),           # Afghanistan
-    "+355": re.compile(r"^\d{9}$"),          # Albania
-    "+213": re.compile(r"^\d{9}$"),          # Algeria
-    "+376": re.compile(r"^\d{6}$"),          # Andorra
-    "+244": re.compile(r"^\d{9}$"),          # Angola
-    "+54": re.compile(r"^\d{10}$"),          # Argentina
-    "+374": re.compile(r"^\d{8}$"),          # Armenia
-    "+297": re.compile(r"^\d{7}$"),          # Aruba
-    "+61": re.compile(r"^\d{9}$"),           # Australia
-    "+43": re.compile(r"^\d{10,11}$"),       # Austria
-    "+994": re.compile(r"^\d{9}$"),          # Azerbaijan
-    "+973": re.compile(r"^\d{8}$"),          # Bahrain
-    "+880": re.compile(r"^\d{10}$"),         # Bangladesh
-    "+375": re.compile(r"^\d{9}$"),          # Belarus
-    "+32": re.compile(r"^\d{9}$"),           # Belgium
-    "+229": re.compile(r"^\d{8}$"),          # Benin
-    "+387": re.compile(r"^\d{8}$"),          # Bosnia and Herzegovina
-    "+267": re.compile(r"^\d{7,8}$"),        # Botswana
-    "+55": re.compile(r"^\d{10,11}$"),       # Brazil
-    "+673": re.compile(r"^\d{7}$"),          # Brunei
-    "+359": re.compile(r"^\d{9}$"),          # Bulgaria
-    "+226": re.compile(r"^\d{8}$"),          # Burkina Faso
-    "+257": re.compile(r"^\d{8}$"),          # Burundi
-    "+855": re.compile(r"^\d{8,9}$"),        # Cambodia
-    "+237": re.compile(r"^\d{9}$"),          # Cameroon
-    "+1": re.compile(r"^\d{10}$"),           # Canada / United States
-    "+238": re.compile(r"^\d{7}$"),          # Cape Verde
-    "+236": re.compile(r"^\d{8}$"),          # Central African Republic
-    "+235": re.compile(r"^\d{8}$"),          # Chad
-    "+56": re.compile(r"^\d{9}$"),           # Chile
-    "+86": re.compile(r"^\d{11}$"),          # China
-    "+57": re.compile(r"^\d{10}$"),          # Colombia
-    "+269": re.compile(r"^\d{7}$"),          # Comoros
-    "+242": re.compile(r"^\d{9}$"),          # Congo
-    "+243": re.compile(r"^\d{9}$"),          # DR Congo
-    "+506": re.compile(r"^\d{8}$"),          # Costa Rica
-    "+385": re.compile(r"^\d{8,9}$"),        # Croatia
-    "+53": re.compile(r"^\d{8}$"),           # Cuba
-    "+357": re.compile(r"^\d{8}$"),          # Cyprus
-    "+420": re.compile(r"^\d{9}$"),          # Czech Republic
-    "+45": re.compile(r"^\d{8}$"),           # Denmark
-    "+253": re.compile(r"^\d{8}$"),          # Djibouti
-    "+593": re.compile(r"^\d{9}$"),          # Ecuador
-    "+20": re.compile(r"^\d{10}$"),          # Egypt
-    "+503": re.compile(r"^\d{8}$"),          # El Salvador
-    "+240": re.compile(r"^\d{9}$"),          # Equatorial Guinea
-    "+291": re.compile(r"^\d{7}$"),          # Eritrea
-    "+372": re.compile(r"^\d{7,8}$"),        # Estonia
-    "+268": re.compile(r"^\d{8}$"),          # Eswatini
-    "+251": re.compile(r"^\d{9}$"),          # Ethiopia
-    "+500": re.compile(r"^\d{5}$"),          # Falkland Islands
-    "+298": re.compile(r"^\d{6}$"),          # Faroe Islands
-    "+679": re.compile(r"^\d{7}$"),          # Fiji
-    "+358": re.compile(r"^\d{9,10}$"),       # Finland
-    "+33": re.compile(r"^\d{9}$"),           # France
-    "+241": re.compile(r"^\d{7}$"),          # Gabon
-    "+220": re.compile(r"^\d{7}$"),          # Gambia
-    "+995": re.compile(r"^\d{9}$"),          # Georgia
-    "+49": re.compile(r"^\d{10,11}$"),       # Germany
-    "+233": re.compile(r"^\d{9}$"),          # Ghana
-    "+350": re.compile(r"^\d{8}$"),          # Gibraltar
-    "+30": re.compile(r"^\d{10}$"),          # Greece
-    "+299": re.compile(r"^\d{6}$"),          # Greenland
-    "+224": re.compile(r"^\d{9}$"),          # Guinea
-    "+245": re.compile(r"^\d{7}$"),          # Guinea-Bissau
-    "+592": re.compile(r"^\d{7}$"),          # Guyana
-    "+509": re.compile(r"^\d{8}$"),          # Haiti
-    "+504": re.compile(r"^\d{8}$"),          # Honduras
-    "+852": re.compile(r"^\d{8}$"),          # Hong Kong
-    "+36": re.compile(r"^\d{9}$"),           # Hungary
-    "+354": re.compile(r"^\d{7}$"),          # Iceland
-    "+91": re.compile(r"^\d{10}$"),          # India
-    "+62": re.compile(r"^\d{9,11}$"),        # Indonesia
-    "+98": re.compile(r"^\d{10}$"),          # Iran
-    "+964": re.compile(r"^\d{10}$"),         # Iraq
-    "+353": re.compile(r"^\d{9}$"),          # Ireland
-    "+972": re.compile(r"^\d{9}$"),          # Israel
-    "+39": re.compile(r"^\d{9,10}$"),        # Italy
-    "+225": re.compile(r"^\d{10}$"),         # Ivory Coast
-    "+876": re.compile(r"^\d{7}$"),          # Jamaica
-    "+81": re.compile(r"^\d{10}$"),          # Japan
-    "+962": re.compile(r"^\d{9}$"),          # Jordan
-    "+7": re.compile(r"^\d{10}$"),           # Kazakhstan / Russia
-    "+254": re.compile(r"^\d{9}$"),          # Kenya
-    "+965": re.compile(r"^\d{8}$"),          # Kuwait
-    "+996": re.compile(r"^\d{9}$"),          # Kyrgyzstan
-    "+856": re.compile(r"^\d{8}$"),          # Laos
-    "+371": re.compile(r"^\d{8}$"),          # Latvia
-    "+961": re.compile(r"^\d{7,8}$"),        # Lebanon
-    "+266": re.compile(r"^\d{8}$"),          # Lesotho
-    "+231": re.compile(r"^\d{7,8}$"),        # Liberia
-    "+218": re.compile(r"^\d{9}$"),          # Libya
-    "+423": re.compile(r"^\d{7}$"),          # Liechtenstein
-    "+370": re.compile(r"^\d{8}$"),          # Lithuania
-    "+352": re.compile(r"^\d{8,9}$"),        # Luxembourg
-    "+261": re.compile(r"^\d{9}$"),          # Madagascar
-    "+265": re.compile(r"^\d{9}$"),          # Malawi
-    "+60": re.compile(r"^\d{9,10}$"),        # Malaysia
-    "+960": re.compile(r"^\d{7}$"),          # Maldives
-    "+223": re.compile(r"^\d{8}$"),          # Mali
-    "+356": re.compile(r"^\d{8}$"),          # Malta
-    "+222": re.compile(r"^\d{8}$"),          # Mauritania
-    "+230": re.compile(r"^\d{8}$"),          # Mauritius
-    "+52": re.compile(r"^\d{10}$"),          # Mexico
-    "+373": re.compile(r"^\d{8}$"),          # Moldova
-    "+377": re.compile(r"^\d{8}$"),          # Monaco
-    "+976": re.compile(r"^\d{8}$"),          # Mongolia
-    "+382": re.compile(r"^\d{8}$"),          # Montenegro
-    "+212": re.compile(r"^\d{9}$"),          # Morocco
-    "+258": re.compile(r"^\d{9}$"),          # Mozambique
-    "+95": re.compile(r"^\d{9,10}$"),        # Myanmar
-    "+264": re.compile(r"^\d{9}$"),          # Namibia
-    "+977": re.compile(r"^\d{10}$"),         # Nepal
-    "+31": re.compile(r"^\d{9}$"),           # Netherlands
-    "+64": re.compile(r"^\d{8,9}$"),         # New Zealand
-    "+505": re.compile(r"^\d{8}$"),          # Nicaragua
-    "+227": re.compile(r"^\d{8}$"),          # Niger
-    "+234": re.compile(r"^\d{10}$"),         # Nigeria
-    "+850": re.compile(r"^\d{10}$"),         # North Korea
-    "+389": re.compile(r"^\d{8}$"),          # North Macedonia
-    "+47": re.compile(r"^\d{8}$"),           # Norway
-    "+968": re.compile(r"^\d{8}$"),          # Oman
-    "+92": re.compile(r"^\d{10}$"),          # Pakistan
-    "+507": re.compile(r"^\d{8}$"),          # Panama
-    "+675": re.compile(r"^\d{8}$"),          # Papua New Guinea
-    "+595": re.compile(r"^\d{9}$"),          # Paraguay
-    "+51": re.compile(r"^\d{9}$"),           # Peru
-    "+63": re.compile(r"^\d{10}$"),          # Philippines
-    "+48": re.compile(r"^\d{9}$"),           # Poland
-    "+351": re.compile(r"^\d{9}$"),          # Portugal
-    "+974": re.compile(r"^\d{8}$"),          # Qatar
-    "+40": re.compile(r"^\d{9}$"),           # Romania
-    "+250": re.compile(r"^\d{9}$"),          # Rwanda
-    "+966": re.compile(r"^\d{9}$"),          # Saudi Arabia
-    "+221": re.compile(r"^\d{9}$"),          # Senegal
-    "+381": re.compile(r"^\d{9}$"),          # Serbia
-    "+248": re.compile(r"^\d{7}$"),          # Seychelles
-    "+232": re.compile(r"^\d{8}$"),          # Sierra Leone
-    "+65": re.compile(r"^\d{8}$"),           # Singapore
-    "+421": re.compile(r"^\d{9}$"),          # Slovakia
-    "+386": re.compile(r"^\d{8}$"),          # Slovenia
-    "+252": re.compile(r"^\d{8}$"),          # Somalia
-    "+27": re.compile(r"^\d{9}$"),           # South Africa
-    "+82": re.compile(r"^\d{9,10}$"),        # South Korea
-    "+211": re.compile(r"^\d{9}$"),          # South Sudan
-    "+34": re.compile(r"^\d{9}$"),           # Spain
-    "+94": re.compile(r"^\d{9}$"),           # Sri Lanka
-    "+249": re.compile(r"^\d{9}$"),          # Sudan
-    "+597": re.compile(r"^\d{7}$"),          # Suriname
-    "+46": re.compile(r"^\d{9}$"),           # Sweden
-    "+41": re.compile(r"^\d{9}$"),           # Switzerland
-    "+963": re.compile(r"^\d{9}$"),          # Syria
-    "+886": re.compile(r"^\d{9}$"),          # Taiwan
-    "+992": re.compile(r"^\d{9}$"),          # Tajikistan
-    "+255": re.compile(r"^\d{9}$"),          # Tanzania
-    "+66": re.compile(r"^\d{9}$"),           # Thailand
-    "+228": re.compile(r"^\d{8}$"),          # Togo
-    "+676": re.compile(r"^\d{5}$"),          # Tonga
-    "+868": re.compile(r"^\d{7}$"),          # Trinidad and Tobago
-    "+216": re.compile(r"^\d{8}$"),          # Tunisia
-    "+90": re.compile(r"^\d{10}$"),          # Turkey
-    "+993": re.compile(r"^\d{8}$"),          # Turkmenistan
-    "+256": re.compile(r"^\d{9}$"),          # Uganda
-    "+380": re.compile(r"^\d{9}$"),          # Ukraine
-    "+971": re.compile(r"^\d{9}$"),          # UAE
-    "+44": re.compile(r"^\d{10}$"),          # United Kingdom
-    "+598": re.compile(r"^\d{8}$"),          # Uruguay
-    "+998": re.compile(r"^\d{9}$"),          # Uzbekistan
-    "+58": re.compile(r"^\d{10}$"),          # Venezuela
-    "+84": re.compile(r"^\d{9,10}$"),        # Vietnam
-    "+967": re.compile(r"^\d{9}$"),          # Yemen
-    "+260": re.compile(r"^\d{9}$"),          # Zambia
-    "+263": re.compile(r"^\d{9}$"),          # Zimbabwe
+    "+93": re.compile(r"^\d{9}$"),  # Afghanistan
+    "+355": re.compile(r"^\d{9}$"),  # Albania
+    "+213": re.compile(r"^\d{9}$"),  # Algeria
+    "+376": re.compile(r"^\d{6}$"),  # Andorra
+    "+244": re.compile(r"^\d{9}$"),  # Angola
+    "+54": re.compile(r"^\d{10}$"),  # Argentina
+    "+374": re.compile(r"^\d{8}$"),  # Armenia
+    "+297": re.compile(r"^\d{7}$"),  # Aruba
+    "+61": re.compile(r"^\d{9}$"),  # Australia
+    "+43": re.compile(r"^\d{10,11}$"),  # Austria
+    "+994": re.compile(r"^\d{9}$"),  # Azerbaijan
+    "+973": re.compile(r"^\d{8}$"),  # Bahrain
+    "+880": re.compile(r"^\d{10}$"),  # Bangladesh
+    "+375": re.compile(r"^\d{9}$"),  # Belarus
+    "+32": re.compile(r"^\d{9}$"),  # Belgium
+    "+229": re.compile(r"^\d{8}$"),  # Benin
+    "+387": re.compile(r"^\d{8}$"),  # Bosnia and Herzegovina
+    "+267": re.compile(r"^\d{7,8}$"),  # Botswana
+    "+55": re.compile(r"^\d{10,11}$"),  # Brazil
+    "+673": re.compile(r"^\d{7}$"),  # Brunei
+    "+359": re.compile(r"^\d{9}$"),  # Bulgaria
+    "+226": re.compile(r"^\d{8}$"),  # Burkina Faso
+    "+257": re.compile(r"^\d{8}$"),  # Burundi
+    "+855": re.compile(r"^\d{8,9}$"),  # Cambodia
+    "+237": re.compile(r"^\d{9}$"),  # Cameroon
+    "+1": re.compile(r"^\d{10}$"),  # Canada / United States
+    "+238": re.compile(r"^\d{7}$"),  # Cape Verde
+    "+236": re.compile(r"^\d{8}$"),  # Central African Republic
+    "+235": re.compile(r"^\d{8}$"),  # Chad
+    "+56": re.compile(r"^\d{9}$"),  # Chile
+    "+86": re.compile(r"^\d{11}$"),  # China
+    "+57": re.compile(r"^\d{10}$"),  # Colombia
+    "+269": re.compile(r"^\d{7}$"),  # Comoros
+    "+242": re.compile(r"^\d{9}$"),  # Congo
+    "+243": re.compile(r"^\d{9}$"),  # DR Congo
+    "+506": re.compile(r"^\d{8}$"),  # Costa Rica
+    "+385": re.compile(r"^\d{8,9}$"),  # Croatia
+    "+53": re.compile(r"^\d{8}$"),  # Cuba
+    "+357": re.compile(r"^\d{8}$"),  # Cyprus
+    "+420": re.compile(r"^\d{9}$"),  # Czech Republic
+    "+45": re.compile(r"^\d{8}$"),  # Denmark
+    "+253": re.compile(r"^\d{8}$"),  # Djibouti
+    "+593": re.compile(r"^\d{9}$"),  # Ecuador
+    "+20": re.compile(r"^\d{10}$"),  # Egypt
+    "+503": re.compile(r"^\d{8}$"),  # El Salvador
+    "+240": re.compile(r"^\d{9}$"),  # Equatorial Guinea
+    "+291": re.compile(r"^\d{7}$"),  # Eritrea
+    "+372": re.compile(r"^\d{7,8}$"),  # Estonia
+    "+268": re.compile(r"^\d{8}$"),  # Eswatini
+    "+251": re.compile(r"^\d{9}$"),  # Ethiopia
+    "+500": re.compile(r"^\d{5}$"),  # Falkland Islands
+    "+298": re.compile(r"^\d{6}$"),  # Faroe Islands
+    "+679": re.compile(r"^\d{7}$"),  # Fiji
+    "+358": re.compile(r"^\d{9,10}$"),  # Finland
+    "+33": re.compile(r"^\d{9}$"),  # France
+    "+241": re.compile(r"^\d{7}$"),  # Gabon
+    "+220": re.compile(r"^\d{7}$"),  # Gambia
+    "+995": re.compile(r"^\d{9}$"),  # Georgia
+    "+49": re.compile(r"^\d{10,11}$"),  # Germany
+    "+233": re.compile(r"^\d{9}$"),  # Ghana
+    "+350": re.compile(r"^\d{8}$"),  # Gibraltar
+    "+30": re.compile(r"^\d{10}$"),  # Greece
+    "+299": re.compile(r"^\d{6}$"),  # Greenland
+    "+224": re.compile(r"^\d{9}$"),  # Guinea
+    "+245": re.compile(r"^\d{7}$"),  # Guinea-Bissau
+    "+592": re.compile(r"^\d{7}$"),  # Guyana
+    "+509": re.compile(r"^\d{8}$"),  # Haiti
+    "+504": re.compile(r"^\d{8}$"),  # Honduras
+    "+852": re.compile(r"^\d{8}$"),  # Hong Kong
+    "+36": re.compile(r"^\d{9}$"),  # Hungary
+    "+354": re.compile(r"^\d{7}$"),  # Iceland
+    "+91": re.compile(r"^\d{10}$"),  # India
+    "+62": re.compile(r"^\d{9,11}$"),  # Indonesia
+    "+98": re.compile(r"^\d{10}$"),  # Iran
+    "+964": re.compile(r"^\d{10}$"),  # Iraq
+    "+353": re.compile(r"^\d{9}$"),  # Ireland
+    "+972": re.compile(r"^\d{9}$"),  # Israel
+    "+39": re.compile(r"^\d{9,10}$"),  # Italy
+    "+225": re.compile(r"^\d{10}$"),  # Ivory Coast
+    "+876": re.compile(r"^\d{7}$"),  # Jamaica
+    "+81": re.compile(r"^\d{10}$"),  # Japan
+    "+962": re.compile(r"^\d{9}$"),  # Jordan
+    "+7": re.compile(r"^\d{10}$"),  # Kazakhstan / Russia
+    "+254": re.compile(r"^\d{9}$"),  # Kenya
+    "+965": re.compile(r"^\d{8}$"),  # Kuwait
+    "+996": re.compile(r"^\d{9}$"),  # Kyrgyzstan
+    "+856": re.compile(r"^\d{8}$"),  # Laos
+    "+371": re.compile(r"^\d{8}$"),  # Latvia
+    "+961": re.compile(r"^\d{7,8}$"),  # Lebanon
+    "+266": re.compile(r"^\d{8}$"),  # Lesotho
+    "+231": re.compile(r"^\d{7,8}$"),  # Liberia
+    "+218": re.compile(r"^\d{9}$"),  # Libya
+    "+423": re.compile(r"^\d{7}$"),  # Liechtenstein
+    "+370": re.compile(r"^\d{8}$"),  # Lithuania
+    "+352": re.compile(r"^\d{8,9}$"),  # Luxembourg
+    "+261": re.compile(r"^\d{9}$"),  # Madagascar
+    "+265": re.compile(r"^\d{9}$"),  # Malawi
+    "+60": re.compile(r"^\d{9,10}$"),  # Malaysia
+    "+960": re.compile(r"^\d{7}$"),  # Maldives
+    "+223": re.compile(r"^\d{8}$"),  # Mali
+    "+356": re.compile(r"^\d{8}$"),  # Malta
+    "+222": re.compile(r"^\d{8}$"),  # Mauritania
+    "+230": re.compile(r"^\d{8}$"),  # Mauritius
+    "+52": re.compile(r"^\d{10}$"),  # Mexico
+    "+373": re.compile(r"^\d{8}$"),  # Moldova
+    "+377": re.compile(r"^\d{8}$"),  # Monaco
+    "+976": re.compile(r"^\d{8}$"),  # Mongolia
+    "+382": re.compile(r"^\d{8}$"),  # Montenegro
+    "+212": re.compile(r"^\d{9}$"),  # Morocco
+    "+258": re.compile(r"^\d{9}$"),  # Mozambique
+    "+95": re.compile(r"^\d{9,10}$"),  # Myanmar
+    "+264": re.compile(r"^\d{9}$"),  # Namibia
+    "+977": re.compile(r"^\d{10}$"),  # Nepal
+    "+31": re.compile(r"^\d{9}$"),  # Netherlands
+    "+64": re.compile(r"^\d{8,9}$"),  # New Zealand
+    "+505": re.compile(r"^\d{8}$"),  # Nicaragua
+    "+227": re.compile(r"^\d{8}$"),  # Niger
+    "+234": re.compile(r"^\d{10}$"),  # Nigeria
+    "+850": re.compile(r"^\d{10}$"),  # North Korea
+    "+389": re.compile(r"^\d{8}$"),  # North Macedonia
+    "+47": re.compile(r"^\d{8}$"),  # Norway
+    "+968": re.compile(r"^\d{8}$"),  # Oman
+    "+92": re.compile(r"^\d{10}$"),  # Pakistan
+    "+507": re.compile(r"^\d{8}$"),  # Panama
+    "+675": re.compile(r"^\d{8}$"),  # Papua New Guinea
+    "+595": re.compile(r"^\d{9}$"),  # Paraguay
+    "+51": re.compile(r"^\d{9}$"),  # Peru
+    "+63": re.compile(r"^\d{10}$"),  # Philippines
+    "+48": re.compile(r"^\d{9}$"),  # Poland
+    "+351": re.compile(r"^\d{9}$"),  # Portugal
+    "+974": re.compile(r"^\d{8}$"),  # Qatar
+    "+40": re.compile(r"^\d{9}$"),  # Romania
+    "+250": re.compile(r"^\d{9}$"),  # Rwanda
+    "+966": re.compile(r"^\d{9}$"),  # Saudi Arabia
+    "+221": re.compile(r"^\d{9}$"),  # Senegal
+    "+381": re.compile(r"^\d{9}$"),  # Serbia
+    "+248": re.compile(r"^\d{7}$"),  # Seychelles
+    "+232": re.compile(r"^\d{8}$"),  # Sierra Leone
+    "+65": re.compile(r"^\d{8}$"),  # Singapore
+    "+421": re.compile(r"^\d{9}$"),  # Slovakia
+    "+386": re.compile(r"^\d{8}$"),  # Slovenia
+    "+252": re.compile(r"^\d{8}$"),  # Somalia
+    "+27": re.compile(r"^\d{9}$"),  # South Africa
+    "+82": re.compile(r"^\d{9,10}$"),  # South Korea
+    "+211": re.compile(r"^\d{9}$"),  # South Sudan
+    "+34": re.compile(r"^\d{9}$"),  # Spain
+    "+94": re.compile(r"^\d{9}$"),  # Sri Lanka
+    "+249": re.compile(r"^\d{9}$"),  # Sudan
+    "+597": re.compile(r"^\d{7}$"),  # Suriname
+    "+46": re.compile(r"^\d{9}$"),  # Sweden
+    "+41": re.compile(r"^\d{9}$"),  # Switzerland
+    "+963": re.compile(r"^\d{9}$"),  # Syria
+    "+886": re.compile(r"^\d{9}$"),  # Taiwan
+    "+992": re.compile(r"^\d{9}$"),  # Tajikistan
+    "+255": re.compile(r"^\d{9}$"),  # Tanzania
+    "+66": re.compile(r"^\d{9}$"),  # Thailand
+    "+228": re.compile(r"^\d{8}$"),  # Togo
+    "+676": re.compile(r"^\d{5}$"),  # Tonga
+    "+868": re.compile(r"^\d{7}$"),  # Trinidad and Tobago
+    "+216": re.compile(r"^\d{8}$"),  # Tunisia
+    "+90": re.compile(r"^\d{10}$"),  # Turkey
+    "+993": re.compile(r"^\d{8}$"),  # Turkmenistan
+    "+256": re.compile(r"^\d{9}$"),  # Uganda
+    "+380": re.compile(r"^\d{9}$"),  # Ukraine
+    "+971": re.compile(r"^\d{9}$"),  # UAE
+    "+44": re.compile(r"^\d{10}$"),  # United Kingdom
+    "+598": re.compile(r"^\d{8}$"),  # Uruguay
+    "+998": re.compile(r"^\d{9}$"),  # Uzbekistan
+    "+58": re.compile(r"^\d{10}$"),  # Venezuela
+    "+84": re.compile(r"^\d{9,10}$"),  # Vietnam
+    "+967": re.compile(r"^\d{9}$"),  # Yemen
+    "+260": re.compile(r"^\d{9}$"),  # Zambia
+    "+263": re.compile(r"^\d{9}$"),  # Zimbabwe
 }
 
 
@@ -632,7 +632,7 @@ def _national_digits_for_fallback(phone: str, dial_code: str) -> str:
     calling_code = dial_code.lstrip("+")
 
     if phone.strip().startswith("+") and digits.startswith(calling_code):
-        digits = digits[len(calling_code):]
+        digits = digits[len(calling_code) :]
 
     if digits.startswith("0"):
         digits = digits[1:]

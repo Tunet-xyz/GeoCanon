@@ -233,11 +233,11 @@ def _get_zone_info(tz_name: str) -> Any:
         import pytz
 
         return pytz.timezone(tz_name)
-    except ImportError:
+    except ImportError as err:
         raise ImportError(
             "Either Python ≥3.9 (zoneinfo) or pytz is required for timezone support. "
             "Install with: pip install geocanon[timezones]"
-        )
+        ) from err
 
 
 def get_timezone_name(jurisdiction: str) -> str:

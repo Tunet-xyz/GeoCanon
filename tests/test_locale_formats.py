@@ -59,7 +59,9 @@ class TestLocaleFallbacks:
         monkeypatch.setattr(locale_formats, "_babel_lists", None)
 
         assert format_list_locale(["red"], "United States") == "red"
-        assert format_list_locale(["red", "blue", "green"], "United States") == "red, blue and green"
+        assert (
+            format_list_locale(["red", "blue", "green"], "United States") == "red, blue and green"
+        )
 
 
 class TestBabelFormatting:

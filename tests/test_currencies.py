@@ -121,7 +121,7 @@ class TestGetCurrencyChoices:
 
     def test_each_has_code_and_label(self):
         choices = get_currency_choices()
-        for code, label in choices:
+        for code, _label in choices:
             assert isinstance(code, str)
             assert len(code) == 3  # ISO 4217
 

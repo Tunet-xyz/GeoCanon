@@ -20,8 +20,6 @@ Usage:
 
 from __future__ import annotations
 
-from typing import Any
-
 try:
     from pydantic import BaseModel, Field
 except ImportError:
@@ -29,7 +27,6 @@ except ImportError:
     BaseModel = None  # type: ignore[assignment, misc]
 
 from .exceptions import ConfigurationError
-
 
 if BaseModel is not None:
 

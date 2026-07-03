@@ -24,11 +24,35 @@ __version__ = "0.4.0"
 # ---------------------------------------------------------------------------
 # Jurisdictions
 # ---------------------------------------------------------------------------
-from .jurisdictions import (
-    JURISDICTION_NAMES,
-    JURISDICTIONS,
-    get_jurisdiction_choices,
-    is_valid_jurisdiction,
+# ---------------------------------------------------------------------------
+# Address formats
+# ---------------------------------------------------------------------------
+from .address_formats import (
+    JURISDICTION_ADDRESS_FORMAT,
+    AddressFormat,
+    format_address,
+    get_address_format,
+    get_postal_code_label,
+    get_postal_code_regex,
+    get_state_label,
+    is_state_required,
+    validate_postal_code,
+)
+
+# ---------------------------------------------------------------------------
+# Currencies
+# ---------------------------------------------------------------------------
+from .currencies import (
+    CURRENCY_BY_CODE,
+    CURRENCY_CHOICES,
+    JURISDICTION_CURRENCY,
+    CurrencyInfo,
+    format_currency,
+    get_currency_by_code,
+    get_currency_choices,
+    get_currency_code,
+    get_currency_for_jurisdiction,
+    get_currency_symbol,
 )
 
 # ---------------------------------------------------------------------------
@@ -44,6 +68,24 @@ from .dial_codes import (
     is_phone_extra_available,
     validate_phone,
     validate_phone_number,
+)
+
+# ---------------------------------------------------------------------------
+# Duration
+# ---------------------------------------------------------------------------
+from .duration import format_duration
+
+# ---------------------------------------------------------------------------
+# Exceptions
+# ---------------------------------------------------------------------------
+from .exceptions import (
+    ConfigurationError,
+    DialCodeNotFoundError,
+    GeoCanonError,
+    HolidaysNotAvailableError,
+    JurisdictionNotFoundError,
+    PhoneValidationError,
+    TimezoneNotFoundError,
 )
 
 # ---------------------------------------------------------------------------
@@ -71,21 +113,12 @@ from .iso_codes import (
     get_jurisdiction_by_alpha3,
     get_numeric_code,
 )
-
-# ---------------------------------------------------------------------------
-# Timezones
-# ---------------------------------------------------------------------------
-from .timezones import (
-    TIMEZONE_MAP,
-    get_current_local_time,
-    get_timezone_for_jurisdiction,
-    get_timezone_name,
+from .jurisdictions import (
+    JURISDICTION_NAMES,
+    JURISDICTIONS,
+    get_jurisdiction_choices,
+    is_valid_jurisdiction,
 )
-
-# ---------------------------------------------------------------------------
-# Duration
-# ---------------------------------------------------------------------------
-from .duration import format_duration
 
 # ---------------------------------------------------------------------------
 # Languages
@@ -95,22 +128,6 @@ from .languages import (
     LANGUAGE_CHOICES,
     get_language_choices,
     get_language_for_jurisdiction,
-)
-
-# ---------------------------------------------------------------------------
-# Currencies
-# ---------------------------------------------------------------------------
-from .currencies import (
-    CURRENCY_BY_CODE,
-    CURRENCY_CHOICES,
-    JURISDICTION_CURRENCY,
-    CurrencyInfo,
-    format_currency,
-    get_currency_by_code,
-    get_currency_choices,
-    get_currency_code,
-    get_currency_for_jurisdiction,
-    get_currency_symbol,
 )
 
 # ---------------------------------------------------------------------------
@@ -129,36 +146,18 @@ from .locale_formats import (
 )
 
 # ---------------------------------------------------------------------------
-# Address formats
-# ---------------------------------------------------------------------------
-from .address_formats import (
-    JURISDICTION_ADDRESS_FORMAT,
-    AddressFormat,
-    format_address,
-    get_address_format,
-    get_postal_code_label,
-    get_postal_code_regex,
-    get_state_label,
-    is_state_required,
-    validate_postal_code,
-)
-
-# ---------------------------------------------------------------------------
 # Settings
 # ---------------------------------------------------------------------------
 from .settings import GeoCanonSettings, get_geocanon_settings
 
 # ---------------------------------------------------------------------------
-# Exceptions
+# Timezones
 # ---------------------------------------------------------------------------
-from .exceptions import (
-    ConfigurationError,
-    DialCodeNotFoundError,
-    GeoCanonError,
-    HolidaysNotAvailableError,
-    JurisdictionNotFoundError,
-    PhoneValidationError,
-    TimezoneNotFoundError,
+from .timezones import (
+    TIMEZONE_MAP,
+    get_current_local_time,
+    get_timezone_for_jurisdiction,
+    get_timezone_name,
 )
 
 # Holidays are optional — only export when the extra is installed

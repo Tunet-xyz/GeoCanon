@@ -1,7 +1,5 @@
 """Tests for geo_canon.address_formats."""
 
-import pytest
-
 from geo_canon.address_formats import (
     JURISDICTION_ADDRESS_FORMAT,
     AddressFormat,
@@ -13,7 +11,6 @@ from geo_canon.address_formats import (
     is_state_required,
     validate_postal_code,
 )
-
 
 # ---------------------------------------------------------------------------
 # Registry
