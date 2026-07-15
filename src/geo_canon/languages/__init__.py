@@ -6,6 +6,8 @@ Language choices for Django form fields, and jurisdiction → default language m
 
 from __future__ import annotations
 
+from typing import Any
+
 from django.utils.translation import gettext_lazy as _
 
 # ---------------------------------------------------------------------------
@@ -13,7 +15,12 @@ from django.utils.translation import gettext_lazy as _
 # Suitable for Django ChoiceField / Select widgets.
 # ---------------------------------------------------------------------------
 
-LANGUAGE_CHOICES: list[tuple[str, str]] = sorted(
+
+def _lazy_source_text(value: Any) -> str:
+    return value._args[0] if hasattr(value, "_args") and value._args else str(value)
+
+
+LANGUAGE_CHOICES: list[tuple[str, Any]] = sorted(
     [
         ("af", _("Afrikaans")),
         ("am", _("Amharic")),
@@ -89,7 +96,7 @@ LANGUAGE_CHOICES: list[tuple[str, str]] = sorted(
         ("vi", _("Vietnamese")),
         ("zh", _("Chinese")),
     ],
-    key=lambda x: str(x[1]),
+    key=lambda x: _lazy_source_text(x[1]),
 )
 
 # ---------------------------------------------------------------------------
@@ -292,7 +299,7 @@ JURISDICTION_LANGUAGE: dict[str, str] = {
 }
 
 
-def get_language_choices() -> list[tuple[str, str]]:
+def get_language_choices() -> list[tuple[str, Any]]:
     """Return language choices for a Django ``ChoiceField``."""
     return list(LANGUAGE_CHOICES)
 

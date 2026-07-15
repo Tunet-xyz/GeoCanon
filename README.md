@@ -3,7 +3,7 @@
 
 **Jurisdictions. Dial Codes. Flags. ISO Codes. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
 
-Part of the [Tunet](https://github.com/Tunet-xyz) ecosystem — alongside [SwapLayer](https://github.com/Tunet-xyz/swap_layer) and [SessionArmor](https://github.com/Tunet-xyz/session_armor).
+Part of the [Tunet](https://tunet.xyz/engineering/) ecosystem — alongside [SwapLayer](https://github.com/Tunet-xyz/swap_layer) and [SessionArmor](https://github.com/Tunet-xyz/session_armor). See the [GeoCanon product page](https://tunet.xyz/engineering/geo-canon/) for the public capability overview.
 
 ---
 
@@ -74,7 +74,7 @@ pip install geocanon
 
 # With optional extras
 pip install geocanon[holidays]     # Public holiday detection
-pip install geocanon[timezones]    # pytz fallback for Python <3.9
+pip install geocanon[timezones]    # pytz fallback when system timezone data is unavailable
 pip install geocanon[phones]       # phonenumbers parsing/formatting
 pip install geocanon[locale]       # Babel locale-aware formatting
 pip install geocanon[all]          # Everything
@@ -84,7 +84,7 @@ pip install geocanon[all]          # Everything
 | Extra | What it adds |
 |-------|-------------|
 | `holidays` | Public holiday detection (140+ countries) |
-| `timezones` | `pytz` fallback for legacy Python |
+| `timezones` | `pytz` fallback when system timezone data is unavailable |
 | `phones` | Robust phone parsing, validation, formatting, and number type detection |
 | `locale` | Babel-backed number, currency, date, time, datetime, percent, and list formatting |
 | `all` | Everything above |
@@ -198,11 +198,13 @@ MIDDLEWARE = [
 ## Why GeoCanon?
 
 - **One Source of Truth** — no more scattered country lists and timezone dicts
-- **Production-Tested** — extracted from a live Django platform serving multiple jurisdictions
+- **Product-Grounded** — extracted from repeated Django product needs across multiple jurisdictions
 - **Translatable** — all labels use `gettext_lazy` for full i18n support
 - **Minimal Dependencies** — only Django required; extras are truly optional
 - **Type-Safe** — Pydantic validation, type hints throughout, PEP 561 compliant
 - **Extensible** — override timezones, holiday mappings, and more via settings
+
+Bundled mappings are maintained release data rather than a live legal or standards feed. Review the [data provenance and update policy](docs/data-provenance.md) before using defaults for compliance, tax, postal, or other high-stakes decisions.
 
 ---
 

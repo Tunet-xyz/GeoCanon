@@ -7,7 +7,7 @@ names, Django form integration, and a context-switching form.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from django.utils.translation import gettext_lazy as _
 
@@ -19,7 +19,12 @@ if TYPE_CHECKING:
 # Each entry is (internal_key, translatable_label).
 # ---------------------------------------------------------------------------
 
-JURISDICTIONS: list[tuple[str, str]] = sorted(
+
+def _lazy_source_text(value: Any) -> str:
+    return value._args[0] if hasattr(value, "_args") and value._args else str(value)
+
+
+JURISDICTIONS: list[tuple[str, Any]] = sorted(
     [
         ("Afghanistan", _("Afghanistan")),
         ("Albania", _("Albania")),
@@ -218,14 +223,14 @@ JURISDICTIONS: list[tuple[str, str]] = sorted(
         ("Zambia", _("Zambia")),
         ("Zimbabwe", _("Zimbabwe")),
     ],
-    key=lambda x: str(x[1]),
+    key=lambda x: _lazy_source_text(x[1]),
 )
 
 # Flat set for O(1) lookups
 JURISDICTION_NAMES: set[str] = {j[0] for j in JURISDICTIONS}
 
 
-def get_jurisdiction_choices() -> list[tuple[str, str]]:
+def get_jurisdiction_choices() -> list[tuple[str, Any]]:
     """Return the full jurisdiction list, suitable for Django ``ChoiceField``."""
     return list(JURISDICTIONS)
 

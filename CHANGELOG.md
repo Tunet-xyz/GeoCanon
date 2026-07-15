@@ -7,10 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-07-15
+
 ### Added
 
 - **Phones extra** - optional `phonenumbers` integration for robust phone validation, E.164/international/national formatting, and number type detection
 - **Locale extra** - optional Babel-backed formatting for decimals, percentages, currencies, dates, times, datetimes, and lists
+- **Packaged MCP contract** - added the `geocanon-mcp` stdio command and public agent contract for review-first API, data, and locale workflow guidance
+
+### Fixed
+
+- Preserved Django lazy translation objects while sorting jurisdiction and language choices, so `import geo_canon` works before Django settings are configured.
+
+### Documentation
+
+- Added data provenance, update policy, and limitations for the bundled geographic defaults and optional third-party datasets.
 
 ## [0.4.0] - 2026-02-25
 

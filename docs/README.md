@@ -15,9 +15,10 @@
 - [Settings](settings.md) — Configuration reference
 
 - [Locale Formatting](locale-formats.md) - Optional Babel-backed number, currency, date, time, and list formatting
+- [Data Provenance](data-provenance.md) - Source classes, update policy, and limitations
 
 ## Quick Links
 
 - [PyPI](https://pypi.org/project/GeoCanon/)
-- [GitHub](https://github.com/Tunet-xyz/geo_canon)
-- [Changelog](https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md)
+- [GitHub](https://github.com/Tunet-xyz/GeoCanon)
+- [Changelog](https://github.com/Tunet-xyz/GeoCanon/blob/main/CHANGELOG.md)

@@ -51,7 +51,7 @@ class JurisdictionNotFoundError(GeoCanonError):
         super().__init__(
             f"Jurisdiction not found: {jurisdiction}",
             hint=" ".join(hint_parts),
-            docs_url="https://github.com/Tunet-xyz/geo_canon/blob/main/docs/jurisdictions.md",
+            docs_url="https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/jurisdictions.md",
         )
 
 
@@ -62,7 +62,7 @@ class TimezoneNotFoundError(GeoCanonError):
         super().__init__(
             f"No timezone configured for jurisdiction: {jurisdiction}",
             hint="Add a GEOCANON.timezone_overrides entry or submit a PR to add this mapping.",
-            docs_url="https://github.com/Tunet-xyz/geo_canon/blob/main/docs/timezones.md",
+            docs_url="https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/timezones.md",
         )
 
 
