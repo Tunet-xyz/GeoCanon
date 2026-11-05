@@ -219,6 +219,10 @@ From a checkout, run the dependency-free contract server with `python mcp/server
 geocanon-mcp
 ```
 
+## Contributing and releases
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](VERSIONING.md) for the shared SemVer and release policy. Public PRs and agent mentions do not start agents or workflows.
+
 ## License
 
 MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](LICENSE).
