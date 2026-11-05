@@ -10,6 +10,7 @@ from __future__ import annotations
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, NamedTuple
 
+from django.utils.functional import Promise
 from django.utils.text import format_lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -22,7 +23,7 @@ class CurrencyInfo(NamedTuple):
     """Immutable container for a single currency."""
 
     code: str  # ISO 4217 alpha-3
-    name: str  # English name (translatable)
+    name: str | Promise  # English name (translatable)
     symbol: str  # Conventional symbol (e.g. "$", "€", "£")
     decimal_places: int  # Standard minor units (0 for JPY, 2 for most)
 
@@ -245,7 +246,7 @@ def _lazy_source_text(value: Any) -> str:
     return value._args[0] if hasattr(value, "_args") and value._args else str(value)
 
 
-CURRENCY_CHOICES: list[tuple[str, Any]] = [
+CURRENCY_CHOICES: list[tuple[str, str | Promise]] = [
     (info.code, format_lazy("{} ({})", info.name, info.code))
     for info in sorted(CURRENCY_BY_CODE.values(), key=lambda item: _lazy_source_text(item.name))
 ]
@@ -291,7 +292,7 @@ def get_currency_symbol(jurisdiction: str) -> str | None:
     return info.symbol if info else None
 
 
-def get_currency_choices() -> list[tuple[str, str]]:
+def get_currency_choices() -> list[tuple[str, str | Promise]]:
     """
     Return a list of ``(code, label)`` tuples suitable for a Django
     ``ChoiceField``.  Deduplicated and sorted alphabetically by label.

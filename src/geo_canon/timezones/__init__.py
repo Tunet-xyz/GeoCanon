@@ -3,14 +3,17 @@ GeoCanon — Timezones
 
 Jurisdiction → IANA timezone mapping and local-time retrieval.
 
-Uses ``zoneinfo`` (Python 3.9+) by default, with an optional ``pytz``
-fallback for older setups installed via ``pip install geocanon[timezones]``.
+Uses ``zoneinfo`` by default, with an optional ``pytz`` fallback when IANA
+timezone data is unavailable, installed via ``pip install geocanon[timezones]``.
 """
 
 from __future__ import annotations
 
 import datetime
 from typing import Any
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
+from django.conf import settings as django_settings
 
 from ..exceptions import TimezoneNotFoundError
 
@@ -223,11 +226,13 @@ TIMEZONE_MAP: dict[str, str] = {
 def _get_zone_info(tz_name: str) -> Any:
     """Return a timezone object, preferring ``zoneinfo`` over ``pytz``."""
     try:
-        from zoneinfo import ZoneInfo
-
         return ZoneInfo(tz_name)
-    except ImportError:
-        pass
+    except ZoneInfoNotFoundError:
+        # The pytz extra carries its own timezone data.
+        return _get_pytz_timezone(tz_name)
+
+
+def _get_pytz_timezone(tz_name: str) -> Any:
 
     try:
         import pytz
@@ -235,8 +240,7 @@ def _get_zone_info(tz_name: str) -> Any:
         return pytz.timezone(tz_name)
     except ImportError as err:
         raise ImportError(
-            "Either Python ≥3.9 (zoneinfo) or pytz is required for timezone support. "
-            "Install with: pip install geocanon[timezones]"
+            "IANA timezone data is unavailable. Install tzdata or GeoCanon[timezones]."
         ) from err
 
 
@@ -248,15 +252,14 @@ def get_timezone_name(jurisdiction: str) -> str:
 
     Raises ``TimezoneNotFoundError`` when no mapping exists.
     """
-    # Check user overrides first
-    try:
+    # Lookups also work before Django setup. Configured-but-invalid settings
+    # must propagate their error rather than silently ignoring an override.
+    if django_settings.configured:
         from ..settings import get_geocanon_settings
 
         overrides = get_geocanon_settings().timezone_overrides
         if jurisdiction in overrides:
             return overrides[jurisdiction]
-    except Exception:
-        pass
 
     tz_name = TIMEZONE_MAP.get(jurisdiction)
     if tz_name is None:

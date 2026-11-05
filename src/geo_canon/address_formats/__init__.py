@@ -10,6 +10,7 @@ from __future__ import annotations
 import re
 from typing import NamedTuple
 
+from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
 # ---------------------------------------------------------------------------
@@ -25,10 +26,10 @@ class AddressFormat(NamedTuple):
     template: str
 
     # Label for the "state" field (varies by country)
-    state_label: str
+    state_label: str | Promise
 
     # Label for the "postal code" field
-    postal_code_label: str
+    postal_code_label: str | Promise
 
     # Whether the state/province/region field is required
     state_required: bool
@@ -569,7 +570,7 @@ def validate_postal_code(jurisdiction: str, postal_code: str) -> bool:
     return bool(re.match(fmt.postal_code_pattern, postal_code.strip(), re.IGNORECASE))
 
 
-def get_state_label(jurisdiction: str) -> str | None:
+def get_state_label(jurisdiction: str) -> str | Promise | None:
     """
     Return the localised label for the "state" field (State, Province,
     County, Prefecture, etc.) for *jurisdiction*.
@@ -584,7 +585,7 @@ def get_state_label(jurisdiction: str) -> str | None:
     return str(fmt.state_label) if fmt else None
 
 
-def get_postal_code_label(jurisdiction: str) -> str | None:
+def get_postal_code_label(jurisdiction: str) -> str | Promise | None:
     """
     Return the localised label for the postal-code field (ZIP Code,
     Postcode, PLZ, CEP, etc.) for *jurisdiction*.

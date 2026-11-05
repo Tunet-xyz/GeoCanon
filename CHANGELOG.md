@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Preserve lazy Django translations in public type annotations and restore the
+  configured type-checker environment so the complete source passes mypy.
+- Use the optional pytz timezone database when zoneinfo data is missing, and
+  surface invalid configured timezone settings instead of silently ignoring them.
+- Bound public MCP messages, reject ambiguous/non-finite JSON and invalid request
+  shapes, support ping, and keep stdio serving after malformed or oversized input.
+
 ## [0.5.0] - 2026-07-15
 
 ### Added

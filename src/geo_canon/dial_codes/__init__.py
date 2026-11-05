@@ -9,18 +9,19 @@ from __future__ import annotations
 
 import re
 
+from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
 try:
     import phonenumbers as _phonenumbers
 except ImportError:  # pragma: no cover - exercised indirectly by fallback tests
-    _phonenumbers = None
+    _phonenumbers = None  # type: ignore[assignment]  # Optional module may be absent.
 
 # ---------------------------------------------------------------------------
 # Dial-code choices for Django ChoiceField / Select widgets
 # ---------------------------------------------------------------------------
 
-DIAL_CODE_CHOICES: list[tuple[str, str]] = [
+DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+93", _("Afghanistan (+93)")),
     ("+355", _("Albania (+355)")),
     ("+213", _("Algeria (+213)")),
@@ -565,7 +566,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
 # ---------------------------------------------------------------------------
 
 
-def get_dial_code_choices() -> list[tuple[str, str]]:
+def get_dial_code_choices() -> list[tuple[str, str | Promise]]:
     """Return dial-code choices suitable for a Django ``ChoiceField``."""
     return list(DIAL_CODE_CHOICES)
 

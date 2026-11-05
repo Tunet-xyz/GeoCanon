@@ -17,9 +17,9 @@ try:
     from babel import numbers as _babel_numbers
     from babel.core import UnknownLocaleError
 except ImportError:  # pragma: no cover - exercised by fallback tests
-    _babel_dates = None
-    _babel_lists = None
-    _babel_numbers = None
+    _babel_dates = None  # type: ignore[assignment]  # Optional module may be absent.
+    _babel_lists = None  # type: ignore[assignment]
+    _babel_numbers = None  # type: ignore[assignment]
 
     class UnknownLocaleError(Exception):  # type: ignore[no-redef]
         """Fallback exception used when Babel is not installed."""

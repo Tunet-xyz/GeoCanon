@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from typing import NamedTuple
 
+from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
 # ---------------------------------------------------------------------------
@@ -24,7 +25,7 @@ class ISOCountryInfo(NamedTuple):
     alpha_2: str  # Two-letter code  (e.g. "RO")
     alpha_3: str  # Three-letter code (e.g. "ROU")
     numeric: str  # Numeric code      (e.g. "642")
-    name: str  # English short name (translatable)
+    name: str | Promise  # English short name (translatable)
 
 
 # ---------------------------------------------------------------------------
