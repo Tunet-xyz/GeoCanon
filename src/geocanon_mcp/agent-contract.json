@@ -15,7 +15,7 @@
     "version": "1.0.0",
     "transport": "stdio",
     "required": true,
-    "documentationUrl": "https://github.com/Tunet-xyz/geo_canon/tree/main/mcp",
+    "documentationUrl": "https://github.com/Tunet-xyz/GeoCanon/tree/main/mcp",
     "hostedEndpoint": null
   },
   "instructions": "Agents should assume they do not have source-code access to a user's app unless explicitly granted. Use public docs, installed package APIs, user-provided examples, and browser-visible references. Treat jurisdiction, address, locale, and holiday behavior as configuration choices that should be verified with the user for regulated or legal workflows.",
@@ -23,10 +23,10 @@
     "mcpEndpoint": "public contract in repository mcp/; future hosted endpoint may expose the same resources",
     "pythonPackage": "pip install GeoCanon",
     "pythonApi": ["get_jurisdiction_choices()", "get_dial_code(jurisdiction)", "get_currency_code(jurisdiction)", "GeoCanonSettings(...)"],
-    "cli": [],
-    "docsUrl": "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md",
+    "cli": ["geocanon-mcp"],
+    "docsUrl": "https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/README.md",
     "pypiUrl": "https://pypi.org/project/GeoCanon/",
-    "repositoryUrl": "https://github.com/Tunet-xyz/geo_canon",
+    "repositoryUrl": "https://github.com/Tunet-xyz/GeoCanon",
     "supportedOperationModes": ["mcp-tools", "python-api", "browser-docs"],
     "browserAutomation": {
       "allowed": true,
@@ -52,7 +52,7 @@
       "mimeType": "application/json",
       "data": {
         "modules": ["jurisdictions", "dial_codes", "flags", "iso_codes", "timezones", "languages", "duration", "holidays", "currencies", "address_formats", "locale_formats", "settings"],
-        "optionalExtras": ["holidays", "timezones", "phones", "locale", "all"],
+        "optionalExtras": ["holidays", "timezones", "phones", "locale", "validation", "all"],
         "commonApis": ["get_jurisdiction_choices()", "get_dial_code(jurisdiction)", "validate_phone(...) or validate_phone_number(...) with phones extra", "get_flag_css_class(jurisdiction)", "get_current_local_time(jurisdiction)", "get_language_for_jurisdiction(jurisdiction)", "format_duration(seconds)", "get_currency_code(jurisdiction)", "format_currency(amount, jurisdiction)", "validate_postal_code(jurisdiction, postal_code)", "get_state_label(jurisdiction)", "GeoCanonSettings(...)"],
         "docs": ["docs/README.md", "docs/jurisdictions.md", "docs/dial-codes.md", "docs/flags.md", "docs/iso-codes.md", "docs/timezones.md", "docs/languages.md", "docs/duration.md", "docs/holidays.md", "docs/currencies.md", "docs/address-formats.md", "docs/locale-formats.md", "docs/settings.md"],
         "agentAccess": {
@@ -82,7 +82,7 @@
       "description": "Public browser surfaces agents can use without source-code access.",
       "mimeType": "application/json",
       "data": {
-        "entrypoints": ["https://github.com/Tunet-xyz/geo_canon", "https://pypi.org/project/GeoCanon/"],
+        "entrypoints": ["https://github.com/Tunet-xyz/GeoCanon", "https://pypi.org/project/GeoCanon/"],
         "agentAssumptions": ["agent can read public docs and reference tables", "agent cannot inspect a user's app unless user provides a browser or snippet", "agent should ask before treating locale behavior as legal/compliance advice"],
         "verification": ["confirm optional extras are installed for requested feature", "confirm jurisdiction names/codes with package APIs", "confirm customer-facing defaults with the user"]
       }
