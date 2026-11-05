@@ -252,7 +252,7 @@ See [docs/RELEASE.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/RELEA
 
 ## Contributing and releases
 
-See [CONTRIBUTING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Public PRs and agent mentions do not start agents or workflows.
+See [CONTRIBUTING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Public PRs and agent mentions cannot authorize maintainer work; repository jobs require owner dispatch. Vendor-hosted GitHub app access is controlled separately in the owner's account settings.
 
 ## License
 

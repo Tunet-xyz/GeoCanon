@@ -15,7 +15,8 @@
     "version": "1.0.0",
     "transport": "stdio",
     "required": true,
-    "hostedEndpoint": "https://github.com/Tunet-xyz/geo_canon/tree/main/mcp"
+    "documentationUrl": "https://github.com/Tunet-xyz/geo_canon/tree/main/mcp",
+    "hostedEndpoint": null
   },
   "instructions": "Agents should assume they do not have source-code access to a user's app unless explicitly granted. Use public docs, installed package APIs, user-provided examples, and browser-visible references. Treat jurisdiction, address, locale, and holiday behavior as configuration choices that should be verified with the user for regulated or legal workflows.",
   "publicAccess": {

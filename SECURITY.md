@@ -2,6 +2,8 @@
 
 ## Supported Versions
 
+The active security line is 1.x. Pre-1.0 rows are retained as historical release information and no longer indicate active security support.
+
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.0.x   | :white_check_mark: |
