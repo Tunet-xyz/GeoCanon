@@ -18,6 +18,15 @@ GEOCANON = GeoCanonSettings(
 
 All fields have sensible defaults; you only need to set what you want to change.
 
+The core installation uses a lightweight settings container. Install
+`GeoCanon[validation]` (or `[all]`) for Pydantic 2 runtime type validation and
+rejection of unknown fields. Do not assume runtime type coercion or validation
+from the dependency-free container alone. `GEOCANON` may also be a plain dict.
+
+Timezone lookups work before Django settings are configured. Once configured,
+invalid settings raise an error; GeoCanon does not silently ignore a malformed
+timezone override configuration.
+
 ## Accessing Settings
 
 ```python

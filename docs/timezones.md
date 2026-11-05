@@ -4,6 +4,10 @@ Jurisdiction → IANA timezone mapping with 200+ built-in entries.
 
 Uses Python's `zoneinfo` module (3.9+) by default, with `pytz` fallback available via `pip install geocanon[timezones]`.
 
+The fallback is used when the IANA timezone data is unavailable. Install
+`tzdata` or the `timezones` extra in stripped-down environments. Invalid
+configured overrides raise an error instead of falling back silently.
+
 ## Functions
 
 ### `get_timezone_name(jurisdiction: str) -> str`

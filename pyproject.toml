@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
@@ -8,13 +8,22 @@ packages = ["src/geo_canon", "src/geocanon_mcp"]
 [tool.hatch.build.targets.wheel.force-include]
 "src/geocanon_mcp/agent-contract.json" = "geocanon_mcp/agent-contract.json"
 
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src", "/tests", "/docs", "/mcp", "/requirements", "/.github",
+  "/README.md", "/LICENSE", "/CHANGELOG.md", "/SECURITY.md",
+  "/VERSIONING.md", "/CONTRIBUTING.md", "/AGENTS.md", "/CLAUDE.md",
+  "/pyproject.toml",
+]
+
 [project]
 name = "GeoCanon"
-version = "0.5.0"
+version = "1.0.0"
 description = "Django locale toolkit for jurisdictions, ISO codes, currencies, addresses, phones, timezones, languages, and holidays."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
+license-files = ["LICENSE"]
 keywords = [
   "django",
   "i18n",
@@ -34,6 +43,7 @@ authors = [
   { name = "Tunet Ltd", email = "alex@tunet.xyz" },
 ]
 classifiers = [
+  "Development Status :: 5 - Production/Stable",
   "Framework :: Django",
   "Framework :: Django :: 4.2",
   "Framework :: Django :: 5.0",
@@ -43,14 +53,13 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "License :: OSI Approved :: MIT License",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Topic :: Software Development :: Internationalization",
   "Topic :: Software Development :: Localization",
   "Intended Audience :: Developers",
 ]
 dependencies = [
-  "Django>=4.2",
+  "Django>=4.2,<7",
 ]
 
 [project.urls]
@@ -69,25 +78,32 @@ holidays = ["holidays>=0.40"]
 timezones = ["pytz>=2023.3"]
 phones = ["phonenumbers>=8.13"]
 locale = ["Babel>=2.14"]
+validation = ["pydantic>=2,<3"]
 all = [
   "holidays>=0.40",
   "pytz>=2023.3",
   "phonenumbers>=8.13",
   "Babel>=2.14",
+  "pydantic>=2,<3",
 ]
 dev = [
+  "bandit>=1.7",
+  "build>=1.5",
+  "pip-audit>=2.7",
   "pytest>=7.0.0",
   "pytest-cov>=4.0.0",
   "pytest-django>=4.5.0",
   "mypy>=1.0.0",
   "ruff>=0.1.0",
   "django-stubs>=4.2.0",
+  "tomli>=2; python_version < '3.11'",
 ]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
 addopts = "-v --tb=short"
+pythonpath = [".", "src"]
 
 [tool.mypy]
 python_version = "3.10"
@@ -124,7 +140,7 @@ ignore = [
 known-first-party = ["geo_canon"]
 
 [tool.coverage.run]
-source = ["src/geo_canon"]
+source = ["src/geo_canon", "src/geocanon_mcp"]
 branch = true
 omit = ["*/tests/*", "*/__pycache__/*"]
 

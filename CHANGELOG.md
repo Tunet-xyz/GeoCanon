@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-05
+
+### Changed
+
+- Stabilized the documented jurisdiction, ISO, currency, address, phone, locale,
+  timezone, language, duration, settings, form, middleware, and local MCP APIs.
+- Adopted the shared SemVer and owner-reviewed release policy with matching
+  Claude and Codex instructions; aligned runtime, package, and MCP versions.
+- Added a `validation` extra for optional Pydantic 2 settings validation and
+  included it in `all`; the core still requires only Django.
+- Bounded Django below 7, declared MIT license files, and added a hash-locked
+  release toolchain, owner-only manual workflows, and protected publishing flow.
+
 ### Fixed
 
 - Preserve lazy Django translations in public type annotations and restore the

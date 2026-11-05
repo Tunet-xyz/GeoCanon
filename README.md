@@ -3,7 +3,19 @@
 
 **Jurisdictions. Dial Codes. Flags. ISO Codes. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
 
-Part of the [Tunet](https://tunet.xyz/engineering/) ecosystem — alongside [SwapLayer](https://github.com/Tunet-xyz/swap_layer) and [SessionArmor](https://github.com/Tunet-xyz/session_armor). See the [GeoCanon product page](https://tunet.xyz/engineering/geo-canon/) for the public capability overview.
+Part of the [Tunet](https://tunet.xyz/engineering/) open-source libraries, alongside [SessionArmor](https://github.com/Tunet-xyz/session_armor), [AccessGate](https://github.com/Tunet-xyz/access_gate), and [SwapLayer](https://github.com/Tunet-xyz/swap_layer). See the [GeoCanon product page](https://tunet.xyz/engineering/geo-canon/) for the public capability overview.
+
+## Version 1.0
+
+The documented Python helpers, configuration, Django integration, and local MCP
+entry point form the stable 1.x API. GeoCanon supports Python 3.10–3.13 and
+Django 4.2–6.x (`Django<7`); use an upstream-supported Django release.
+The 0.5 API and bundled mappings are preserved. Invalid configured timezone
+settings now raise their error instead of silently ignoring an override.
+
+Core installation requires only Django. Optional data and formatting features
+are listed below. Settings use Pydantic validation when the `validation` extra
+is installed; otherwise they use the lightweight settings container.
 
 ---
 
@@ -49,6 +61,7 @@ get_alpha2("Romania")  # "RO"
 get_alpha3("Romania")  # "ROU"
 
 # Optional: holiday detection
+from datetime import date
 from geo_canon.holidays import is_public_holiday
 is_public_holiday("Romania", date(2025, 12, 25))  # True
 
@@ -77,6 +90,7 @@ pip install geocanon[holidays]     # Public holiday detection
 pip install geocanon[timezones]    # pytz fallback when system timezone data is unavailable
 pip install geocanon[phones]       # phonenumbers parsing/formatting
 pip install geocanon[locale]       # Babel locale-aware formatting
+pip install geocanon[validation]   # Pydantic 2 settings validation
 pip install geocanon[all]          # Everything
 ```
 
@@ -87,6 +101,7 @@ pip install geocanon[all]          # Everything
 | `timezones` | `pytz` fallback when system timezone data is unavailable |
 | `phones` | Robust phone parsing, validation, formatting, and number type detection |
 | `locale` | Babel-backed number, currency, date, time, datetime, percent, and list formatting |
+| `validation` | Pydantic 2 validation for the settings model |
 | `all` | Everything above |
 
 ### 2. Configure (optional)
@@ -170,7 +185,7 @@ MIDDLEWARE = [
 | **Currencies** | Production | ISO 4217 currency mapping, symbols, and formatting |
 | **Address Formats** | Production | Postal address formats, postal-code validation, and field labels |
 | **Locale Formatting** | Production | Optional Babel-backed number, currency, date, time, and list formatting |
-| **Settings** | Production | Pydantic-validated configuration |
+| **Settings** | Production | Lightweight configuration, with optional Pydantic 2 validation |
 
 ---
 
@@ -188,7 +203,7 @@ MIDDLEWARE = [
 - **Duration formatting** — respects Django's active translation
 - **Jurisdiction middleware** — automatic `request.jurisdiction` on every request
 - **Django form fields** — drop-in `JurisdictionChoiceField` and context-switch form
-- **Pydantic settings** — type-safe configuration with sensible defaults
+- **Optional Pydantic settings** — install `[validation]` for runtime validation
 - **Rich exceptions** — actionable error messages with hints and docs links
 - **Zero config** — works with defaults, customise when you need to
 - **PEP 561** — `py.typed` marker for mypy/pyright
@@ -201,17 +216,17 @@ MIDDLEWARE = [
 - **Product-Grounded** — extracted from repeated Django product needs across multiple jurisdictions
 - **Translatable** — all labels use `gettext_lazy` for full i18n support
 - **Minimal Dependencies** — only Django required; extras are truly optional
-- **Type-Safe** — Pydantic validation, type hints throughout, PEP 561 compliant
+- **Typed APIs** — lazy Django label types, optional Pydantic validation, and PEP 561 support
 - **Extensible** — override timezones, holiday mappings, and more via settings
 
-Bundled mappings are maintained release data rather than a live legal or standards feed. Review the [data provenance and update policy](docs/data-provenance.md) before using defaults for compliance, tax, postal, or other high-stakes decisions.
+Bundled mappings are maintained release data rather than a live legal or standards feed. Review the [data provenance and update policy](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/data-provenance.md) before using defaults for compliance, tax, postal, or other high-stakes decisions.
 
 ---
 
 
 ## Public Agent MCP Contract
 
-GeoCanon includes a public agent-operability contract in [`mcp/`](mcp/). It describes how external agents can safely discover package APIs, optional extras, locale/jurisdiction workflows, public docs, and browser-visible surfaces without requiring source-code access or customer personal data.
+GeoCanon includes a public agent-operability contract in [`mcp/`](https://github.com/Tunet-xyz/GeoCanon/tree/main/mcp/). It describes how external agents can safely discover package APIs, optional extras, locale/jurisdiction workflows, public docs, and browser-visible surfaces without requiring source-code access or customer personal data.
 
 From a checkout, run the dependency-free contract server with `python mcp/server.py`. After installation, agents can use the packaged stdio command:
 
@@ -219,14 +234,30 @@ From a checkout, run the dependency-free contract server with `python mcp/server
 geocanon-mcp
 ```
 
+This starts a local public-contract server. Its tools describe integration
+workflows and do not connect to Tunet's maintainer agents, paid accounts,
+release credentials, or production systems.
+
+## Development
+
+```bash
+python -m pip install -e ".[all,dev]"
+python -m ruff check src tests
+python -m mypy src/geo_canon src/geocanon_mcp
+python -m bandit -r src
+python -m pytest --cov=geo_canon --cov=geocanon_mcp --cov-branch
+```
+
+See [docs/RELEASE.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/RELEASE.md) for release verification and publishing.
+
 ## Contributing and releases
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](VERSIONING.md) for the shared SemVer and release policy. Public PRs and agent mentions do not start agents or workflows.
+See [CONTRIBUTING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Public PRs and agent mentions do not start agents or workflows.
 
 ## License
 
-MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](LICENSE).
+MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](https://github.com/Tunet-xyz/GeoCanon/blob/main/LICENSE).
 
 ---
 
-**[→ Read Full Documentation](docs/README.md)**
+**[→ Read Full Documentation](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/README.md)**

@@ -16,6 +16,8 @@
 
 - [Locale Formatting](locale-formats.md) - Optional Babel-backed number, currency, date, time, and list formatting
 - [Data Provenance](data-provenance.md) - Source classes, update policy, and limitations
+- [Release Procedure](RELEASE.md) - Verification, license checks, and owner-approved publishing
+- [Versioning](../VERSIONING.md) - Shared SemVer and compatibility policy
 
 ## Quick Links
 

@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.0.x   | :white_check_mark: |
 | 0.4.x   | :white_check_mark: |
 | 0.3.x   | :white_check_mark: |
 | < 0.3   | :x:                |
@@ -48,7 +49,7 @@ The following are in scope:
 
 GeoCanon includes several security features:
 
-- ✅ Input validation via Pydantic settings
+- ✅ Optional Pydantic 2 settings validation with GeoCanon[validation]
 - ✅ Rich exceptions with actionable hints (no internal leakage)
 - ✅ Type hints throughout for static analysis
 - ✅ PEP 561 `py.typed` marker for mypy/pyright

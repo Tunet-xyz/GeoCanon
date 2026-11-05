@@ -12,7 +12,7 @@
   "server": {
     "name": "geo-canon-public-contract-mcp",
     "title": "GeoCanon Public Agent Contract",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "transport": "stdio",
     "required": true,
     "hostedEndpoint": "https://github.com/Tunet-xyz/geo_canon/tree/main/mcp"

@@ -87,7 +87,7 @@ def test_stdio_recovers_from_hostile_input_and_reports_the_release_version():
         + b'{"jsonrpc":"2.0","id":3,"method":"initialize"}\n'
     )
     result = subprocess.run(
-        [sys.executable, "-m", "geocanon_mcp.server"],
+        [sys.executable, str(ROOT / "mcp/server.py")],
         input=payload,
         capture_output=True,
         check=True,
