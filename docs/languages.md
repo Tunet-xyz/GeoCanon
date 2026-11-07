@@ -4,7 +4,7 @@ Language choices for forms and jurisdiction → language mapping.
 
 ## Data
 
-- `LANGUAGE_CHOICES` — 75+ languages as `(code, translatable_name)` tuples
+- `LANGUAGE_CHOICES` — 70+ languages as `(code, translatable_name)` tuples
 - `JURISDICTION_LANGUAGE` — dict mapping jurisdiction name → ISO 639-1 code
 
 ## Functions

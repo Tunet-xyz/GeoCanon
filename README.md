@@ -3,7 +3,7 @@
 
 **Jurisdictions. Dial Codes. Flags. ISO Codes. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
 
-Part of the [Tunet](https://tunet.xyz/engineering/) open-source libraries, alongside [SessionArmor](https://github.com/Tunet-xyz/session_armor), [AccessGate](https://github.com/Tunet-xyz/access_gate), and [SwapLayer](https://github.com/Tunet-xyz/swap_layer). See the [GeoCanon product page](https://tunet.xyz/engineering/geo-canon/) for the public capability overview.
+Part of the [Tunet](https://www.tunet.xyz/engineering/) open-source libraries, alongside [SessionArmor](https://github.com/Tunet-xyz/session_armor), [AccessGate](https://github.com/Tunet-xyz/access_gate), and [SwapLayer](https://github.com/Tunet-xyz/swap_layer). See the [GeoCanon product page](https://www.tunet.xyz/engineering/geo-canon/) for the public capability overview.
 
 ## Version 1.0
 
@@ -178,7 +178,7 @@ MIDDLEWARE = [
 | **Dial Codes** | Production | International dial codes + per-country phone validation |
 | **Flags** | Production | Country → ISO-3166 flag CSS class mapping |
 | **ISO Codes** | Production | ISO 3166-1 alpha-2, alpha-3, and numeric codes |
-| **Timezones** | Production | 200+ jurisdiction → IANA timezone mappings |
+| **Timezones** | Production | 190+ jurisdiction → IANA timezone mappings |
 | **Languages** | Production | Language choices + jurisdiction → default language |
 | **Duration** | Production | i18n-aware human-readable duration formatting |
 | **Holidays** | Production | Public holiday detection for 140+ countries |
@@ -195,11 +195,11 @@ MIDDLEWARE = [
 - **ISO 3166-1 codes** — alpha-2, alpha-3, and numeric with reverse lookups
 - **Phone validation** — per-country regex patterns for national number formats
 - **Flag icons** — CSS class mapping compatible with [flag-icons](https://flagicons.lipis.dev/)
-- **200+ timezones** — uses `zoneinfo` (3.9+) with `pytz` fallback
+- **190+ timezone mappings** — uses `zoneinfo` (3.9+) with `pytz` fallback
 - **Holiday detection** — powered by the battle-tested `holidays` library
 - **170+ currency mappings** — ISO 4217 codes, symbols, and locale-aware formatting
 - **170+ address formats** — postal-code validation, localised field labels, and `format_address()`
-- **75+ languages** — ISO 639-1 choices with jurisdiction → language mapping
+- **70+ languages** — ISO 639-1 choices with jurisdiction → language mapping
 - **Duration formatting** — respects Django's active translation
 - **Jurisdiction middleware** — automatic `request.jurisdiction` on every request
 - **Django form fields** — drop-in `JurisdictionChoiceField` and context-switch form
@@ -217,7 +217,7 @@ MIDDLEWARE = [
 - **Translatable** — all labels use `gettext_lazy` for full i18n support
 - **Minimal Dependencies** — only Django required; extras are truly optional
 - **Typed APIs** — lazy Django label types, optional Pydantic validation, and PEP 561 support
-- **Extensible** — override timezones, holiday mappings, and more via settings
+- **Extensible** — override jurisdiction → timezone mappings with `GEOCANON.timezone_overrides`
 
 Bundled mappings are maintained release data rather than a live legal or standards feed. Review the [data provenance and update policy](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/data-provenance.md) before using defaults for compliance, tax, postal, or other high-stakes decisions.
 
@@ -234,9 +234,9 @@ From a checkout, run the dependency-free contract server with `python mcp/server
 geocanon-mcp
 ```
 
-This starts a local public-contract server. Its tools describe integration
-workflows and do not connect to Tunet's maintainer agents, paid accounts,
-release credentials, or production systems.
+This starts a local public-contract server over stdio. Its tools describe
+integration workflows; it makes no network connections and needs no credentials
+or account.
 
 ## Development
 
@@ -252,7 +252,7 @@ See [docs/RELEASE.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/RELEA
 
 ## Contributing and releases
 
-See [CONTRIBUTING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Public PRs and agent mentions cannot authorize maintainer work; repository jobs require owner dispatch. Vendor-hosted GitHub app access is controlled separately in the owner's account settings.
+See [CONTRIBUTING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Report vulnerabilities privately as described in [SECURITY.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/SECURITY.md). CI workflows run only when the maintainer starts them, so include your local test results in pull requests.
 
 ## License
 

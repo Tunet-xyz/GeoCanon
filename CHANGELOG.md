@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The Product URL points at `www.tunet.xyz`, which serves the product page.
+- Documentation: timezone and language counts match the bundled data (197 and
+  73), `default_language`, `holiday_country_overrides` and `enable_form_widgets`
+  are marked as reserved settings that 1.x accepts but does not use, and the
+  MCP and contribution notes are written for outside readers.
+
 ## [1.0.0] - 2026-11-05
 
 ### Changed
@@ -29,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bound public MCP messages, reject ambiguous/non-finite JSON and invalid request
   shapes, support ping, and keep stdio serving after malformed or oversized input.
 
-## [0.5.0] - 2026-07-15
+## [0.5.0] - 2026-07-15 (not published to PyPI; included in 1.0.0)
 
 ### Added
 
@@ -45,7 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added data provenance, update policy, and limitations for the bundled geographic defaults and optional third-party datasets.
 
-## [0.4.0] - 2026-02-25
+## [0.4.0] - 2026-02-25 (not published to PyPI; included in 1.0.0)
 
 ### Added
 
@@ -55,13 +63,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Flags** - Refactored to derive `FLAG_CSS_CLASS` from the new `iso_codes` module instead of maintaining a duplicate mapping. All public API unchanged.
 
-## [0.3.0] - 2026-02-25
+## [0.3.0] - 2026-02-25 (not published to PyPI; included in 1.0.0)
 
 ### Added
 
 - **Address Formats** - Jurisdiction → postal address format mapping (170+ entries), postal-code validation, localised field labels (`get_state_label`, `get_postal_code_label`), and `format_address()` helper
 
-## [0.2.0] - 2026-02-25
+## [0.2.0] - 2026-02-25 (not published to PyPI; included in 1.0.0)
 
 ### Added
 

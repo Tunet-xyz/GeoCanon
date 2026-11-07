@@ -1,6 +1,6 @@
 # Timezones
 
-Jurisdiction → IANA timezone mapping with 200+ built-in entries.
+Jurisdiction → IANA timezone mapping with 190+ built-in entries.
 
 Uses Python's `zoneinfo` module (3.9+) by default, with `pytz` fallback available via `pip install geocanon[timezones]`.
 

@@ -9,14 +9,17 @@ from geo_canon.settings import GeoCanonSettings
 
 GEOCANON = GeoCanonSettings(
     default_jurisdiction="United States",   # Default when none specified
-    default_language="en",                  # Default ISO 639-1 code
+    default_language="en",                  # Reserved: accepted, not used in 1.x
     timezone_overrides={},                  # Extra jurisdiction → IANA timezone
-    holiday_country_overrides={},           # Extra jurisdiction → ISO country code
-    enable_form_widgets=True,               # Include Django form widgets
+    holiday_country_overrides={},           # Reserved: accepted, not used in 1.x
+    enable_form_widgets=True,               # Reserved: accepted, not used in 1.x
 )
 ```
 
 All fields have sensible defaults; you only need to set what you want to change.
+`default_language`, `holiday_country_overrides` and `enable_form_widgets` are
+accepted so existing settings keep validating, but GeoCanon 1.x does not use
+them yet.
 
 The core installation uses a lightweight settings container. Install
 `GeoCanon[validation]` (or `[all]`) for Pydantic 2 runtime type validation and

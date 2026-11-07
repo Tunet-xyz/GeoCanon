@@ -19,7 +19,7 @@ from ..exceptions import TimezoneNotFoundError
 
 # ---------------------------------------------------------------------------
 # Built-in jurisdiction → IANA timezone mapping
-# Covers 200+ countries.  Users can extend via GEOCANON.timezone_overrides.
+# Covers all 196 jurisdictions.  Users can extend via GEOCANON.timezone_overrides.
 # ---------------------------------------------------------------------------
 
 TIMEZONE_MAP: dict[str, str] = {

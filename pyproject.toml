@@ -64,7 +64,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/Tunet-xyz/GeoCanon"
-Product = "https://tunet.xyz/engineering/geo-canon/"
+Product = "https://www.tunet.xyz/engineering/geo-canon/"
 Documentation = "https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/README.md"
 Repository = "https://github.com/Tunet-xyz/GeoCanon"
 Issues = "https://github.com/Tunet-xyz/GeoCanon/issues"
