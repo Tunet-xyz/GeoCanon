@@ -46,41 +46,54 @@ class AddressFormat(NamedTuple):
 # Default templates
 # ---------------------------------------------------------------------------
 
+# Recipient first in the small-to-large orders; last in the large-to-small
+# orders (Japan, China, Russia, Taiwan), as domestic mail writes them.
+_RECIPIENT = "{name}\n{company}\n"
+_RECIPIENT_LAST = "\n{company}\n{name}"
+
 # Most common worldwide: street → city → postal code → country
-_TPL_DEFAULT = "{address1}\n{address2}\n{city} {postal_code}\n{country}"
+_TPL_DEFAULT = _RECIPIENT + "{address1}\n{address2}\n{city} {postal_code}\n{country}"
+
+# The same, with the required region on its own line
+_TPL_DEFAULT_STATE = (
+    _RECIPIENT + "{address1}\n{address2}\n{city} {postal_code}\n{state}\n{country}"
+)
 
 # US/Philippines style: street → city, STATE ZIP
-_TPL_US = "{address1}\n{address2}\n{city}, {state} {postal_code}\n{country}"
+_TPL_US = _RECIPIENT + "{address1}\n{address2}\n{city}, {state} {postal_code}\n{country}"
 
 # UK style: street → city → postal code (state rarely used)
-_TPL_UK = "{address1}\n{address2}\n{city}\n{postal_code}\n{country}"
+_TPL_UK = _RECIPIENT + "{address1}\n{address2}\n{city}\n{postal_code}\n{country}"
 
 # Japan style: postal code → prefecture → city → street (reversed)
-_TPL_JP = "〒{postal_code}\n{state}{city}\n{address1}\n{address2}"
+_TPL_JP = "〒{postal_code}\n{state}{city}\n{address1}\n{address2}" + _RECIPIENT_LAST
 
 # Brazil style: street → city – STATE → postal code → country
-_TPL_BR = "{address1}\n{address2}\n{city} - {state}\n{postal_code}\n{country}"
+_TPL_BR = _RECIPIENT + "{address1}\n{address2}\n{city} - {state}\n{postal_code}\n{country}"
 
 # Germany/Nordics: street → postal_code city → country
-_TPL_DE = "{address1}\n{address2}\n{postal_code} {city}\n{country}"
+_TPL_DE = _RECIPIENT + "{address1}\n{address2}\n{postal_code} {city}\n{country}"
 
-# France/Italy/Spain: street → postal_code city → country
-_TPL_FR = "{address1}\n{address2}\n{postal_code} {city}\n{country}"
+# France style: street → postal_code city → country
+_TPL_FR = _RECIPIENT + "{address1}\n{address2}\n{postal_code} {city}\n{country}"
 
-# Russia/CIS: country → postal_code → city → street (reversed)
-_TPL_RU = "{country}\n{postal_code}\n{city}\n{address1}\n{address2}"
+# Spain/Turkey/Iran: street → postal_code city province → country
+_TPL_ES = _RECIPIENT + "{address1}\n{address2}\n{postal_code} {city} {state}\n{country}"
 
-# China: country → state → city → street (reversed)
-_TPL_CN = "{country}\n{state}\n{city}\n{address1}\n{address2}"
+# Russia/CIS: country → postal_code → region → city → street (reversed)
+_TPL_RU = "{country}\n{postal_code}\n{state}\n{city}\n{address1}\n{address2}" + _RECIPIENT_LAST
+
+# China: country → postal_code → state → city → street (reversed)
+_TPL_CN = "{country}\n{postal_code}\n{state}\n{city}\n{address1}\n{address2}" + _RECIPIENT_LAST
 
 # South Korea: state → city → street → postal code
-_TPL_KR = "{state} {city}\n{address1}\n{address2}\n{postal_code}\n{country}"
+_TPL_KR = _RECIPIENT + "{state} {city}\n{address1}\n{address2}\n{postal_code}\n{country}"
 
 # India: street → city → state → postal code
-_TPL_IN = "{address1}\n{address2}\n{city}\n{state} {postal_code}\n{country}"
+_TPL_IN = _RECIPIENT + "{address1}\n{address2}\n{city}\n{state} {postal_code}\n{country}"
 
 # Canada/Australia: street → city STATE postal_code
-_TPL_CA = "{address1}\n{address2}\n{city} {state} {postal_code}\n{country}"
+_TPL_CA = _RECIPIENT + "{address1}\n{address2}\n{city} {state} {postal_code}\n{country}"
 
 
 # ---------------------------------------------------------------------------
@@ -159,11 +172,11 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     ),
     "Chad": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
     "Chile": AddressFormat(
-        _TPL_DEFAULT, _("Region"), _("Postal Code"), True, r"^\d{7}$", "8320000"
+        _TPL_DEFAULT_STATE, _("Region"), _("Postal Code"), True, r"^\d{7}$", "8320000"
     ),
     "China": AddressFormat(_TPL_CN, _("Province"), _("Postal Code"), True, r"^\d{6}$", "100000"),
     "Colombia": AddressFormat(
-        _TPL_DEFAULT, _("Department"), _("Postal Code"), True, r"^\d{6}$", "110111"
+        _TPL_DEFAULT_STATE, _("Department"), _("Postal Code"), True, r"^\d{6}$", "110111"
     ),
     "Comoros": AddressFormat(_TPL_DEFAULT, _("Island"), _("Postal Code"), False, "", ""),
     "Congo": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
@@ -172,7 +185,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     ),
     "Congo (DRC)": AddressFormat(_TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""),
     "Costa Rica": AddressFormat(
-        _TPL_DEFAULT, _("Province"), _("Postal Code"), True, r"^\d{4,5}$", "10101"
+        _TPL_DEFAULT_STATE, _("Province"), _("Postal Code"), True, r"^\d{4,5}$", "10101"
     ),
     "Cote d'Ivoire": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
     "Croatia": AddressFormat(_TPL_DE, _("County"), _("Postal Code"), False, r"^\d{5}$", "10000"),
@@ -197,10 +210,10 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
         _TPL_DEFAULT, _("Province"), _("Postal Code"), False, r"^\d{6}$", "170150"
     ),
     "Egypt": AddressFormat(
-        _TPL_DEFAULT, _("Governorate"), _("Postal Code"), True, r"^\d{5}$", "11511"
+        _TPL_DEFAULT_STATE, _("Governorate"), _("Postal Code"), True, r"^\d{5}$", "11511"
     ),
     "El Salvador": AddressFormat(
-        _TPL_DEFAULT, _("Department"), _("Postal Code"), True, r"^\d{4}$", "1101"
+        _TPL_DEFAULT_STATE, _("Department"), _("Postal Code"), True, r"^\d{4}$", "1101"
     ),
     "Equatorial Guinea": AddressFormat(
         _TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""
@@ -247,7 +260,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
         _TPL_DEFAULT, _("Department"), _("Postal Code"), False, r"^\d{5}$", "11101"
     ),
     "Hong Kong": AddressFormat(
-        "{address1}\n{address2}\n{city}\n{state}",
+        _RECIPIENT + "{address1}\n{address2}\n{city}\n{state}",
         _("District"),
         _("Postal Code"),
         False,
@@ -258,16 +271,16 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Iceland": AddressFormat(_TPL_DE, _("Region"), _("Postal Code"), False, r"^\d{3}$", "101"),
     "India": AddressFormat(_TPL_IN, _("State"), _("PIN Code"), True, r"^\d{6}$", "110001"),
     "Indonesia": AddressFormat(
-        _TPL_DEFAULT, _("Province"), _("Postal Code"), True, r"^\d{5}$", "10110"
+        _TPL_DEFAULT_STATE, _("Province"), _("Postal Code"), True, r"^\d{5}$", "10110"
     ),
     "Iran": AddressFormat(
-        _TPL_DE, _("Province"), _("Postal Code"), True, r"^\d{5}-?\d{5}$", "11369-44318"
+        _TPL_ES, _("Province"), _("Postal Code"), True, r"^\d{5}-?\d{5}$", "11369-44318"
     ),
     "Iraq": AddressFormat(
         _TPL_DEFAULT, _("Governorate"), _("Postal Code"), False, r"^\d{5}$", "10001"
     ),
     "Ireland": AddressFormat(
-        "{address1}\n{address2}\n{city}\n{state}\n{postal_code}",
+        _RECIPIENT + "{address1}\n{address2}\n{city}\n{state}\n{postal_code}",
         _("County"),
         _("Eircode"),
         False,
@@ -276,7 +289,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     ),
     "Israel": AddressFormat(_TPL_DE, _("District"), _("Postal Code"), False, r"^\d{7}$", "6100000"),
     "Italy": AddressFormat(
-        "{address1}\n{address2}\n{postal_code} {city} {state}",
+        _RECIPIENT + "{address1}\n{address2}\n{postal_code} {city} {state}",
         _("Province"),
         _("CAP"),
         True,
@@ -332,7 +345,9 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Luxembourg": AddressFormat(_TPL_DE, _("Canton"), _("Postal Code"), False, r"^\d{4}$", "1009"),
     "Madagascar": AddressFormat(_TPL_DE, _("Province"), _("Postal Code"), False, r"^\d{3}$", "101"),
     "Malawi": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
-    "Malaysia": AddressFormat(_TPL_DEFAULT, _("State"), _("Postcode"), True, r"^\d{5}$", "50000"),
+    "Malaysia": AddressFormat(
+        _TPL_DEFAULT_STATE, _("State"), _("Postcode"), True, r"^\d{5}$", "50000"
+    ),
     "Maldives": AddressFormat(
         _TPL_DEFAULT, _("Atoll"), _("Postal Code"), False, r"^\d{5}$", "20026"
     ),
@@ -382,7 +397,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     ),
     "Niger": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, r"^\d{4}$", "8000"),
     "Nigeria": AddressFormat(
-        _TPL_DEFAULT, _("State"), _("Postal Code"), True, r"^\d{6}$", "100001"
+        _TPL_DEFAULT_STATE, _("State"), _("Postal Code"), True, r"^\d{6}$", "100001"
     ),
     "North Korea": AddressFormat(_TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""),
     "North Macedonia": AddressFormat(
@@ -393,7 +408,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
         _TPL_DEFAULT, _("Governorate"), _("Postal Code"), False, r"^\d{3}$", "100"
     ),
     "Pakistan": AddressFormat(
-        _TPL_DEFAULT, _("Province"), _("Postal Code"), True, r"^\d{5}$", "44000"
+        _TPL_DEFAULT_STATE, _("Province"), _("Postal Code"), True, r"^\d{5}$", "44000"
     ),
     "Palau": AddressFormat(_TPL_US, _("State"), _("ZIP Code"), False, r"^\d{5}$", "96940"),
     "Palestine": AddressFormat(
@@ -408,7 +423,9 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Paraguay": AddressFormat(
         _TPL_DEFAULT, _("Department"), _("Postal Code"), False, r"^\d{4}$", "1209"
     ),
-    "Peru": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), True, r"^\d{5}$", "15001"),
+    "Peru": AddressFormat(
+        _TPL_DEFAULT_STATE, _("Region"), _("Postal Code"), True, r"^\d{5}$", "15001"
+    ),
     "Philippines": AddressFormat(_TPL_US, _("Province"), _("ZIP Code"), True, r"^\d{4}$", "1000"),
     "Poland": AddressFormat(
         _TPL_DE, _("Voivodeship"), _("Postal Code"), False, r"^\d{2}-\d{3}$", "00-001"
@@ -444,7 +461,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Seychelles": AddressFormat(_TPL_DEFAULT, _("District"), _("Postal Code"), False, "", ""),
     "Sierra Leone": AddressFormat(_TPL_DEFAULT, _("District"), _("Postal Code"), False, "", ""),
     "Singapore": AddressFormat(
-        "{address1}\n{address2}\nSingapore {postal_code}",
+        _RECIPIENT + "{address1}\n{address2}\nSingapore {postal_code}",
         _("Region"),
         _("Postal Code"),
         False,
@@ -458,13 +475,13 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
         _TPL_DEFAULT, _("Region"), _("Postal Code"), False, r"^[A-Z]{2}\s?\d{5}$", "JH 09010"
     ),
     "South Africa": AddressFormat(
-        _TPL_DEFAULT, _("Province"), _("Postal Code"), True, r"^\d{4}$", "0001"
+        _TPL_DEFAULT_STATE, _("Province"), _("Postal Code"), True, r"^\d{4}$", "0001"
     ),
     "South Korea": AddressFormat(
         _TPL_KR, _("Province"), _("Postal Code"), True, r"^\d{5}$", "03051"
     ),
     "South Sudan": AddressFormat(_TPL_DEFAULT, _("State"), _("Postal Code"), False, "", ""),
-    "Spain": AddressFormat(_TPL_FR, _("Province"), _("Código Postal"), True, r"^\d{5}$", "28001"),
+    "Spain": AddressFormat(_TPL_ES, _("Province"), _("Código Postal"), True, r"^\d{5}$", "28001"),
     "Sri Lanka": AddressFormat(
         _TPL_DEFAULT, _("Province"), _("Postal Code"), False, r"^\d{5}$", "00100"
     ),
@@ -476,7 +493,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Switzerland": AddressFormat(_TPL_DE, _("Canton"), _("PLZ"), False, r"^\d{4}$", "3000"),
     "Syria": AddressFormat(_TPL_DEFAULT, _("Governorate"), _("Postal Code"), False, "", ""),
     "Taiwan": AddressFormat(
-        "{postal_code}\n{state}{city}\n{address1}\n{address2}",
+        "{postal_code}\n{state}{city}\n{address1}\n{address2}" + _RECIPIENT_LAST,
         _("County/City"),
         _("Postal Code"),
         True,
@@ -490,7 +507,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
         _TPL_DEFAULT, _("Region"), _("Postal Code"), False, r"^\d{5}$", "11101"
     ),
     "Thailand": AddressFormat(
-        _TPL_DEFAULT, _("Province"), _("Postal Code"), True, r"^\d{5}$", "10100"
+        _TPL_DEFAULT_STATE, _("Province"), _("Postal Code"), True, r"^\d{5}$", "10100"
     ),
     "Timor-Leste": AddressFormat(_TPL_DEFAULT, _("Municipality"), _("Postal Code"), False, "", ""),
     "Togo": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
@@ -501,7 +518,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Tunisia": AddressFormat(
         _TPL_DE, _("Governorate"), _("Code Postal"), False, r"^\d{4}$", "1000"
     ),
-    "Turkey": AddressFormat(_TPL_DE, _("Province"), _("Postal Code"), True, r"^\d{5}$", "06100"),
+    "Turkey": AddressFormat(_TPL_ES, _("Province"), _("Postal Code"), True, r"^\d{5}$", "06100"),
     "Turkmenistan": AddressFormat(
         _TPL_DE, _("Region"), _("Postal Code"), False, r"^\d{6}$", "744000"
     ),
@@ -509,7 +526,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Uganda": AddressFormat(_TPL_DEFAULT, _("District"), _("Postal Code"), False, "", ""),
     "Ukraine": AddressFormat(_TPL_DE, _("Region"), _("Postal Code"), False, r"^\d{5}$", "01001"),
     "United Arab Emirates": AddressFormat(
-        _TPL_DEFAULT, _("Emirate"), _("Postal Code"), True, "", ""
+        _TPL_DEFAULT_STATE, _("Emirate"), _("Postal Code"), True, "", ""
     ),
     "United Kingdom": AddressFormat(
         _TPL_UK,
@@ -531,7 +548,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Vanuatu": AddressFormat(_TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""),
     "Vatican City": AddressFormat(_TPL_FR, _("Region"), _("CAP"), False, r"^00120$", "00120"),
     "Venezuela": AddressFormat(
-        _TPL_DEFAULT, _("State"), _("Postal Code"), True, r"^\d{4}(-[A-Z])?\d?$", "1010"
+        _TPL_DEFAULT_STATE, _("State"), _("Postal Code"), True, r"^\d{4}(-[A-Z])?\d?$", "1010"
     ),
     "Vietnam": AddressFormat(
         _TPL_DEFAULT, _("Province"), _("Postal Code"), False, r"^\d{5,6}$", "100000"
@@ -654,7 +671,7 @@ def format_address(
     """
     Format an address string according to *jurisdiction*'s conventions.
 
-    Empty lines are automatically collapsed.
+    Empty fields leave no blank lines or stray spaces behind.
 
     >>> from geo_canon.address_formats import format_address
     >>> print(format_address(
@@ -666,6 +683,7 @@ def format_address(
     ...     postal_code="10001",
     ...     country="United States",
     ... ))
+    Jane Doe
     123 Main St
     New York, NY 10001
     United States
@@ -688,8 +706,8 @@ def format_address(
         postal_code=postal_code,
         country=country,
     )
-    # Collapse blank or whitespace-only lines
-    lines = [line for line in raw.splitlines() if line.strip()]
+    # Drop lines left empty by missing fields, and the spaces they leave behind
+    lines = [" ".join(line.split()) for line in raw.splitlines() if line.strip()]
     return "\n".join(lines)
 
 

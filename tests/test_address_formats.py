@@ -360,6 +360,81 @@ class TestFormatAddress:
         )
         assert "Singapore 048616" in result
 
+    def test_recipient_comes_first_in_small_to_large_orders(self):
+        result = format_address(
+            "United States",
+            name="Jane Doe",
+            company="Acme Inc.",
+            address1="123 Main St",
+            city="New York",
+            state="NY",
+            postal_code="10001",
+            country="United States",
+        )
+        assert result.splitlines() == [
+            "Jane Doe",
+            "Acme Inc.",
+            "123 Main St",
+            "New York, NY 10001",
+            "United States",
+        ]
+
+    def test_recipient_comes_last_in_large_to_small_orders(self):
+        result = format_address(
+            "Japan",
+            name="Taro Yamada",
+            company="Example KK",
+            address1="1-1 Chiyoda",
+            state="Tokyo",
+            city="Chiyoda-ku",
+            postal_code="100-0001",
+        )
+        assert result.splitlines()[-2:] == ["Example KK", "Taro Yamada"]
+
+    def test_china_shows_the_postal_code(self):
+        result = format_address(
+            "China",
+            address1="1 Chang'an Avenue",
+            city="Dongcheng",
+            state="Beijing",
+            postal_code="100000",
+            country="China",
+        )
+        assert result.splitlines()[:3] == ["China", "100000", "Beijing"]
+
+    def test_required_state_is_shown(self):
+        spain = format_address(
+            "Spain", address1="Calle Mayor 1", city="Madrid", state="Madrid", postal_code="28001"
+        )
+        assert "28001 Madrid Madrid" in spain.splitlines()
+        nigeria = format_address(
+            "Nigeria", address1="1 Marina", city="Lagos Island", state="Lagos", postal_code="101001"
+        )
+        assert nigeria.splitlines()[-1] == "Lagos"
+
+    def test_empty_fields_leave_no_stray_spaces(self):
+        spain = format_address("Spain", address1="Calle Mayor 1", city="Madrid", postal_code="28001")
+        assert spain.splitlines() == ["Calle Mayor 1", "28001 Madrid"]
+        canada = format_address("Canada", address1="1 Main St", city="Toronto", postal_code="M5V 2T6")
+        assert canada.splitlines() == ["1 Main St", "Toronto M5V 2T6"]
+
+
+class TestTemplatesUseTheirFields:
+    def test_every_template_places_the_recipient(self):
+        for name, fmt in JURISDICTION_ADDRESS_FORMAT.items():
+            assert "{name}" in fmt.template, name
+            assert "{company}" in fmt.template, name
+
+    def test_required_states_appear_in_the_template(self):
+        for name, fmt in JURISDICTION_ADDRESS_FORMAT.items():
+            if fmt.state_required:
+                assert "{state}" in fmt.template, name
+
+    def test_postal_codes_with_a_pattern_appear_in_the_template(self):
+        for name, fmt in JURISDICTION_ADDRESS_FORMAT.items():
+            if fmt.postal_code_pattern:
+                assert "{postal_code}" in fmt.template, name
+
 
 # ---------------------------------------------------------------------------
 # get_postal_code_regex
