@@ -88,12 +88,82 @@ def test_public_discovery_resources_tools_and_prompts_are_callable():
         contents = request("resources/read", {"uri": resource["uri"]})["contents"]
         assert contents and contents[0]["text"]
     for tool in request("tools/list")["tools"]:
-        output = request("tools/call", {"name": tool["name"], "arguments": {}})
+        output = request("tools/call", {"name": tool["name"], "arguments": valid_arguments(tool)})
         assert output["isError"] is False
         assert output["structuredContent"]["offering"]["id"] == "geo_canon"
     for prompt in request("prompts/list")["prompts"]:
-        output = request("prompts/get", {"name": prompt["name"], "arguments": {}})
+        arguments = {argument["name"]: "example" for argument in prompt["arguments"]}
+        output = request("prompts/get", {"name": prompt["name"], "arguments": arguments})
         assert output["messages"]
+
+
+def valid_arguments(tool):
+    """Arguments that satisfy a tool's inputSchema."""
+    arguments = {}
+    for name, spec in tool["inputSchema"].get("properties", {}).items():
+        if "enum" in spec:
+            arguments[name] = spec["enum"][0]
+        elif spec.get("type") == "array":
+            arguments[name] = ["example"]
+        else:
+            arguments[name] = "example"
+    return arguments
+
+
+def call(method, params):
+    return handle({"jsonrpc": "2.0", "id": 1, "method": method, "params": params}, load_contract())
+
+
+def test_prompt_arguments_are_substituted_once():
+    reply = call("prompts/get", {"name": "agent_onboarding", "arguments": {"user_goal": "{user_goal}"}})
+    text = reply["result"]["messages"][0]["content"]["text"]
+    assert text.count("{user_goal}") == 1
+
+
+def test_prompt_arguments_cannot_inject_or_amplify():
+    # Sequential substitution let one argument's value name another argument,
+    # so a 10 KB request could produce a reply of several megabytes.
+    arguments = {"user_goal": "{a}" * 1000, "a": "{b}" * 1000, "b": "x" * 1000}
+    reply = call("prompts/get", {"name": "agent_onboarding", "arguments": arguments})
+    assert reply["error"]["code"] == -32602
+    assert len(json.dumps(reply)) < 1000
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [{}, {"user_goal": 42}, {"user_goal": ["list"]}],
+)
+def test_prompt_arguments_are_checked(arguments):
+    reply = call("prompts/get", {"name": "agent_onboarding", "arguments": arguments})
+    assert reply["error"]["code"] == -32602
+
+
+@pytest.mark.parametrize(
+    ("tool", "arguments"),
+    [
+        ("map_workflow_to_tools", {}),
+        ("prepare_global_form", {"jurisdictions": ["France"]}),
+        ("list_public_capabilities", {"surface": "everything"}),
+        ("prepare_locale_configuration", {"features": "holidays"}),
+        ("prepare_locale_configuration", {"features": [1, 2]}),
+        ("operate_browser_docs", {"task": True}),
+    ],
+)
+def test_tool_arguments_follow_the_input_schema(tool, arguments):
+    assert call("tools/call", {"name": tool, "arguments": arguments})["error"]["code"] == -32602
+
+
+def test_tool_results_say_they_return_contract_guidance():
+    reply = call("tools/call", {"name": "describe_offering", "arguments": {}})
+    assert "does not run GeoCanon or generate code" in reply["result"]["content"][0]["text"]
+    for tool in load_contract()["tools"]:
+        assert not tool["description"].startswith(("Generate", "Draft")), tool["name"]
+
+
+def test_error_details_are_bounded():
+    reply = call("tools/call", {"name": "x" * 100_000, "arguments": {}})
+    assert reply["error"]["code"] == -32602
+    assert len(reply["error"]["message"]) < 400
 
 
 @pytest.mark.parametrize(
