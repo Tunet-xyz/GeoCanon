@@ -20,14 +20,14 @@
   },
   "instructions": "Agents should assume they do not have source-code access to a user's app unless explicitly granted. Use public docs, installed package APIs, user-provided examples, and browser-visible references. Treat jurisdiction, address, locale, and holiday behavior as configuration choices that should be verified with the user for regulated or legal workflows.",
   "publicAccess": {
-    "mcpEndpoint": "public contract in repository mcp/; future hosted endpoint may expose the same resources",
+    "mcpEndpoint": "geocanon-mcp stdio server installed with the package; python mcp/server.py from a source checkout",
     "pythonPackage": "pip install GeoCanon",
     "pythonApi": ["get_jurisdiction_choices()", "get_dial_code(jurisdiction)", "get_currency_code(jurisdiction)", "GeoCanonSettings(...)"],
     "cli": ["geocanon-mcp"],
     "docsUrl": "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md",
     "pypiUrl": "https://pypi.org/project/GeoCanon/",
     "repositoryUrl": "https://github.com/Tunet-xyz/geo_canon",
-    "supportedOperationModes": ["mcp-tools", "python-api", "browser-docs"],
+    "supportedOperationModes": ["mcp-tools", "python-api", "cli", "browser-docs"],
     "browserAutomation": {
       "allowed": true,
       "requiresAuthenticatedUserSession": false,

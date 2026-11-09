@@ -12,8 +12,8 @@ def test_release_identity_and_license():
     metadata = (root / "pyproject.toml").read_text()
     assert re.search(rf'^version = "{re.escape(__version__)}"$', metadata, re.M)
     assert 'license = "MIT"' in metadata and 'license-files = ["LICENSE"]' in metadata
-    assert json.loads((root / "src/geocanon_mcp/agent-contract.json").read_text())["server"]["version"] == __version__
+    assert json.loads((root / "src/geo_canon/mcp/agent-contract.json").read_text())["server"]["version"] == __version__
     assert (root / "mcp/agent-contract.json").read_bytes() == (
-        root / "src/geocanon_mcp/agent-contract.json"
+        root / "src/geo_canon/mcp/agent-contract.json"
     ).read_bytes()
     assert f"## [{__version__}] - " in (root / "CHANGELOG.md").read_text()

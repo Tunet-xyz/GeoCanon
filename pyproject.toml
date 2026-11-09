@@ -3,10 +3,7 @@ requires = ["hatchling>=1.27,<2"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/geo_canon", "src/geocanon_mcp"]
-
-[tool.hatch.build.targets.wheel.force-include]
-"src/geocanon_mcp/agent-contract.json" = "geocanon_mcp/agent-contract.json"
+packages = ["src/geo_canon"]
 
 [tool.hatch.build.targets.sdist]
 include = [
@@ -72,7 +69,7 @@ Issues = "https://github.com/Tunet-xyz/geo_canon/issues"
 Changelog = "https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md"
 
 [project.scripts]
-geocanon-mcp = "geocanon_mcp.server:main"
+geocanon-mcp = "geo_canon.mcp.server:main"
 
 [project.optional-dependencies]
 holidays = ["holidays>=0.66"]
@@ -108,6 +105,8 @@ pythonpath = [".", "src"]
 
 [tool.mypy]
 python_version = "3.10"
+packages = ["geo_canon"]
+mypy_path = "src"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false
@@ -141,7 +140,7 @@ ignore = [
 known-first-party = ["geo_canon"]
 
 [tool.coverage.run]
-source = ["src/geo_canon", "src/geocanon_mcp"]
+source = ["geo_canon"]
 branch = true
 omit = ["*/tests/*", "*/__pycache__/*"]
 

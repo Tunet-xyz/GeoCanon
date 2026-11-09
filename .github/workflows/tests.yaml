@@ -32,12 +32,12 @@ jobs:
     
     - name: Type check with mypy
       run: |
-        python -m mypy src/geo_canon src/geocanon_mcp
+        python -m mypy src/geo_canon
     
     - name: Run tests with coverage
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-        pytest tests/ --cov=geo_canon --cov=geocanon_mcp --cov-branch --cov-report=xml --cov-report=term-missing
+        pytest tests/ --cov=geo_canon --cov-branch --cov-report=xml --cov-report=term-missing
     
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5

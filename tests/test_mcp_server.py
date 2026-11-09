@@ -1,22 +1,56 @@
 """Regression checks for the local public-contract protocol boundary."""
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
 import pytest
 
-from geocanon_mcp.server import MAX_MESSAGE_CHARS, handle, load_contract, parse_message
+from geo_canon.mcp.server import MAX_MESSAGE_CHARS, handle, load_contract, parse_message
 
 ROOT = Path(__file__).resolve().parents[1]
+SOURCE_ENV = {**os.environ, "PYTHONPATH": str(ROOT / "src")}
 
 
 def test_checkout_and_packaged_contract_and_server_agree():
     assert json.loads((ROOT / "mcp/agent-contract.json").read_text()) == load_contract()
-    assert (ROOT / "mcp/server.py").read_bytes() == (
-        ROOT / "src/geocanon_mcp/server.py"
-    ).read_bytes()
+    launcher = (ROOT / "mcp/server.py").read_text(encoding="utf-8")
+    assert "from geo_canon.mcp.server import main" in launcher
+
+
+def test_console_script_targets_the_packaged_server():
+    metadata = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+    assert 'geocanon-mcp = "geo_canon.mcp.server:main"' in metadata
+    assert 'packages = ["src/geo_canon"]' in metadata
+
+
+@pytest.mark.parametrize("module", ["geo_canon", "geo_canon.mcp.server"])
+def test_importing_the_package_or_server_does_not_load_django(module):
+    probe = f"import sys, {module}; print('django' in sys.modules)"
+    result = subprocess.run(
+        [sys.executable, "-c", probe],
+        env=SOURCE_ENV,
+        capture_output=True,
+        check=True,
+        text=True,
+        timeout=60,
+    )
+    assert result.stdout.strip() == "False"
+
+
+def test_python_dash_m_runs_the_server():
+    result = subprocess.run(
+        [sys.executable, "-m", "geo_canon.mcp"],
+        input=b'{"jsonrpc":"2.0","id":1,"method":"initialize"}\n',
+        env=SOURCE_ENV,
+        capture_output=True,
+        check=True,
+        timeout=60,
+    )
+    reply = json.loads(result.stdout.splitlines()[0])
+    assert reply["result"]["serverInfo"]["name"] == load_contract()["server"]["name"]
 
 
 @pytest.mark.parametrize("message", [[], None, 42, {"id": True}, {"id": []}])
