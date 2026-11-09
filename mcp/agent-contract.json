@@ -6,7 +6,7 @@
     "packageName": "GeoCanon",
     "status": "production",
     "license": "MIT",
-    "purpose": "Global-ready Django locale and jurisdiction toolkit for countries, dial codes, flags, ISO codes, timezones, holidays, languages, currencies, address formats, and locale formatting.",
+    "purpose": "Jurisdictions, dial codes, flags, ISO codes, timezones, holidays, languages, currencies, and address formats for Django, in one package.",
     "audiences": ["django-developer", "internationalization-engineer", "customer-agent", "integration-agent", "maintainer-agent"]
   },
   "server": {

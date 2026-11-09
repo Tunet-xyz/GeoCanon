@@ -1,8 +1,5 @@
 """
-GeoCanon — Global-ready Django apps from day one.
-
-Jurisdictions, dial codes, flags, ISO country codes, holidays, timezones,
-languages, currencies, address formats & more.
+Jurisdictions, dial codes, flags, ISO codes, timezones, holidays, languages, currencies, and address formats for Django, in one package.
 
 Quick start::
 

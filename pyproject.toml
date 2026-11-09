@@ -19,7 +19,7 @@ include = [
 [project]
 name = "GeoCanon"
 version = "1.0.0"
-description = "Django locale toolkit for jurisdictions, ISO codes, currencies, addresses, phones, timezones, languages, and holidays."
+description = "Jurisdictions, dial codes, flags, ISO codes, timezones, holidays, languages, currencies, and address formats for Django, in one package."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
