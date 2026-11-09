@@ -21,21 +21,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 license-files = ["LICENSE"]
-keywords = [
-  "django",
-  "i18n",
-  "l10n",
-  "internationalization",
-  "localization",
-  "jurisdiction",
-  "dial-codes",
-  "flags",
-  "holidays",
-  "timezones",
-  "languages",
-  "global",
-  "locale",
-]
+keywords = ["dial-codes", "django", "flags", "global", "holidays", "i18n", "internationalization", "jurisdiction", "l10n", "languages", "locale", "localization", "mcp", "timezones"]
 authors = [
   { name = "Tunet Ltd", email = "alex@tunet.xyz" },
 ]

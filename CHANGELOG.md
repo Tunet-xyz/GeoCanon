@@ -86,8 +86,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   undeclared, missing, or non-string arguments; `tools/call` checks each tool's
   required arguments, types, and allowed values; tool descriptions say the
   tools return contract guidance; error details are cut to 200 characters.
-- Django classifiers list 4.2, 5.2, and 6.1, and the package declares
-  `Typing :: Typed`.
+- Django classifiers list 4.2, 5.2, and 6.1, the package declares
+  `Typing :: Typed`, and its keywords are sorted and add `mcp`.
 
 ### Removed
 
