@@ -13,7 +13,7 @@ GeoCanon's data model follows these public standards and upstream datasets:
 | Timezone identifiers | [IANA Time Zone Database](https://www.iana.org/time-zones) | Default IANA timezone choices for jurisdiction lookups. |
 | Locale formatting | [Unicode CLDR](https://cldr.unicode.org/) through Babel | Optional locale-aware number, currency, date, time, and list formatting. |
 | Phone metadata | [Google libphonenumber](https://github.com/google/libphonenumber) through `phonenumbers` | Optional parsing, validation, number type detection, and display formatting. |
-| Public holidays | The optional [`holidays`](https://github.com/vacanza/holidays) package | Runtime holiday calculation for the countries supported by the installed dependency version. |
+| Public holidays | The optional [`holidays`](https://github.com/vacanza/holidays) package | Runtime holiday calculation for GeoCanon's fixed registry of 147 jurisdictions; dates and names come from the installed dependency version. |
 | Flag CSS classes | The ISO alpha-2 convention used by [`flag-icons`](https://github.com/lipis/flag-icons) | Generates CSS class names; GeoCanon does not bundle flag artwork. |
 
 The repository currently maintains the core jurisdiction, code, timezone, language, currency, dial-code, and address mappings directly. It does not automatically synchronize those tables from upstream services during installation or runtime.
@@ -32,7 +32,7 @@ Corrections should include a primary-source reference in the pull request or iss
 
 - A country can have multiple timezones, currencies, languages, address conventions, or phone-number patterns. A single default is a product convenience, not a complete geopolitical model.
 - Postal formats and labels vary within jurisdictions and change over time. Validate addresses through an authoritative delivery provider when deliverability matters.
-- Holiday coverage and naming depend on the installed `holidays` version and its supported subdivisions.
+- Holiday coverage and naming depend on the installed `holidays` version. GeoCanon asks for national holidays only; it does not pass subdivisions.
 - Phone validity and formatting depend on `phonenumbers` metadata; a syntactically valid number is not proof that the number exists or belongs to a user.
 - Locale formatting is presentation logic, not tax, accounting, accessibility, or legal advice.
 - Jurisdiction names and boundaries can be disputed. Applications with policy or legal consequences should maintain their own reviewed overrides and decision records.

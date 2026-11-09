@@ -98,7 +98,7 @@ is_state_required("France")         # False
 
 ### `format_address(jurisdiction, *, name, company, address1, address2, city, state, postal_code, country) → str`
 
-Format address fields according to the jurisdiction's conventions. All keyword arguments are optional strings. Empty lines are collapsed automatically.
+Format address fields according to the jurisdiction's conventions. All keyword arguments are optional strings. Empty lines are collapsed automatically. No registered template includes `{name}` or `{company}`, so those two arguments are dropped; they are printed only for a jurisdiction without a registered format, where the non-empty fields are joined one per line.
 
 ```python
 from geo_canon.address_formats import format_address
@@ -148,7 +148,8 @@ The module ships with jurisdiction-appropriate templates:
 | US | US, Philippines, Mexico | street → city, STATE ZIP → country |
 | UK | United Kingdom | street → city → postcode → country |
 | DE/Nordics | Germany, Austria, Scandinavia | street → PLZ city → country |
-| FR | France, Italy, Spain | street → code_postal city → country |
+| FR | France, Spain | street → code_postal city → country |
+| IT | Italy | street → CAP city province |
 | JP | Japan | 〒postal → prefecture city → street |
 | BR | Brazil | street → city – STATE → CEP → country |
 | CN | China | country → province → city → street |
@@ -164,10 +165,10 @@ The "state" field has different names worldwide — the module maps each:
 | Label | Jurisdictions |
 |-------|--------------|
 | State | US, Australia, Brazil, India, Nigeria |
-| Province | Canada, Argentina, China, Philippines |
+| Province | Canada, Argentina, China, Italy, Philippines |
 | County | UK, Ireland, Romania, Hungary |
 | Prefecture | Japan |
-| Region | France, Italy, many African countries |
+| Region | France, many African countries |
 | Emirate | UAE |
 | Canton | Switzerland, Luxembourg |
 | Voivodeship | Poland |

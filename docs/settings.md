@@ -22,13 +22,16 @@ accepted so existing settings keep validating, but GeoCanon 1.x does not use
 them yet.
 
 The core installation uses a lightweight settings container. Install
-`GeoCanon[validation]` (or `[all]`) for Pydantic 2 runtime type validation and
-rejection of unknown fields. Do not assume runtime type coercion or validation
-from the dependency-free container alone. `GEOCANON` may also be a plain dict.
+`GeoCanon[validation]` (or `[all]`) for Pydantic 2 runtime type validation; the
+dependency-free container does not check or coerce types. Both containers
+reject unknown fields, and neither checks that jurisdiction or IANA timezone
+names exist. `GEOCANON` may also be a plain dict.
 
-Timezone lookups work before Django settings are configured. Once configured,
-invalid settings raise an error; GeoCanon does not silently ignore a malformed
-timezone override configuration.
+Timezone lookups work before Django settings are configured. Once configured, a
+`GEOCANON` value that is neither a `GeoCanonSettings` instance nor a mapping
+raises `ConfigurationError`. Without the `validation` extra, values of the wrong
+type are not rejected, and override zone names are checked only when they are
+used (see [Timezones](timezones.md)).
 
 ## Accessing Settings
 

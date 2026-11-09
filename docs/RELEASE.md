@@ -1,27 +1,86 @@
 # Release procedure
 
-Follow the shared [versioning policy](../VERSIONING.md). Only the owner starts,
-reruns, or re-enables GitHub Actions, and only `bezu-1` approves the `pypi`
-environment. PRs, issues, comments, and mentions never launch maintainers' agents.
+Follow the shared [versioning policy](../VERSIONING.md). The GitHub Actions
+workflows are manual-only: only the owner (`@bezu-1`) starts, reruns, or
+re-enables them, and only the owner approves the protected `pypi` environment.
+Agents run the equivalent checks locally and never dispatch, rerun, re-enable,
+or approve a workflow. Pull requests, issues, comments, and mentions never
+start one.
 
-1. Review the current source, data provenance, compatibility impact, changelog,
-   supported-version table, and package/runtime/MCP version agreement.
-2. Run lint, mypy, Bandit, dependency auditing, and tests on supported Python and
-   Django boundaries, both without extras and with `[all]`. Exercise the local
-   MCP command, including malformed-message recovery. Record unavailable checks.
-3. Inspect source/history for secrets. Check the MIT text and SPDX metadata;
-   external dependencies retain their own licenses, and no flag artwork or
-   third-party package code is bundled in GeoCanon's wheel.
-4. Install `requirements/build.txt` with `--require-hashes`, then build with
-   `python -m build --no-isolation`. Validate both files with `python -m twine
-   check`, inspect archive contents, retain SHA-256 checksums, and smoke-test
-   the exact wheel in a clean environment.
-5. Commit and push the verified source under the owner's authorization. Create
-   an immutable `v<version>` tag on that commit. The owner may then start the
-   manual `publish.yaml` workflow from `main` or that matching tag.
-6. Publish only through PyPI Trusted Publishing bound to this repository,
-   `publish.yaml`, and the owner-approved `pypi` environment. Allow only `main`
-   and protected `v*` tags to deploy. Keep OIDC permission in the upload job;
-   neither build jobs nor public contributions receive publishing credentials.
-7. Verify the PyPI version, artifact hashes, metadata, and clean installation
-   before announcing availability. A committed candidate is not a PyPI release.
+## 1. Prepare
+
+1. Confirm one release identity: `version` in `pyproject.toml`,
+   `geo_canon.__version__`, `server.version` in both copies of the MCP contract
+   (`mcp/agent-contract.json` and `src/geocanon_mcp/agent-contract.json`), the
+   dated `CHANGELOG.md` entry, and the supported-versions table in
+   `SECURITY.md`.
+2. Review the compatibility impact, migration notes, and documentation, and the
+   [data provenance](data-provenance.md) of any bundled data that changed.
+
+## 2. Verify
+
+Run the checks the release workflow runs, on the supported Python and Django
+boundaries, both without extras and with `[all]`:
+
+```bash
+python -m pip install -e ".[all,dev]"
+python -m ruff check src tests
+python -m mypy src/geo_canon src/geocanon_mcp
+python -m bandit -r src
+python -m pytest --cov=geo_canon --cov=geocanon_mcp --cov-branch
+```
+
+Audit the installed dependencies with `pip-audit` (the security workflow runs
+it with `--strict`), run `geocanon-mcp` and check that it keeps serving after a
+malformed message, inspect the source and history for secrets, and record any
+check you could not run.
+
+## 3. Build
+
+```bash
+python -m pip install --require-hashes -r requirements/build.txt
+export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
+python -m build --no-isolation
+python -m twine check dist/*
+```
+
+Record SHA-256 checksums, inspect both archives (the MIT license and SPDX
+metadata, `py.typed`, and the MCP contract; no flag artwork or third-party
+package code is bundled), and smoke-test the exact wheel in a clean
+environment.
+
+## 4. Publish
+
+1. Commit and push the verified source under the owner's authorization, then
+   create an annotated `v<version>` tag on that exact commit. Only repository
+   administrators can create `v*` tags, and nobody can move or delete one.
+2. The owner starts `publish.yaml` from `main` or that tag; it stops on any
+   other ref, including a tag that does not match the package version. The
+   build job repeats the lint, type, Bandit, and test checks, builds the
+   distributions with the hash-locked tools, runs `twine check`, and writes
+   `SHA256SUMS`.
+3. The upload job runs in the `pypi` environment, which only `main` and `v*`
+   tags may use and which needs the owner's approval; administrators cannot
+   bypass it, and agents cannot give that approval. PyPI Trusted Publishing
+   gives the job a short-lived OIDC token, so no long-lived PyPI token exists.
+   The trusted publisher must name `Tunet-xyz/geo_canon`, `publish.yaml`, and
+   the `pypi` environment; otherwise a workflow edited on another branch could
+   publish.
+
+Do not publish when a check was skipped without a recorded reason, evidence is
+missing, the checkout is dirty, the tag and version disagree, or a security
+finding is unresolved. A rerun must start from the same commit or from a new,
+reviewed release candidate.
+
+## 5. After publication
+
+Verify the version, file hashes, metadata, and links on PyPI, and install the
+release in a clean environment before announcing it. A prepared or tagged
+version is not a release until it is on PyPI.
+
+Then update anything that described the publication as pending, such as the
+changelog heading or the README's release status.
+
+Never put PyPI credentials, agent tokens, or production data in release
+artifacts or workflow logs. Never move a release tag, overwrite PyPI files, or
+reuse a published version; fix a bad release with a new version.

@@ -51,11 +51,11 @@ format_currency_locale(1234.5, "United States")
 # "$1,234.50"
 
 format_currency_locale(1234.5, "Germany")
-# "1.234,50 EUR" or the locale's conventional Euro display
+# "1.234,50\xa0€" with Babel; "€1,234.50" without it
 ```
 
 Pass `currency_code` to format a different currency in the jurisdiction's
-locale:
+locale. The override needs the `locale` extra and a locale Babel can resolve:
 
 ```python
 format_currency_locale(1234.5, "United States", currency_code="EUR")
@@ -90,5 +90,5 @@ format_datetime_locale(
 from geo_canon import format_list_locale
 
 format_list_locale(["red", "blue", "green"], "United States")
-# "red, blue, and green"
+# "red, blue, and green" with Babel; "red, blue and green" without it
 ```

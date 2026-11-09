@@ -49,7 +49,7 @@ to an ISO-3166 alpha-2 region code automatically.
 from geo_canon import validate_phone_number
 
 validate_phone_number("6502530000", "United States")  # True
-validate_phone_number("+1 650-253-0000")              # True
+validate_phone_number("+1 650-253-0000")              # True with [phones]; False without it
 ```
 
 When `phonenumbers` is not installed, this falls back to GeoCanon's lightweight
@@ -58,7 +58,8 @@ regex validation for known jurisdictions.
 ### `format_phone_number(phone, jurisdiction=None, *, region=None, phone_format="E164") -> str | None`
 
 Formats a parsed phone number. Supported formats are `E164`, `INTERNATIONAL`,
-`NATIONAL`, and `RFC3966`.
+`NATIONAL`, and `RFC3966`. It needs the `phones` extra and returns `None`
+without it.
 
 ```python
 from geo_canon import format_phone_number
@@ -73,7 +74,7 @@ format_phone_number("6502530000", "United States", phone_format="INTERNATIONAL")
 ### `get_phone_number_type(phone, jurisdiction=None, *, region=None) -> str | None`
 
 Returns types such as `mobile`, `fixed_line`, `fixed_line_or_mobile`, `voip`,
-or `unknown`.
+or `unknown`. It needs the `phones` extra and returns `None` without it.
 
 ### `is_phone_extra_available() -> bool`
 

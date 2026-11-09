@@ -92,8 +92,8 @@ The `iso_codes` module feeds into other GeoCanon modules:
 | Consumer | How it uses ISO codes |
 |----------|---------------------|
 | **Flags** | `FLAG_CSS_CLASS` is generated as `fi-{alpha_2.lower()}` |
-| **Dial Codes** | Can be cross-referenced via jurisdiction name |
-| **Currencies** | Can be cross-referenced via jurisdiction name |
+| **Dial Codes** | Separate table keyed by jurisdiction name; not every ISO name has an entry |
+| **Currencies** | Separate table keyed by jurisdiction name; not every ISO name has an entry |
 
 ```python
 # Example: get everything for a single jurisdiction

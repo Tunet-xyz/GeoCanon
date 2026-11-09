@@ -26,6 +26,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   guidance. Its supported-versions table lists 1.0.x instead of the
   never-published 0.3.x and 0.4.x.
 - `VERSIONING.md` is worded for outside readers; its rules are unchanged.
+- Documentation has the layout shared by the Tunet libraries: a reworked docs
+  index, the same sections in the release procedure and MCP README, and new
+  threat model, security assurance, audit scope, and secure-development
+  documents. Guides are corrected against the code: examples say which output
+  needs the `locale` or `phones` extra, `format_address` drops `name` and
+  `company` for registered templates, Italy has its own address template, both
+  settings containers reject unknown fields, override timezone names are
+  checked only when used, and holiday coverage is GeoCanon's registry of 147
+  jurisdictions with national holidays only.
 
 ## [1.0.0] - 2026-11-05 (tagged; not yet published to PyPI)
 

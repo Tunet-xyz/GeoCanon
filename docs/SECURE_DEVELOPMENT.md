@@ -1,0 +1,56 @@
+# GeoCanon secure development
+
+GeoCanon applies the intent of the NIST Secure Software Development Framework
+(SSDF) to a small reference-data library.
+
+## Practices
+
+- **Prepare:** maintain the threat model, ownership boundaries, disclosure
+  process, protected CI permissions, and documented release criteria.
+- **Protect:** require least-privilege workflows, commit-pinned actions, hashed
+  release tooling, trusted publishing, protected environments, and reviewed
+  changes on `main`.
+- **Produce:** keep validation patterns anchored with bounded quantifiers, look
+  data up by key instead of evaluating input, test with and without each
+  optional extra, keep the MCP server dependency-free and bounded, and record
+  the source of every data change.
+- **Respond:** triage privately, contain critical issues rapidly, revoke or
+  rotate affected trust, issue patched releases and advisories, and capture
+  lessons in tests and the threat model.
+
+## Security-sensitive changes
+
+Every security-relevant change must identify the affected assets and trust
+boundaries, include negative tests, and consider compatibility and migration.
+No generated or AI-assisted change is exempt from human review and the same
+checks. Do not weaken a bound, error mode, audit behavior, signature check, or
+release gate solely to preserve compatibility.
+
+Review these areas with particular care: phone and postal-code patterns,
+the jurisdiction middleware and forms, settings validation, changes to
+bundled data (record their source in the
+[data provenance](data-provenance.md) document), the boundaries with optional
+dependencies, and the MCP server.
+
+## Repository controls
+
+These GitHub settings were in place on 2026-11-09:
+
+- `main` accepts pushes only from the owner and rejects force pushes and
+  deletion. Other changes need a pull request approved by the code owner, with
+  stale approvals dismissed and conversations resolved.
+- Release tags (`v*`) can be created only by repository administrators, and no
+  one can move or delete them.
+- The `pypi` environment accepts only `main` and `v*` tags, requires the
+  owner's approval, and does not let administrators bypass it. PyPI uploads use
+  Trusted Publishing with short-lived OIDC credentials.
+- Every workflow is manual (`workflow_dispatch`) and runs only when the owner
+  starts it, with actions pinned to full commit SHAs and read-only default
+  permissions. Pull requests, issues, and comments cannot start a workflow.
+- Secret scanning with push protection, Dependabot alerts and security updates,
+  and private vulnerability reporting are on.
+
+Known gaps: the project has one maintainer, so no second person reviews the
+owner's changes, and the owner can push to `main` directly. No status checks
+are required, because CI runs only when the owner starts it, and commits are
+not required to be signed. Export these settings with each audit.
