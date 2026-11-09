@@ -1,35 +1,73 @@
-# Public Agent MCP Contract
+# GeoCanon MCP server
 
-This directory defines the public agent-operability contract for this open-source offering. It is written for external user agents that can use published package APIs, hosted or local MCP tools, public documentation, and browser-visible surfaces. It must not assume access to private source code, local repository paths, unredacted settings, production data, or vendor dashboards unless the user explicitly grants that access.
+This directory holds GeoCanon's public agent contract and a dependency-free
+stdio MCP server for it. Agents can use it to discover GeoCanon's modules,
+APIs, and optional extras, and to get guidance for settings, forms, and
+middleware that handle jurisdictions, addresses, phones, currencies, and
+locales. The server runs locally under the caller's control, makes no network
+connections, and needs no credentials or account. There is no hosted GeoCanon
+MCP service, and nothing here gives access to the maintainer's agents,
+accounts, or infrastructure.
 
-Files:
+## Run
 
-```text
-mcp/
-  README.md
-  agent-contract.json
-  server.py
+After installing GeoCanon:
+
+```bash
+geocanon-mcp
 ```
 
-The local stdio server is dependency-free and contract-first. It is useful for development checks and for any MCP client that can launch a local process.
+From a source checkout:
 
 ```bash
 python mcp/server.py
 ```
 
-Supported methods:
+## Files
 
-- `initialize`
-- `resources/list`
-- `resources/read`
-- `tools/list`
-- `tools/call`
-- `prompts/list`
-- `prompts/get`
+| File | Purpose |
+| --- | --- |
+| `README.md` | This guide. |
+| `agent-contract.json` | The public agent contract, byte-identical to the packaged `src/geocanon_mcp/agent-contract.json`. |
+| `server.py` | The dependency-free server, identical to the packaged `src/geocanon_mcp/server.py`. |
 
-Production packages may expose richer runtime MCP tools, but those tools should preserve this contract's public-access boundaries, approval gates, and verification expectations.
-## GeoCanon Notes
+## Methods and tools
 
-GeoCanon's public contract exposes locale and jurisdiction helper guidance for external agents. Agents may generate settings, API mappings, form/middleware plans, and reference checks using public docs and installed package APIs.
+The server implements `initialize`, `ping`, `resources/list`,
+`resources/read`, `tools/list`, `tools/call`, `prompts/list`, and
+`prompts/get`.
 
-Agents must not treat jurisdiction data as legal, tax, regulatory, or compliance advice without explicit human review, and must avoid customer personal address/phone data unless the user provides safe examples.
+Every tool returns the contract's guidance for its task, with the arguments
+you passed and the contract's access and safety rules. The calling agent
+writes any settings or code, for a person to review.
+
+| Tool | Guidance on |
+| --- | --- |
+| `describe_offering` | GeoCanon's modules, APIs, optional extras, and safe operating model. |
+| `list_public_capabilities` | Package APIs, modules, optional extras, docs, and browser references. |
+| `map_workflow_to_tools` | Mapping a goal to public APIs, docs, extras, approval gates, and verification steps. |
+| `prepare_locale_configuration` | `GeoCanonSettings` and an integration plan for jurisdictions, languages, timezones, and overrides. |
+| `prepare_global_form` | Forms and middleware for jurisdiction, address, phone, currency, and locale behavior. |
+| `operate_browser_docs` | Walking a user through public docs, PyPI, GitHub issues, or reference docs in a browser. |
+
+Resources: `overview`, `public-apis`, `workflows`, `browser-surfaces`, and
+`security-and-audit`. Prompt: `agent_onboarding`.
+
+## Limits
+
+The server reads one JSON-RPC message per line. It answers with a JSON-RPC
+error, and keeps serving, when a line is longer than 1,100,000 characters
+(newline included), is not valid UTF-8 JSON, repeats an object key, uses `NaN`
+or `Infinity`, has a number longer than 256 characters, or has an invalid
+request shape.
+
+## Boundaries
+
+- Jurisdiction data is not legal, tax, regulatory, or compliance advice; a
+  person must review any such use.
+- Agents must not handle customers' real addresses or phone numbers unless
+  the user supplies safe examples.
+- Agents work from published package APIs, public documentation, and this
+  contract. They must not assume access to private source code, unredacted
+  settings, production data, or provider dashboards unless the user grants
+  it.
