@@ -1,59 +1,88 @@
-# Security Policy
+# Security policy
 
-## Supported Versions
-
-The active security line is 1.x. Pre-1.0 rows are retained as historical release information and no longer indicate active security support.
+## Supported versions
 
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.0.x   | :white_check_mark: |
-| 0.4.x   | :white_check_mark: |
-| 0.3.x   | :white_check_mark: |
-| < 0.3   | :x:                |
+| < 1.0   | :x:                |
 
-## Reporting a Vulnerability
+Security fixes ship as new 1.0.x releases on
+[PyPI](https://pypi.org/project/GeoCanon/). GeoCanon 1.0.0 is tagged (`v1.0.0`)
+but not yet published there; PyPI still serves 0.1.0, which is not supported.
 
-We take security seriously. If you discover a security vulnerability in GeoCanon, please report it responsibly.
+## Reporting a vulnerability
 
-### How to Report
+Do not report a suspected vulnerability in a public issue, pull request, or
+discussion. Report it privately in either of these ways:
 
-**Please DO NOT open a public GitHub issue for security vulnerabilities.**
+- On GitHub, open the repository's **Security** tab and choose
+  **Report a vulnerability**
+  ([direct link](https://github.com/Tunet-xyz/geo_canon/security/advisories/new)).
+- Email **alex@tunet.xyz**.
 
-Instead, please email security concerns to: **alex@tunet.xyz**
+Include a description, the affected versions, reproduction steps, the potential
+impact, and any suggested mitigation. Use synthetic examples; do not send
+credentials, personal data, or production samples.
 
-Include the following in your report:
-- Description of the vulnerability
-- Steps to reproduce
-- Potential impact
-- Suggested fix (if any)
+## Response targets
 
-### Response Timeline
+We aim to acknowledge reports within 48 hours and provide an initial assessment
+within five business days. Targets begin when severity is confirmed:
 
-- **Acknowledgement:** Within 48 hours
-- **Initial assessment:** Within 5 business days
-- **Fix release:** Within 30 days for critical issues
+| Severity | Containment/mitigation target | Fix target |
+| --- | --- | --- |
+| Critical | 24 hours | 7 days |
+| High | 3 business days | 14 days |
+| Moderate | 10 business days | 30 days |
+| Low | 30 days | 90 days |
 
-### Scope
+These are maximum targets, not a promise to delay urgent fixes. If a complete
+fix needs longer, we will prioritize a safe mitigation, coordinate disclosure,
+and communicate a revised timeline privately. Please allow a reasonable period
+for remediation before public disclosure. We will request a CVE and publish a
+GitHub security advisory when impact warrants it.
 
-The following are in scope:
-- Locale data injection or manipulation
-- Regex denial-of-service in phone validation patterns
-- Path traversal via jurisdiction or locale inputs
-- Any bypass of input validation or Pydantic settings
+## Scope
 
-### Out of Scope
+### In scope
 
-- Vulnerabilities in Django itself (report to Django security team)
-- Issues in third-party extras (`holidays`, `pytz`)
-- Issues requiring physical access to the server
+- Injection or manipulation of locale or jurisdiction data.
+- Regular-expression denial of service in phone or postal-code validation
+  patterns.
+- Path traversal through jurisdiction or locale inputs.
+- Any bypass of input validation or of Pydantic settings validation.
+- Malformed or oversized input that stops the local MCP server from serving.
 
-## Security Features
+### Out of scope
 
-GeoCanon includes several security features:
+- Vulnerabilities in Django itself; report them to the Django security team.
+- Vulnerabilities in the optional dependencies (`holidays`, `pytz`,
+  `phonenumbers`, Babel, and Pydantic); report them to those projects.
+- Inaccurate reference data (country, currency, holiday, or address facts)
+  without a security impact; report it as a regular issue.
+- Issues that require physical access to the server.
 
-- ✅ Optional Pydantic 2 settings validation with GeoCanon[validation]
-- ✅ Rich exceptions with actionable hints (no internal leakage)
-- ✅ Type hints throughout for static analysis
-- ✅ PEP 561 `py.typed` marker for mypy/pyright
-- ✅ Per-country regex patterns for phone validation (no `eval`)
-- ✅ All lookups use O(1) dictionary access (no injection surface)
+## Secure use
+
+- Bundled mappings are maintained release data, not a live legal or standards
+  feed. Review the [data provenance and update policy](docs/data-provenance.md)
+  before relying on defaults for compliance, tax, postal, or other high-stakes
+  decisions.
+- Phone and postal-code validators check format only; they do not show that a
+  number or address exists or belongs to the person who entered it.
+- Install the `validation` extra to validate settings with Pydantic 2.
+- Keep the optional dependencies up to date; their data and security fixes ship
+  separately from GeoCanon.
+
+## Releases and advisories
+
+Security fixes are released from a reviewed commit on `main` through the
+owner-approved trusted-publishing workflow described in
+[docs/RELEASE.md](docs/RELEASE.md). Workflows run only when the owner starts
+them, and PyPI uploads use short-lived OIDC credentials from a protected
+environment. Stable API changes follow [VERSIONING.md](VERSIONING.md); a
+security fix may intentionally reject previously accepted ambiguous input, with
+the compatibility and migration impact explained in the release notes. Pin and
+verify release artifacts, watch this repository's security advisories, test
+your integration, and upgrade supported versions promptly.

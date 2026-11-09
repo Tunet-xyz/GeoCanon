@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- A Contributor Covenant 2.1 code of conduct, and issue templates for bug
+  reports and feature requests that send vulnerability reports to private
+  reporting.
+
 ### Changed
 
 - The Product URL points at `www.tunet.xyz`, which serves the product page.
@@ -14,8 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   73), `default_language`, `holiday_country_overrides` and `enable_form_widgets`
   are marked as reserved settings that 1.x accepts but does not use, and the
   MCP and contribution notes are written for outside readers.
+- The security policy uses the layout shared by the Tunet libraries: private
+  reporting through the Security tab or by email, one set of response targets
+  (critical fixes within 7 days instead of 30), package scope, and secure-use
+  guidance. Its supported-versions table lists 1.0.x instead of the
+  never-published 0.3.x and 0.4.x.
+- `VERSIONING.md` is worded for outside readers; its rules are unchanged.
 
-## [1.0.0] - 2026-11-05
+## [1.0.0] - 2026-11-05 (tagged; not yet published to PyPI)
 
 ### Changed
 
@@ -90,3 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Exceptions** - Rich, actionable error messages with hints and documentation links
 - Full test suite with 80%+ coverage target
 - PEP 561 `py.typed` marker for type checker support
+
+[Unreleased]: https://github.com/Tunet-xyz/geo_canon/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/Tunet-xyz/geo_canon/releases/tag/v1.0.0
+[0.1.0]: https://pypi.org/project/GeoCanon/0.1.0/
