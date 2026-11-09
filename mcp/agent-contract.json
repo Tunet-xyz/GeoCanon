@@ -15,7 +15,7 @@
     "version": "1.0.0",
     "transport": "stdio",
     "required": true,
-    "documentationUrl": "https://github.com/Tunet-xyz/GeoCanon/tree/main/mcp",
+    "documentationUrl": "https://github.com/Tunet-xyz/geo_canon/tree/main/mcp",
     "hostedEndpoint": null
   },
   "instructions": "Agents should assume they do not have source-code access to a user's app unless explicitly granted. Use public docs, installed package APIs, user-provided examples, and browser-visible references. Treat jurisdiction, address, locale, and holiday behavior as configuration choices that should be verified with the user for regulated or legal workflows.",
@@ -24,9 +24,9 @@
     "pythonPackage": "pip install GeoCanon",
     "pythonApi": ["get_jurisdiction_choices()", "get_dial_code(jurisdiction)", "get_currency_code(jurisdiction)", "GeoCanonSettings(...)"],
     "cli": ["geocanon-mcp"],
-    "docsUrl": "https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/README.md",
+    "docsUrl": "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md",
     "pypiUrl": "https://pypi.org/project/GeoCanon/",
-    "repositoryUrl": "https://github.com/Tunet-xyz/GeoCanon",
+    "repositoryUrl": "https://github.com/Tunet-xyz/geo_canon",
     "supportedOperationModes": ["mcp-tools", "python-api", "browser-docs"],
     "browserAutomation": {
       "allowed": true,
@@ -82,7 +82,7 @@
       "description": "Public browser surfaces agents can use without source-code access.",
       "mimeType": "application/json",
       "data": {
-        "entrypoints": ["https://github.com/Tunet-xyz/GeoCanon", "https://pypi.org/project/GeoCanon/"],
+        "entrypoints": ["https://github.com/Tunet-xyz/geo_canon", "https://pypi.org/project/GeoCanon/"],
         "agentAssumptions": ["agent can read public docs and reference tables", "agent cannot inspect a user's app unless user provides a browser or snippet", "agent should ask before treating locale behavior as legal/compliance advice"],
         "verification": ["confirm optional extras are installed for requested feature", "confirm jurisdiction names/codes with package APIs", "confirm customer-facing defaults with the user"]
       }

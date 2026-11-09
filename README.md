@@ -3,7 +3,7 @@
 
 **Jurisdictions. Dial Codes. Flags. ISO Codes. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
 
-Part of the [Tunet](https://www.tunet.xyz/engineering/) open-source libraries, alongside [SessionArmor](https://github.com/Tunet-xyz/session_armor), [AccessGate](https://github.com/Tunet-xyz/access_gate), and [SwapLayer](https://github.com/Tunet-xyz/swap_layer). See the [GeoCanon product page](https://www.tunet.xyz/engineering/geo-canon/) for the public capability overview.
+Part of the [Tunet](https://www.tunet.xyz/engineering/) open-source libraries, alongside [AccessGate](https://github.com/Tunet-xyz/access_gate), [SessionArmor](https://github.com/Tunet-xyz/session_armor), and [SwapLayer](https://github.com/Tunet-xyz/swap_layer). See the [GeoCanon product page](https://www.tunet.xyz/engineering/geo-canon/) for the public capability overview.
 
 ## Version 1.0
 
@@ -219,14 +219,14 @@ MIDDLEWARE = [
 - **Typed APIs** — lazy Django label types, optional Pydantic validation, and PEP 561 support
 - **Extensible** — override jurisdiction → timezone mappings with `GEOCANON.timezone_overrides`
 
-Bundled mappings are maintained release data rather than a live legal or standards feed. Review the [data provenance and update policy](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/data-provenance.md) before using defaults for compliance, tax, postal, or other high-stakes decisions.
+Bundled mappings are maintained release data rather than a live legal or standards feed. Review the [data provenance and update policy](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/data-provenance.md) before using defaults for compliance, tax, postal, or other high-stakes decisions.
 
 ---
 
 
 ## Public Agent MCP Contract
 
-GeoCanon includes a public agent-operability contract in [`mcp/`](https://github.com/Tunet-xyz/GeoCanon/tree/main/mcp/). It describes how external agents can safely discover package APIs, optional extras, locale/jurisdiction workflows, public docs, and browser-visible surfaces without requiring source-code access or customer personal data.
+GeoCanon includes a public agent-operability contract in [`mcp/`](https://github.com/Tunet-xyz/geo_canon/tree/main/mcp/). It describes how external agents can safely discover package APIs, optional extras, locale/jurisdiction workflows, public docs, and browser-visible surfaces without requiring source-code access or customer personal data.
 
 From a checkout, run the dependency-free contract server with `python mcp/server.py`. After installation, agents can use the packaged stdio command:
 
@@ -248,16 +248,16 @@ python -m bandit -r src
 python -m pytest --cov=geo_canon --cov=geocanon_mcp --cov-branch
 ```
 
-See [docs/RELEASE.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/RELEASE.md) for release verification and publishing.
+See [docs/RELEASE.md](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/RELEASE.md) for release verification and publishing.
 
 ## Contributing and releases
 
-See [CONTRIBUTING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Report vulnerabilities privately as described in [SECURITY.md](https://github.com/Tunet-xyz/GeoCanon/blob/main/SECURITY.md). CI workflows run only when the maintainer starts them, so include your local test results in pull requests.
+See [CONTRIBUTING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Report vulnerabilities privately as described in [SECURITY.md](https://github.com/Tunet-xyz/geo_canon/blob/main/SECURITY.md). CI workflows run only when the maintainer starts them, so include your local test results in pull requests.
 
 ## License
 
-MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](https://github.com/Tunet-xyz/GeoCanon/blob/main/LICENSE).
+MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](https://github.com/Tunet-xyz/geo_canon/blob/main/LICENSE).
 
 ---
 
-**[→ Read Full Documentation](https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/README.md)**
+**[→ Read Full Documentation](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md)**

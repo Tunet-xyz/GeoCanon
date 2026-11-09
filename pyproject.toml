@@ -63,12 +63,12 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Tunet-xyz/GeoCanon"
+Homepage = "https://github.com/Tunet-xyz/geo_canon"
 Product = "https://www.tunet.xyz/engineering/geo-canon/"
-Documentation = "https://github.com/Tunet-xyz/GeoCanon/blob/main/docs/README.md"
-Repository = "https://github.com/Tunet-xyz/GeoCanon"
-Issues = "https://github.com/Tunet-xyz/GeoCanon/issues"
-Changelog = "https://github.com/Tunet-xyz/GeoCanon/blob/main/CHANGELOG.md"
+Documentation = "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md"
+Repository = "https://github.com/Tunet-xyz/geo_canon"
+Issues = "https://github.com/Tunet-xyz/geo_canon/issues"
+Changelog = "https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md"
 
 [project.scripts]
 geocanon-mcp = "geocanon_mcp.server:main"

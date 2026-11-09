@@ -22,5 +22,5 @@
 ## Quick Links
 
 - [PyPI](https://pypi.org/project/GeoCanon/)
-- [GitHub](https://github.com/Tunet-xyz/GeoCanon)
-- [Changelog](https://github.com/Tunet-xyz/GeoCanon/blob/main/CHANGELOG.md)
+- [GitHub](https://github.com/Tunet-xyz/geo_canon)
+- [Changelog](https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md)
