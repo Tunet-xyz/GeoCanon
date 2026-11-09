@@ -184,6 +184,23 @@ class TestValidatePostalCode:
 
     def test_strips_whitespace(self):
         assert validate_postal_code("United States", " 10001 ") is True
+        assert validate_postal_code("United States", "\t10001\n") is True
+
+    def test_letters_match_case_insensitively(self):
+        assert validate_postal_code("Canada", "k1a 0b1") is True
+
+    def test_non_ascii_lookalikes_are_rejected(self):
+        # Fullwidth and Arabic-Indic digits, the Kelvin sign that case-folds to "k",
+        # and no-break spaces inside or around the code.
+        assert validate_postal_code("United States", "１０００１") is False
+        assert validate_postal_code("United States", "١٠٠٠١") is False
+        assert validate_postal_code("Canada", "K1A 0B1") is False
+        assert validate_postal_code("Canada", "K1A 0B1") is False
+        assert validate_postal_code("United States", " 10001 ") is False
+
+    def test_the_whole_code_must_match(self):
+        assert validate_postal_code("United States", "10001 trailing") is False
+        assert validate_postal_code("United States", "10001\nX") is False
 
 
 # ---------------------------------------------------------------------------

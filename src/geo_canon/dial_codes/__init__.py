@@ -435,201 +435,207 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
 # Per-dial-code phone-number validation patterns (national digits only)
 # ---------------------------------------------------------------------------
 
+
+def _national_number(pattern: str) -> re.Pattern[str]:
+    """Compile a national-number pattern in which ``\\d`` matches only 0-9."""
+    return re.compile(pattern, re.ASCII)
+
+
 PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
-    "+93": re.compile(r"^\d{9}$"),  # Afghanistan
-    "+355": re.compile(r"^\d{9}$"),  # Albania
-    "+213": re.compile(r"^\d{9}$"),  # Algeria
-    "+376": re.compile(r"^\d{6}$"),  # Andorra
-    "+244": re.compile(r"^\d{9}$"),  # Angola
-    "+54": re.compile(r"^\d{10}$"),  # Argentina
-    "+374": re.compile(r"^\d{8}$"),  # Armenia
-    "+297": re.compile(r"^\d{7}$"),  # Aruba
-    "+61": re.compile(r"^\d{9}$"),  # Australia
-    "+43": re.compile(r"^\d{10,11}$"),  # Austria
-    "+994": re.compile(r"^\d{9}$"),  # Azerbaijan
-    "+973": re.compile(r"^\d{8}$"),  # Bahrain
-    "+880": re.compile(r"^\d{10}$"),  # Bangladesh
-    "+375": re.compile(r"^\d{9}$"),  # Belarus
-    "+32": re.compile(r"^\d{9}$"),  # Belgium
-    "+501": re.compile(r"^\d{7}$"),  # Belize
-    "+229": re.compile(r"^\d{8}$"),  # Benin
-    "+975": re.compile(r"^\d{7,8}$"),  # Bhutan
-    "+591": re.compile(r"^\d{8}$"),  # Bolivia
-    "+387": re.compile(r"^\d{8}$"),  # Bosnia and Herzegovina
-    "+267": re.compile(r"^\d{7,8}$"),  # Botswana
-    "+55": re.compile(r"^\d{10,11}$"),  # Brazil
-    "+246": re.compile(r"^\d{7}$"),  # British Indian Ocean Territory
-    "+673": re.compile(r"^\d{7}$"),  # Brunei
-    "+359": re.compile(r"^\d{9}$"),  # Bulgaria
-    "+226": re.compile(r"^\d{8}$"),  # Burkina Faso
-    "+257": re.compile(r"^\d{8}$"),  # Burundi
-    "+855": re.compile(r"^\d{8,9}$"),  # Cambodia
-    "+237": re.compile(r"^\d{9}$"),  # Cameroon
-    "+1": re.compile(r"^\d{10}$"),  # Canada / United States
-    "+238": re.compile(r"^\d{7}$"),  # Cape Verde
-    "+236": re.compile(r"^\d{8}$"),  # Central African Republic
-    "+235": re.compile(r"^\d{8}$"),  # Chad
-    "+56": re.compile(r"^\d{9}$"),  # Chile
-    "+86": re.compile(r"^\d{11}$"),  # China
-    "+57": re.compile(r"^\d{10}$"),  # Colombia
-    "+269": re.compile(r"^\d{7}$"),  # Comoros
-    "+242": re.compile(r"^\d{9}$"),  # Congo
-    "+243": re.compile(r"^\d{9}$"),  # DR Congo
-    "+506": re.compile(r"^\d{8}$"),  # Costa Rica
-    "+385": re.compile(r"^\d{8,9}$"),  # Croatia
-    "+53": re.compile(r"^\d{8}$"),  # Cuba
-    "+599": re.compile(r"^\d{7,8}$"),  # Curaçao
-    "+357": re.compile(r"^\d{8}$"),  # Cyprus
-    "+420": re.compile(r"^\d{9}$"),  # Czech Republic
-    "+45": re.compile(r"^\d{8}$"),  # Denmark
-    "+253": re.compile(r"^\d{8}$"),  # Djibouti
-    "+593": re.compile(r"^\d{9}$"),  # Ecuador
-    "+20": re.compile(r"^\d{10}$"),  # Egypt
-    "+503": re.compile(r"^\d{8}$"),  # El Salvador
-    "+240": re.compile(r"^\d{9}$"),  # Equatorial Guinea
-    "+291": re.compile(r"^\d{7}$"),  # Eritrea
-    "+372": re.compile(r"^\d{7,8}$"),  # Estonia
-    "+268": re.compile(r"^\d{8}$"),  # Eswatini
-    "+251": re.compile(r"^\d{9}$"),  # Ethiopia
-    "+500": re.compile(r"^\d{5}$"),  # Falkland Islands
-    "+298": re.compile(r"^\d{6}$"),  # Faroe Islands
-    "+679": re.compile(r"^\d{7}$"),  # Fiji
-    "+358": re.compile(r"^\d{9,10}$"),  # Finland
-    "+33": re.compile(r"^\d{9}$"),  # France
-    "+241": re.compile(r"^\d{7}$"),  # Gabon
-    "+220": re.compile(r"^\d{7}$"),  # Gambia
-    "+995": re.compile(r"^\d{9}$"),  # Georgia
-    "+49": re.compile(r"^\d{10,11}$"),  # Germany
-    "+233": re.compile(r"^\d{9}$"),  # Ghana
-    "+350": re.compile(r"^\d{8}$"),  # Gibraltar
-    "+30": re.compile(r"^\d{10}$"),  # Greece
-    "+299": re.compile(r"^\d{6}$"),  # Greenland
-    "+502": re.compile(r"^\d{8}$"),  # Guatemala
-    "+224": re.compile(r"^\d{9}$"),  # Guinea
-    "+245": re.compile(r"^\d{7}$"),  # Guinea-Bissau
-    "+592": re.compile(r"^\d{7}$"),  # Guyana
-    "+509": re.compile(r"^\d{8}$"),  # Haiti
-    "+504": re.compile(r"^\d{8}$"),  # Honduras
-    "+852": re.compile(r"^\d{8}$"),  # Hong Kong
-    "+36": re.compile(r"^\d{9}$"),  # Hungary
-    "+354": re.compile(r"^\d{7}$"),  # Iceland
-    "+91": re.compile(r"^\d{10}$"),  # India
-    "+62": re.compile(r"^\d{9,11}$"),  # Indonesia
-    "+98": re.compile(r"^\d{10}$"),  # Iran
-    "+964": re.compile(r"^\d{10}$"),  # Iraq
-    "+353": re.compile(r"^\d{9}$"),  # Ireland
-    "+972": re.compile(r"^\d{9}$"),  # Israel
-    "+39": re.compile(r"^\d{9,10}$"),  # Italy
-    "+225": re.compile(r"^\d{10}$"),  # Ivory Coast
-    "+81": re.compile(r"^\d{10}$"),  # Japan
-    "+962": re.compile(r"^\d{9}$"),  # Jordan
-    "+7": re.compile(r"^\d{10}$"),  # Kazakhstan / Russia
-    "+254": re.compile(r"^\d{9}$"),  # Kenya
-    "+686": re.compile(r"^(?:\d{5}|\d{8})$"),  # Kiribati
-    "+383": re.compile(r"^\d{8,9}$"),  # Kosovo
-    "+965": re.compile(r"^\d{8}$"),  # Kuwait
-    "+996": re.compile(r"^\d{9}$"),  # Kyrgyzstan
-    "+856": re.compile(r"^\d{8}$"),  # Laos
-    "+371": re.compile(r"^\d{8}$"),  # Latvia
-    "+961": re.compile(r"^\d{7,8}$"),  # Lebanon
-    "+266": re.compile(r"^\d{8}$"),  # Lesotho
-    "+231": re.compile(r"^\d{7,8}$"),  # Liberia
-    "+218": re.compile(r"^\d{9}$"),  # Libya
-    "+423": re.compile(r"^\d{7}$"),  # Liechtenstein
-    "+370": re.compile(r"^\d{8}$"),  # Lithuania
-    "+352": re.compile(r"^\d{8,9}$"),  # Luxembourg
-    "+853": re.compile(r"^\d{8}$"),  # Macau
-    "+261": re.compile(r"^\d{9}$"),  # Madagascar
-    "+265": re.compile(r"^\d{9}$"),  # Malawi
-    "+60": re.compile(r"^\d{9,10}$"),  # Malaysia
-    "+960": re.compile(r"^\d{7}$"),  # Maldives
-    "+223": re.compile(r"^\d{8}$"),  # Mali
-    "+356": re.compile(r"^\d{8}$"),  # Malta
-    "+692": re.compile(r"^\d{7}$"),  # Marshall Islands
-    "+222": re.compile(r"^\d{8}$"),  # Mauritania
-    "+230": re.compile(r"^\d{8}$"),  # Mauritius
-    "+52": re.compile(r"^\d{10}$"),  # Mexico
-    "+691": re.compile(r"^\d{7}$"),  # Micronesia
-    "+373": re.compile(r"^\d{8}$"),  # Moldova
-    "+377": re.compile(r"^\d{8}$"),  # Monaco
-    "+976": re.compile(r"^\d{8}$"),  # Mongolia
-    "+382": re.compile(r"^\d{8}$"),  # Montenegro
-    "+212": re.compile(r"^\d{9}$"),  # Morocco
-    "+258": re.compile(r"^\d{9}$"),  # Mozambique
-    "+95": re.compile(r"^\d{9,10}$"),  # Myanmar
-    "+264": re.compile(r"^\d{9}$"),  # Namibia
-    "+674": re.compile(r"^\d{7}$"),  # Nauru
-    "+977": re.compile(r"^\d{10}$"),  # Nepal
-    "+31": re.compile(r"^\d{9}$"),  # Netherlands
-    "+64": re.compile(r"^\d{8,9}$"),  # New Zealand
-    "+505": re.compile(r"^\d{8}$"),  # Nicaragua
-    "+227": re.compile(r"^\d{8}$"),  # Niger
-    "+234": re.compile(r"^\d{10}$"),  # Nigeria
-    "+850": re.compile(r"^\d{10}$"),  # North Korea
-    "+389": re.compile(r"^\d{8}$"),  # North Macedonia
-    "+47": re.compile(r"^\d{8}$"),  # Norway
-    "+968": re.compile(r"^\d{8}$"),  # Oman
-    "+92": re.compile(r"^\d{10}$"),  # Pakistan
-    "+680": re.compile(r"^\d{7}$"),  # Palau
-    "+970": re.compile(r"^\d{8,9}$"),  # Palestine
-    "+507": re.compile(r"^\d{8}$"),  # Panama
-    "+675": re.compile(r"^\d{8}$"),  # Papua New Guinea
-    "+595": re.compile(r"^\d{9}$"),  # Paraguay
-    "+51": re.compile(r"^\d{9}$"),  # Peru
-    "+63": re.compile(r"^\d{10}$"),  # Philippines
-    "+48": re.compile(r"^\d{9}$"),  # Poland
-    "+351": re.compile(r"^\d{9}$"),  # Portugal
-    "+974": re.compile(r"^\d{8}$"),  # Qatar
-    "+262": re.compile(r"^\d{9}$"),  # Réunion
-    "+40": re.compile(r"^\d{9}$"),  # Romania
-    "+250": re.compile(r"^\d{9}$"),  # Rwanda
-    "+290": re.compile(r"^\d{4,5}$"),  # Saint Helena
-    "+685": re.compile(r"^\d{5,7}$"),  # Samoa
-    "+378": re.compile(r"^\d{8,10}$"),  # San Marino
-    "+239": re.compile(r"^\d{7}$"),  # Sao Tome and Principe
-    "+966": re.compile(r"^\d{9}$"),  # Saudi Arabia
-    "+221": re.compile(r"^\d{9}$"),  # Senegal
-    "+381": re.compile(r"^\d{9}$"),  # Serbia
-    "+248": re.compile(r"^\d{7}$"),  # Seychelles
-    "+232": re.compile(r"^\d{8}$"),  # Sierra Leone
-    "+65": re.compile(r"^\d{8}$"),  # Singapore
-    "+421": re.compile(r"^\d{9}$"),  # Slovakia
-    "+386": re.compile(r"^\d{8}$"),  # Slovenia
-    "+677": re.compile(r"^(?:\d{5}|\d{7})$"),  # Solomon Islands
-    "+252": re.compile(r"^\d{8}$"),  # Somalia
-    "+27": re.compile(r"^\d{9}$"),  # South Africa
-    "+82": re.compile(r"^\d{9,10}$"),  # South Korea
-    "+211": re.compile(r"^\d{9}$"),  # South Sudan
-    "+34": re.compile(r"^\d{9}$"),  # Spain
-    "+94": re.compile(r"^\d{9}$"),  # Sri Lanka
-    "+249": re.compile(r"^\d{9}$"),  # Sudan
-    "+597": re.compile(r"^\d{7}$"),  # Suriname
-    "+46": re.compile(r"^\d{9}$"),  # Sweden
-    "+41": re.compile(r"^\d{9}$"),  # Switzerland
-    "+963": re.compile(r"^\d{9}$"),  # Syria
-    "+886": re.compile(r"^\d{9}$"),  # Taiwan
-    "+992": re.compile(r"^\d{9}$"),  # Tajikistan
-    "+255": re.compile(r"^\d{9}$"),  # Tanzania
-    "+66": re.compile(r"^\d{9}$"),  # Thailand
-    "+670": re.compile(r"^\d{7,8}$"),  # Timor-Leste
-    "+228": re.compile(r"^\d{8}$"),  # Togo
-    "+676": re.compile(r"^\d{5}$"),  # Tonga
-    "+216": re.compile(r"^\d{8}$"),  # Tunisia
-    "+90": re.compile(r"^\d{10}$"),  # Turkey
-    "+993": re.compile(r"^\d{8}$"),  # Turkmenistan
-    "+688": re.compile(r"^\d{5,7}$"),  # Tuvalu
-    "+256": re.compile(r"^\d{9}$"),  # Uganda
-    "+380": re.compile(r"^\d{9}$"),  # Ukraine
-    "+971": re.compile(r"^\d{9}$"),  # UAE
-    "+44": re.compile(r"^\d{10}$"),  # United Kingdom
-    "+598": re.compile(r"^\d{8}$"),  # Uruguay
-    "+998": re.compile(r"^\d{9}$"),  # Uzbekistan
-    "+678": re.compile(r"^(?:\d{5}|\d{7})$"),  # Vanuatu
-    "+58": re.compile(r"^\d{10}$"),  # Venezuela
-    "+84": re.compile(r"^\d{9,10}$"),  # Vietnam
-    "+967": re.compile(r"^\d{9}$"),  # Yemen
-    "+260": re.compile(r"^\d{9}$"),  # Zambia
-    "+263": re.compile(r"^\d{9}$"),  # Zimbabwe
+    "+93": _national_number(r"^\d{9}$"),  # Afghanistan
+    "+355": _national_number(r"^\d{9}$"),  # Albania
+    "+213": _national_number(r"^\d{9}$"),  # Algeria
+    "+376": _national_number(r"^\d{6}$"),  # Andorra
+    "+244": _national_number(r"^\d{9}$"),  # Angola
+    "+54": _national_number(r"^\d{10}$"),  # Argentina
+    "+374": _national_number(r"^\d{8}$"),  # Armenia
+    "+297": _national_number(r"^\d{7}$"),  # Aruba
+    "+61": _national_number(r"^\d{9}$"),  # Australia
+    "+43": _national_number(r"^\d{10,11}$"),  # Austria
+    "+994": _national_number(r"^\d{9}$"),  # Azerbaijan
+    "+973": _national_number(r"^\d{8}$"),  # Bahrain
+    "+880": _national_number(r"^\d{10}$"),  # Bangladesh
+    "+375": _national_number(r"^\d{9}$"),  # Belarus
+    "+32": _national_number(r"^\d{9}$"),  # Belgium
+    "+501": _national_number(r"^\d{7}$"),  # Belize
+    "+229": _national_number(r"^\d{8}$"),  # Benin
+    "+975": _national_number(r"^\d{7,8}$"),  # Bhutan
+    "+591": _national_number(r"^\d{8}$"),  # Bolivia
+    "+387": _national_number(r"^\d{8}$"),  # Bosnia and Herzegovina
+    "+267": _national_number(r"^\d{7,8}$"),  # Botswana
+    "+55": _national_number(r"^\d{10,11}$"),  # Brazil
+    "+246": _national_number(r"^\d{7}$"),  # British Indian Ocean Territory
+    "+673": _national_number(r"^\d{7}$"),  # Brunei
+    "+359": _national_number(r"^\d{9}$"),  # Bulgaria
+    "+226": _national_number(r"^\d{8}$"),  # Burkina Faso
+    "+257": _national_number(r"^\d{8}$"),  # Burundi
+    "+855": _national_number(r"^\d{8,9}$"),  # Cambodia
+    "+237": _national_number(r"^\d{9}$"),  # Cameroon
+    "+1": _national_number(r"^\d{10}$"),  # Canada / United States
+    "+238": _national_number(r"^\d{7}$"),  # Cape Verde
+    "+236": _national_number(r"^\d{8}$"),  # Central African Republic
+    "+235": _national_number(r"^\d{8}$"),  # Chad
+    "+56": _national_number(r"^\d{9}$"),  # Chile
+    "+86": _national_number(r"^\d{11}$"),  # China
+    "+57": _national_number(r"^\d{10}$"),  # Colombia
+    "+269": _national_number(r"^\d{7}$"),  # Comoros
+    "+242": _national_number(r"^\d{9}$"),  # Congo
+    "+243": _national_number(r"^\d{9}$"),  # DR Congo
+    "+506": _national_number(r"^\d{8}$"),  # Costa Rica
+    "+385": _national_number(r"^\d{8,9}$"),  # Croatia
+    "+53": _national_number(r"^\d{8}$"),  # Cuba
+    "+599": _national_number(r"^\d{7,8}$"),  # Curaçao
+    "+357": _national_number(r"^\d{8}$"),  # Cyprus
+    "+420": _national_number(r"^\d{9}$"),  # Czech Republic
+    "+45": _national_number(r"^\d{8}$"),  # Denmark
+    "+253": _national_number(r"^\d{8}$"),  # Djibouti
+    "+593": _national_number(r"^\d{9}$"),  # Ecuador
+    "+20": _national_number(r"^\d{10}$"),  # Egypt
+    "+503": _national_number(r"^\d{8}$"),  # El Salvador
+    "+240": _national_number(r"^\d{9}$"),  # Equatorial Guinea
+    "+291": _national_number(r"^\d{7}$"),  # Eritrea
+    "+372": _national_number(r"^\d{7,8}$"),  # Estonia
+    "+268": _national_number(r"^\d{8}$"),  # Eswatini
+    "+251": _national_number(r"^\d{9}$"),  # Ethiopia
+    "+500": _national_number(r"^\d{5}$"),  # Falkland Islands
+    "+298": _national_number(r"^\d{6}$"),  # Faroe Islands
+    "+679": _national_number(r"^\d{7}$"),  # Fiji
+    "+358": _national_number(r"^\d{9,10}$"),  # Finland
+    "+33": _national_number(r"^\d{9}$"),  # France
+    "+241": _national_number(r"^\d{7}$"),  # Gabon
+    "+220": _national_number(r"^\d{7}$"),  # Gambia
+    "+995": _national_number(r"^\d{9}$"),  # Georgia
+    "+49": _national_number(r"^\d{10,11}$"),  # Germany
+    "+233": _national_number(r"^\d{9}$"),  # Ghana
+    "+350": _national_number(r"^\d{8}$"),  # Gibraltar
+    "+30": _national_number(r"^\d{10}$"),  # Greece
+    "+299": _national_number(r"^\d{6}$"),  # Greenland
+    "+502": _national_number(r"^\d{8}$"),  # Guatemala
+    "+224": _national_number(r"^\d{9}$"),  # Guinea
+    "+245": _national_number(r"^\d{7}$"),  # Guinea-Bissau
+    "+592": _national_number(r"^\d{7}$"),  # Guyana
+    "+509": _national_number(r"^\d{8}$"),  # Haiti
+    "+504": _national_number(r"^\d{8}$"),  # Honduras
+    "+852": _national_number(r"^\d{8}$"),  # Hong Kong
+    "+36": _national_number(r"^\d{9}$"),  # Hungary
+    "+354": _national_number(r"^\d{7}$"),  # Iceland
+    "+91": _national_number(r"^\d{10}$"),  # India
+    "+62": _national_number(r"^\d{9,11}$"),  # Indonesia
+    "+98": _national_number(r"^\d{10}$"),  # Iran
+    "+964": _national_number(r"^\d{10}$"),  # Iraq
+    "+353": _national_number(r"^\d{9}$"),  # Ireland
+    "+972": _national_number(r"^\d{9}$"),  # Israel
+    "+39": _national_number(r"^\d{9,10}$"),  # Italy
+    "+225": _national_number(r"^\d{10}$"),  # Ivory Coast
+    "+81": _national_number(r"^\d{10}$"),  # Japan
+    "+962": _national_number(r"^\d{9}$"),  # Jordan
+    "+7": _national_number(r"^\d{10}$"),  # Kazakhstan / Russia
+    "+254": _national_number(r"^\d{9}$"),  # Kenya
+    "+686": _national_number(r"^(?:\d{5}|\d{8})$"),  # Kiribati
+    "+383": _national_number(r"^\d{8,9}$"),  # Kosovo
+    "+965": _national_number(r"^\d{8}$"),  # Kuwait
+    "+996": _national_number(r"^\d{9}$"),  # Kyrgyzstan
+    "+856": _national_number(r"^\d{8}$"),  # Laos
+    "+371": _national_number(r"^\d{8}$"),  # Latvia
+    "+961": _national_number(r"^\d{7,8}$"),  # Lebanon
+    "+266": _national_number(r"^\d{8}$"),  # Lesotho
+    "+231": _national_number(r"^\d{7,8}$"),  # Liberia
+    "+218": _national_number(r"^\d{9}$"),  # Libya
+    "+423": _national_number(r"^\d{7}$"),  # Liechtenstein
+    "+370": _national_number(r"^\d{8}$"),  # Lithuania
+    "+352": _national_number(r"^\d{8,9}$"),  # Luxembourg
+    "+853": _national_number(r"^\d{8}$"),  # Macau
+    "+261": _national_number(r"^\d{9}$"),  # Madagascar
+    "+265": _national_number(r"^\d{9}$"),  # Malawi
+    "+60": _national_number(r"^\d{9,10}$"),  # Malaysia
+    "+960": _national_number(r"^\d{7}$"),  # Maldives
+    "+223": _national_number(r"^\d{8}$"),  # Mali
+    "+356": _national_number(r"^\d{8}$"),  # Malta
+    "+692": _national_number(r"^\d{7}$"),  # Marshall Islands
+    "+222": _national_number(r"^\d{8}$"),  # Mauritania
+    "+230": _national_number(r"^\d{8}$"),  # Mauritius
+    "+52": _national_number(r"^\d{10}$"),  # Mexico
+    "+691": _national_number(r"^\d{7}$"),  # Micronesia
+    "+373": _national_number(r"^\d{8}$"),  # Moldova
+    "+377": _national_number(r"^\d{8}$"),  # Monaco
+    "+976": _national_number(r"^\d{8}$"),  # Mongolia
+    "+382": _national_number(r"^\d{8}$"),  # Montenegro
+    "+212": _national_number(r"^\d{9}$"),  # Morocco
+    "+258": _national_number(r"^\d{9}$"),  # Mozambique
+    "+95": _national_number(r"^\d{9,10}$"),  # Myanmar
+    "+264": _national_number(r"^\d{9}$"),  # Namibia
+    "+674": _national_number(r"^\d{7}$"),  # Nauru
+    "+977": _national_number(r"^\d{10}$"),  # Nepal
+    "+31": _national_number(r"^\d{9}$"),  # Netherlands
+    "+64": _national_number(r"^\d{8,9}$"),  # New Zealand
+    "+505": _national_number(r"^\d{8}$"),  # Nicaragua
+    "+227": _national_number(r"^\d{8}$"),  # Niger
+    "+234": _national_number(r"^\d{10}$"),  # Nigeria
+    "+850": _national_number(r"^\d{10}$"),  # North Korea
+    "+389": _national_number(r"^\d{8}$"),  # North Macedonia
+    "+47": _national_number(r"^\d{8}$"),  # Norway
+    "+968": _national_number(r"^\d{8}$"),  # Oman
+    "+92": _national_number(r"^\d{10}$"),  # Pakistan
+    "+680": _national_number(r"^\d{7}$"),  # Palau
+    "+970": _national_number(r"^\d{8,9}$"),  # Palestine
+    "+507": _national_number(r"^\d{8}$"),  # Panama
+    "+675": _national_number(r"^\d{8}$"),  # Papua New Guinea
+    "+595": _national_number(r"^\d{9}$"),  # Paraguay
+    "+51": _national_number(r"^\d{9}$"),  # Peru
+    "+63": _national_number(r"^\d{10}$"),  # Philippines
+    "+48": _national_number(r"^\d{9}$"),  # Poland
+    "+351": _national_number(r"^\d{9}$"),  # Portugal
+    "+974": _national_number(r"^\d{8}$"),  # Qatar
+    "+262": _national_number(r"^\d{9}$"),  # Réunion
+    "+40": _national_number(r"^\d{9}$"),  # Romania
+    "+250": _national_number(r"^\d{9}$"),  # Rwanda
+    "+290": _national_number(r"^\d{4,5}$"),  # Saint Helena
+    "+685": _national_number(r"^\d{5,7}$"),  # Samoa
+    "+378": _national_number(r"^\d{8,10}$"),  # San Marino
+    "+239": _national_number(r"^\d{7}$"),  # Sao Tome and Principe
+    "+966": _national_number(r"^\d{9}$"),  # Saudi Arabia
+    "+221": _national_number(r"^\d{9}$"),  # Senegal
+    "+381": _national_number(r"^\d{9}$"),  # Serbia
+    "+248": _national_number(r"^\d{7}$"),  # Seychelles
+    "+232": _national_number(r"^\d{8}$"),  # Sierra Leone
+    "+65": _national_number(r"^\d{8}$"),  # Singapore
+    "+421": _national_number(r"^\d{9}$"),  # Slovakia
+    "+386": _national_number(r"^\d{8}$"),  # Slovenia
+    "+677": _national_number(r"^(?:\d{5}|\d{7})$"),  # Solomon Islands
+    "+252": _national_number(r"^\d{8}$"),  # Somalia
+    "+27": _national_number(r"^\d{9}$"),  # South Africa
+    "+82": _national_number(r"^\d{9,10}$"),  # South Korea
+    "+211": _national_number(r"^\d{9}$"),  # South Sudan
+    "+34": _national_number(r"^\d{9}$"),  # Spain
+    "+94": _national_number(r"^\d{9}$"),  # Sri Lanka
+    "+249": _national_number(r"^\d{9}$"),  # Sudan
+    "+597": _national_number(r"^\d{7}$"),  # Suriname
+    "+46": _national_number(r"^\d{9}$"),  # Sweden
+    "+41": _national_number(r"^\d{9}$"),  # Switzerland
+    "+963": _national_number(r"^\d{9}$"),  # Syria
+    "+886": _national_number(r"^\d{9}$"),  # Taiwan
+    "+992": _national_number(r"^\d{9}$"),  # Tajikistan
+    "+255": _national_number(r"^\d{9}$"),  # Tanzania
+    "+66": _national_number(r"^\d{9}$"),  # Thailand
+    "+670": _national_number(r"^\d{7,8}$"),  # Timor-Leste
+    "+228": _national_number(r"^\d{8}$"),  # Togo
+    "+676": _national_number(r"^\d{5}$"),  # Tonga
+    "+216": _national_number(r"^\d{8}$"),  # Tunisia
+    "+90": _national_number(r"^\d{10}$"),  # Turkey
+    "+993": _national_number(r"^\d{8}$"),  # Turkmenistan
+    "+688": _national_number(r"^\d{5,7}$"),  # Tuvalu
+    "+256": _national_number(r"^\d{9}$"),  # Uganda
+    "+380": _national_number(r"^\d{9}$"),  # Ukraine
+    "+971": _national_number(r"^\d{9}$"),  # UAE
+    "+44": _national_number(r"^\d{10}$"),  # United Kingdom
+    "+598": _national_number(r"^\d{8}$"),  # Uruguay
+    "+998": _national_number(r"^\d{9}$"),  # Uzbekistan
+    "+678": _national_number(r"^(?:\d{5}|\d{7})$"),  # Vanuatu
+    "+58": _national_number(r"^\d{10}$"),  # Venezuela
+    "+84": _national_number(r"^\d{9,10}$"),  # Vietnam
+    "+967": _national_number(r"^\d{9}$"),  # Yemen
+    "+260": _national_number(r"^\d{9}$"),  # Zambia
+    "+263": _national_number(r"^\d{9}$"),  # Zimbabwe
 }
 
 
@@ -658,7 +664,8 @@ def validate_phone(phone: str, dial_code: str) -> bool:
     Validate that *phone* (national digits only, no leading zero) matches the
     expected pattern for *dial_code*.
 
-    Returns ``True`` when valid, ``False`` otherwise.
+    The whole string must match, and only the ASCII digits 0-9 count as
+    digits. Returns ``True`` when valid, ``False`` otherwise.
 
     >>> validate_phone("7123456789", "+44")
     True
@@ -666,7 +673,7 @@ def validate_phone(phone: str, dial_code: str) -> bool:
     pattern = PHONE_PATTERNS.get(dial_code)
     if pattern is None:
         return False
-    return bool(pattern.match(phone))
+    return pattern.fullmatch(phone) is not None
 
 
 def is_phone_extra_available() -> bool:

@@ -8,6 +8,7 @@ field labels, and formatting helpers for building locale-aware address forms.
 from __future__ import annotations
 
 import re
+import string
 from typing import NamedTuple
 
 from django.utils.functional import Promise
@@ -585,6 +586,10 @@ def validate_postal_code(jurisdiction: str, postal_code: str) -> bool:
     Returns ``True`` for jurisdictions with no known postal-code system
     (e.g. Angola, Hong Kong) — there is nothing to validate.
 
+    Leading and trailing ASCII whitespace is ignored. The rest must match the
+    whole pattern, letters case-insensitively, and only ASCII letters, digits
+    and whitespace count as such.
+
     >>> from geo_canon.address_formats import validate_postal_code
     >>> validate_postal_code("United States", "10001")
     True
@@ -599,7 +604,9 @@ def validate_postal_code(jurisdiction: str, postal_code: str) -> bool:
     if not fmt.postal_code_pattern:
         # No postal code system — anything is acceptable
         return True
-    return bool(re.match(fmt.postal_code_pattern, postal_code.strip(), re.IGNORECASE))
+    candidate = postal_code.strip(string.whitespace)
+    flags = re.IGNORECASE | re.ASCII
+    return re.fullmatch(fmt.postal_code_pattern, candidate, flags) is not None
 
 
 def get_state_label(jurisdiction: str) -> str | Promise | None:

@@ -59,6 +59,26 @@ class TestPhoneValidation:
 
         for code, pattern in PHONE_PATTERNS.items():
             assert isinstance(pattern, re.Pattern), f"Pattern for {code} is not compiled"
+            assert pattern.flags & re.ASCII, f"Pattern for {code} accepts non-ASCII digits"
+
+    def test_the_whole_number_must_match(self):
+        assert validate_phone("7123456789\n", "+44") is False
+        assert validate_phone("7123456789 ", "+44") is False
+        assert validate_phone("71234567890", "+44") is False
+
+    def test_non_ascii_digits_are_rejected(self):
+        fullwidth = "７１２３４５６７８９"
+        arabic_indic = "٧١٢٣٤٥٦٧٨٩"
+        assert validate_phone(fullwidth, "+44") is False
+        assert validate_phone(arabic_indic, "+44") is False
+
+    def test_fallback_rejects_non_ascii_digits(self, monkeypatch):
+        import geo_canon.dial_codes as dial_codes
+
+        monkeypatch.setattr(dial_codes, "_phonenumbers", None)
+        arabic_indic = "٠٧١٢٣٤٥٦٧٨٩"
+        assert validate_phone_number(arabic_indic, "United Kingdom") is False
+        assert validate_phone_number("07123 456789\n", "United Kingdom") is True
 
 
 class TestPhoneNumbersExtra:
