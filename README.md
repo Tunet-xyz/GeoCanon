@@ -1,47 +1,102 @@
 # GeoCanon
-### Global-Ready Django Apps From Day One
 
-**Jurisdictions. Dial Codes. Flags. ISO Codes. Timezones. Holidays. Languages. Currencies. Address Formats. One Package.**
+[![PyPI](https://img.shields.io/pypi/v/GeoCanon)](https://pypi.org/project/GeoCanon/)
+[![Python 3.10–3.13](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue)](https://pypi.org/project/GeoCanon/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://github.com/Tunet-xyz/geo_canon/blob/main/LICENSE)
+
+**Jurisdictions, dial codes, flags, ISO codes, timezones, holidays, languages,
+currencies, and address formats for Django, in one package.**
 
 Part of the [Tunet](https://www.tunet.xyz/engineering/) open-source libraries, alongside [AccessGate](https://github.com/Tunet-xyz/access_gate), [SessionArmor](https://github.com/Tunet-xyz/session_armor), and [SwapLayer](https://github.com/Tunet-xyz/swap_layer). See the [GeoCanon product page](https://www.tunet.xyz/engineering/geo-canon/) for the public capability overview.
+
+GeoCanon is a locale and jurisdiction toolkit for Django. Instead of
+hand-maintained country lists, dial-code maps, timezone tables, and holiday
+calendars scattered across a codebase, you import one consistent library and
+ship internationally from your first deploy.
+
+## Features
+
+| Module | What it provides |
+| --- | --- |
+| Jurisdictions | 190+ countries with translatable names, a form field, a context-switch form, and middleware |
+| ISO codes | ISO 3166-1 alpha-2, alpha-3, and numeric codes with reverse lookups |
+| Dial codes | International dial codes and phone-number checks per dial code |
+| Flags | Country to flag CSS class mapping for the [flag-icons](https://flagicons.lipis.dev/) library |
+| Timezones | 190+ jurisdiction to IANA timezone mappings, using `zoneinfo` with a `pytz` fallback |
+| Languages | ISO 639-1 language choices (70+) and a default language per jurisdiction |
+| Duration | Human-readable durations that follow Django's active translation |
+| Holidays | National public holidays for 140+ jurisdictions through the `holidays` library |
+| Currencies | ISO 4217 currency mapping (170+ jurisdictions), symbols, and formatting |
+| Address formats | Postal address templates, postal-code validation, and field labels (170+ jurisdictions) |
+| Locale formatting | Optional Babel-backed number, currency, date, time, and list formatting |
+| Settings | A lightweight settings container, with optional Pydantic 2 validation |
+
+- **Zero configuration:** sensible defaults; customize only what you need.
+- **Minimal dependencies:** only Django is required; every extra is optional.
+- **Translatable labels:** names use `gettext_lazy`, so your project's
+  translations apply.
+- **Typed:** type hints throughout and a PEP 561 `py.typed` marker.
 
 ## Version 1.0
 
 The documented Python helpers, configuration, Django integration, and local MCP
 entry point form the stable 1.x API. GeoCanon supports Python 3.10–3.13 and
 Django 4.2–6.x (`Django<7`); use an upstream-supported Django release.
-The 0.5 API and bundled mappings are preserved. Invalid configured timezone
-settings now raise their error instead of silently ignoring an override.
 
-Core installation requires only Django. Optional data and formatting features
-are listed below. Settings use Pydantic validation when the `validation` extra
-is installed; otherwise they use the lightweight settings container.
+GeoCanon 1.0.0 is tagged (`v1.0.0`) but not yet published to PyPI, which still
+serves 0.1.0. Until it is published, install 1.0.0 from the tag:
 
----
-
-## What is GeoCanon?
-
-GeoCanon is a **locale & jurisdiction toolkit** for Django that gives your app global awareness out of the box.
-
-Instead of hand-rolling country lists, phone validation, timezone lookups, and holiday calendars, you import **one consistent library** and ship internationally from your first deploy.
-
-### The Problem
-
-```python
-# Scattered across your codebase...
-COUNTRIES = [("US", "United States"), ...]  # hand-maintained
-DIAL_CODES = {"+1": "US", ...}             # incomplete
-TIMEZONE_MAP = {"US": "America/New_York"}   # 8 entries
-# No holiday detection, no flag icons, no language defaults
+```bash
+pip install "GeoCanon @ git+https://github.com/Tunet-xyz/geo_canon@v1.0.0"
 ```
 
-### The Solution
+Upgrading from 0.1.0, the only earlier release on PyPI, keeps its public names
+and bundled mappings and adds the `phones`, `locale`, and `validation` extras.
+An invalid configured timezone override now raises an error instead of being
+ignored. See the [changelog](https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md).
+
+## Installation
+
+```bash
+pip install GeoCanon                   # Core: Django only
+pip install "GeoCanon[holidays]"       # Public holiday detection
+pip install "GeoCanon[timezones]"      # pytz fallback when system timezone data is missing
+pip install "GeoCanon[phones]"         # phonenumbers parsing and formatting
+pip install "GeoCanon[locale]"         # Babel locale-aware formatting
+pip install "GeoCanon[validation]"     # Pydantic 2 settings validation
+pip install "GeoCanon[all]"            # Everything above
+```
+
+| Extra | What it adds |
+| --- | --- |
+| `holidays` | Public holiday detection |
+| `timezones` | `pytz` fallback when system timezone data is unavailable |
+| `phones` | Robust phone parsing, validation, formatting, and number type detection |
+| `locale` | Babel-backed number, currency, date, time, datetime, percent, and list formatting |
+| `validation` | Pydantic 2 validation for the settings model |
+| `all` | Everything above |
+
+## Quick start
+
+Configuration is optional:
+
+```python
+# settings.py
+from geo_canon.settings import GeoCanonSettings
+
+GEOCANON = GeoCanonSettings(
+    default_jurisdiction="United Kingdom",
+    timezone_overrides={"My Custom Region": "Europe/London"},
+)
+```
+
+Then use the helpers anywhere:
 
 ```python
 from geo_canon import (
     get_jurisdiction_choices,      # 190+ countries, sorted, translatable
     get_dial_code,                 # "Romania" → "+40"
-    validate_phone,                # per-country regex validation
+    validate_phone,                # per-dial-code digit patterns
     get_flag_css_class,            # "Romania" → "fi-ro"
     get_current_local_time,        # "Romania" → aware datetime in Europe/Bucharest
     get_language_for_jurisdiction,  # "Romania" → "ro"
@@ -49,6 +104,12 @@ from geo_canon import (
     get_currency_code,             # "Romania" → "RON"
     format_currency,               # (1234.5, "Japan") → "¥1,235"
 )
+
+get_dial_code("United States")              # "+1"
+get_current_local_time("Japan")             # datetime in Asia/Tokyo
+get_language_for_jurisdiction("France")     # "fr"
+format_duration(7200)                       # "2 hours"
+format_currency(1234.50, "United Kingdom")  # "£1,234.50"
 
 # Address-aware forms
 from geo_canon import validate_postal_code, get_state_label
@@ -59,95 +120,9 @@ get_state_label("Japan")                             # "Prefecture"
 from geo_canon import get_alpha2, get_alpha3
 get_alpha2("Romania")  # "RO"
 get_alpha3("Romania")  # "ROU"
-
-# Optional: holiday detection
-from datetime import date
-from geo_canon.holidays import is_public_holiday
-is_public_holiday("Romania", date(2025, 12, 25))  # True
-
-# Optional: richer phone formatting with geocanon[phones]
-from geo_canon import format_phone_number, validate_phone_number
-validate_phone_number("6502530000", "United States")  # True
-format_phone_number("6502530000", "United States")    # "+16502530000"
-
-# Optional: locale-aware formatting with geocanon[locale]
-from geo_canon import format_currency_locale
-format_currency_locale(1234.5, "United States")       # "$1,234.50"
 ```
 
----
-
-## Quick Start
-
-### 1. Install
-
-```bash
-# Core (zero non-Django dependencies)
-pip install geocanon
-
-# With optional extras
-pip install geocanon[holidays]     # Public holiday detection
-pip install geocanon[timezones]    # pytz fallback when system timezone data is unavailable
-pip install geocanon[phones]       # phonenumbers parsing/formatting
-pip install geocanon[locale]       # Babel locale-aware formatting
-pip install geocanon[validation]   # Pydantic 2 settings validation
-pip install geocanon[all]          # Everything
-```
-
-**Available extras:**
-| Extra | What it adds |
-|-------|-------------|
-| `holidays` | Public holiday detection (140+ countries) |
-| `timezones` | `pytz` fallback when system timezone data is unavailable |
-| `phones` | Robust phone parsing, validation, formatting, and number type detection |
-| `locale` | Babel-backed number, currency, date, time, datetime, percent, and list formatting |
-| `validation` | Pydantic 2 validation for the settings model |
-| `all` | Everything above |
-
-### 2. Configure (optional)
-
-```python
-# settings.py — zero config required, but you CAN customise:
-from geo_canon.settings import GeoCanonSettings
-
-GEOCANON = GeoCanonSettings(
-    default_jurisdiction="United Kingdom",
-    default_language="en",
-    timezone_overrides={"My Custom Region": "Europe/London"},
-)
-```
-
-### 3. Use Anywhere
-
-```python
-from geo_canon import get_dial_code, get_flag_css_class, get_current_local_time
-
-# Phone dial codes
-get_dial_code("Romania")       # "+40"
-get_dial_code("United States") # "+1"
-
-# Flag CSS classes (for flag-icons library)
-get_flag_css_class("Romania")  # "fi-ro"
-
-# Current local time
-get_current_local_time("Japan")  # datetime in Asia/Tokyo
-
-# Language defaults
-from geo_canon import get_language_for_jurisdiction
-get_language_for_jurisdiction("France")  # "fr"
-
-# Duration formatting (i18n-aware)
-from geo_canon import format_duration
-format_duration(7200)  # "2 hours"
-
-# Currency formatting
-from geo_canon import format_currency, get_currency_code
-get_currency_code("Romania")                # "RON"
-format_currency(1234.50, "United Kingdom")  # "£1,234.50"
-format_currency(1234.5, "Japan")            # "¥1,235"
-```
-
-### 4. Django Forms
+## Django integration
 
 ```python
 from geo_canon.jurisdictions.forms import JurisdictionContextSwitchForm
@@ -155,8 +130,6 @@ from geo_canon.jurisdictions.forms import JurisdictionContextSwitchForm
 # Drop-in jurisdiction selector
 form = JurisdictionContextSwitchForm()
 ```
-
-### 5. Middleware
 
 ```python
 # settings.py
@@ -168,79 +141,75 @@ MIDDLEWARE = [
 # Now every request has request.jurisdiction
 ```
 
----
+`JurisdictionMiddleware` reads the jurisdiction from the session's
+`jurisdiction` key, falling back to `default_jurisdiction`; it never reads query
+strings or headers. It needs Django's `SessionMiddleware` before it. Store only
+validated values in that key, for example from `JurisdictionContextSwitchForm`.
 
-## Modules
+## Optional extras
 
-| Module | Status | Description |
-|--------|--------|-------------|
-| **Jurisdictions** | Production | 190+ countries with translatable names, forms, middleware |
-| **Dial Codes** | Production | International dial codes + per-country phone validation |
-| **Flags** | Production | Country → ISO-3166 flag CSS class mapping |
-| **ISO Codes** | Production | ISO 3166-1 alpha-2, alpha-3, and numeric codes |
-| **Timezones** | Production | 190+ jurisdiction → IANA timezone mappings |
-| **Languages** | Production | Language choices + jurisdiction → default language |
-| **Duration** | Production | i18n-aware human-readable duration formatting |
-| **Holidays** | Production | Public holiday detection for 140+ countries |
-| **Currencies** | Production | ISO 4217 currency mapping, symbols, and formatting |
-| **Address Formats** | Production | Postal address formats, postal-code validation, and field labels |
-| **Locale Formatting** | Production | Optional Babel-backed number, currency, date, time, and list formatting |
-| **Settings** | Production | Lightweight configuration, with optional Pydantic 2 validation |
+```python
+# Holiday detection with GeoCanon[holidays]
+from datetime import date
+from geo_canon.holidays import is_public_holiday
+is_public_holiday("Romania", date(2025, 12, 25))  # True
 
----
+# Richer phone formatting with GeoCanon[phones]
+from geo_canon import format_phone_number, validate_phone_number
+validate_phone_number("6502530000", "United States")  # True
+format_phone_number("6502530000", "United States")    # "+16502530000"
 
-## Features
+# Locale-aware formatting with GeoCanon[locale]
+from geo_canon import format_currency_locale
+format_currency_locale(1234.5, "United States")       # "$1,234.50"
+```
 
-- **190+ jurisdictions** — sorted, translatable, with O(1) lookups
-- **ISO 3166-1 codes** — alpha-2, alpha-3, and numeric with reverse lookups
-- **Phone validation** — per-country regex patterns for national number formats
-- **Flag icons** — CSS class mapping compatible with [flag-icons](https://flagicons.lipis.dev/)
-- **190+ timezone mappings** — uses `zoneinfo` (3.9+) with `pytz` fallback
-- **Holiday detection** — powered by the battle-tested `holidays` library
-- **170+ currency mappings** — ISO 4217 codes, symbols, and locale-aware formatting
-- **170+ address formats** — postal-code validation, localised field labels, and `format_address()`
-- **70+ languages** — ISO 639-1 choices with jurisdiction → language mapping
-- **Duration formatting** — respects Django's active translation
-- **Jurisdiction middleware** — automatic `request.jurisdiction` on every request
-- **Django form fields** — drop-in `JurisdictionChoiceField` and context-switch form
-- **Optional Pydantic settings** — install `[validation]` for runtime validation
-- **Rich exceptions** — actionable error messages with hints and docs links
-- **Zero config** — works with defaults, customise when you need to
-- **PEP 561** — `py.typed` marker for mypy/pyright
+## MCP server
 
----
-
-## Why GeoCanon?
-
-- **One Source of Truth** — no more scattered country lists and timezone dicts
-- **Product-Grounded** — extracted from repeated Django product needs across multiple jurisdictions
-- **Translatable** — all labels use `gettext_lazy` for full i18n support
-- **Minimal Dependencies** — only Django required; extras are truly optional
-- **Typed APIs** — lazy Django label types, optional Pydantic validation, and PEP 561 support
-- **Extensible** — override jurisdiction → timezone mappings with `GEOCANON.timezone_overrides`
-
-Bundled mappings are maintained release data rather than a live legal or standards feed. Review the [data provenance and update policy](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/data-provenance.md) before using defaults for compliance, tax, postal, or other high-stakes decisions.
-
----
-
-
-## Public Agent MCP Contract
-
-GeoCanon includes a public agent-operability contract in [`mcp/`](https://github.com/Tunet-xyz/geo_canon/tree/main/mcp/). It describes how external agents can safely discover package APIs, optional extras, locale/jurisdiction workflows, public docs, and browser-visible surfaces without requiring source-code access or customer personal data.
-
-From a checkout, run the dependency-free contract server with `python mcp/server.py`. After installation, agents can use the packaged stdio command:
+GeoCanon includes a local stdio MCP server:
 
 ```bash
 geocanon-mcp
 ```
 
-This starts a local public-contract server over stdio. Its tools describe
-integration workflows; it makes no network connections and needs no credentials
-or account.
+From a source checkout, run `python mcp/server.py`. Its tools return guidance
+for settings, forms, middleware, and locale workflows; the calling agent writes
+any code, for a person to review. It runs locally under the caller's control,
+makes no network connections, and needs no credentials or account. See
+[mcp/README.md](https://github.com/Tunet-xyz/geo_canon/blob/main/mcp/README.md) for its methods, tools, and limits.
+
+## Scope and limitations
+
+Bundled mappings are maintained release data rather than a live legal or
+standards feed, and coverage differs between modules: not every jurisdiction
+has a dial code, currency, address format, or holiday calendar. Review the
+[data provenance and update policy](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/data-provenance.md) before using
+defaults for compliance, tax, postal, or other high-stakes decisions.
+
+Lookups for unknown jurisdictions return `None` or `False` rather than raising;
+configuration and timezone errors raise exceptions with hints. Phone and
+postal-code checks validate format only, not that a number or address exists.
+GeoCanon has not had an independent security audit; the
+[security assurance case](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/SECURITY_ASSURANCE.md) lists the evidence the
+repository provides.
+
+## Documentation
+
+- [Documentation index](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md): guides, security
+  documents, and the release procedure.
+- Guides: [jurisdictions](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/jurisdictions.md), [dial codes](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/dial-codes.md), [timezones](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/timezones.md), [currencies](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/currencies.md), [address formats](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/address-formats.md), [locale formatting](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/locale-formats.md), [settings](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/settings.md), [MCP server](https://github.com/Tunet-xyz/geo_canon/blob/main/mcp/README.md).
+- Security: [security policy](https://github.com/Tunet-xyz/geo_canon/blob/main/SECURITY.md),
+  [threat model](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/THREAT_MODEL.md),
+  [security assurance](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/SECURITY_ASSURANCE.md),
+  [audit scope](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/AUDIT_SCOPE.md), and
+  [secure development](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/SECURE_DEVELOPMENT.md).
+- [Changelog](https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md), including which versions reached PyPI.
 
 ## Development
 
 ```bash
+git clone https://github.com/Tunet-xyz/geo_canon.git
+cd geo_canon
 python -m pip install -e ".[all,dev]"
 python -m ruff check src tests
 python -m mypy src/geo_canon src/geocanon_mcp
@@ -248,16 +217,19 @@ python -m bandit -r src
 python -m pytest --cov=geo_canon --cov=geocanon_mcp --cov-branch
 ```
 
-See [docs/RELEASE.md](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/RELEASE.md) for release verification and publishing.
+These are the checks the manual CI workflows run. The
+[security assurance case](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/SECURITY_ASSURANCE.md) lists the full
+evidence commands, including the dependency audit.
 
 ## Contributing and releases
 
-See [CONTRIBUTING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution process and [VERSIONING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/VERSIONING.md) for the shared SemVer and release policy. Report vulnerabilities privately as described in [SECURITY.md](https://github.com/Tunet-xyz/geo_canon/blob/main/SECURITY.md). CI workflows run only when the maintainer starts them, so include your local test results in pull requests.
+See [CONTRIBUTING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution
+process and [VERSIONING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/VERSIONING.md) for the shared SemVer and
+release policy. Report vulnerabilities privately as described in
+[SECURITY.md](https://github.com/Tunet-xyz/geo_canon/blob/main/SECURITY.md). CI workflows run only when the maintainer
+starts them, so include your local test results in pull requests. Everyone
+taking part follows the [code of conduct](https://github.com/Tunet-xyz/geo_canon/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
-MIT — Copyright (c) 2026 Tunet Ltd. See [LICENSE](https://github.com/Tunet-xyz/geo_canon/blob/main/LICENSE).
-
----
-
-**[→ Read Full Documentation](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md)**
+MIT. Copyright (c) 2026 Tunet Ltd. See [LICENSE](https://github.com/Tunet-xyz/geo_canon/blob/main/LICENSE).

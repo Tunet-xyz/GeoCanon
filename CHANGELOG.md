@@ -35,6 +35,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   settings containers reject unknown fields, override timezone names are
   checked only when used, and holiday coverage is GeoCanon's registry of 147
   jurisdictions with national holidays only.
+- README sections follow the order the Tunet libraries share: features, version
+  status, installation, quick start, usage, MCP server, scope and limitations,
+  documentation, development, contributing, and license, with PyPI, Python, and
+  license badges. It says 1.0.0 is not yet on PyPI and how to install it from
+  the tag, quotes the extras, names 0.1.0 as the upgrade path, drops the unused
+  `default_language` from the example, and states what the middleware reads
+  and what phone and postal checks prove.
 
 ## [1.0.0] - 2026-11-05 (tagged; not yet published to PyPI)
 
