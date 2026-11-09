@@ -39,7 +39,27 @@ class TestExceptions:
         err = DialCodeNotFoundError("+999")
         assert "+999" in str(err)
 
-    def test_phone_validation_error(self):
-        err = PhoneValidationError("123", "+44", r"^\d{10}$")
-        assert "123" in str(err)
-        assert "+44" in str(err)
+    def test_phone_validation_error_does_not_repeat_the_number(self):
+        err = PhoneValidationError("+44 7123 456789", "+44", r"^\d{10}$")
+        message = str(err)
+        assert "7123" not in message and "456789" not in message
+        assert "ending in 89" in message
+        assert "+44" in message
+        assert "123" not in str(PhoneValidationError("123", "+44", r"^\d{10}$"))
+
+    def test_caller_values_are_escaped_and_bounded(self):
+        multiline = str(JurisdictionNotFoundError("Narnia\nERROR forged log line"))
+        assert "Narnia\nERROR" not in multiline
+        assert "Narnia\\nERROR" in multiline
+        assert len(str(TimezoneNotFoundError("x" * 100_000))) < 500
+        assert len(str(DialCodeNotFoundError("+" + "9" * 100_000))) < 500
+
+    def test_holidays_hint_uses_the_published_package_name(self):
+        assert 'pip install "GeoCanon[holidays]"' in str(HolidaysNotAvailableError())
+
+    def test_lookups_return_none_instead_of_raising(self):
+        from geo_canon import get_dial_code, is_valid_jurisdiction, validate_phone
+
+        assert get_dial_code("Narnia") is None
+        assert is_valid_jurisdiction("Narnia") is False
+        assert validate_phone("123", "+999") is False

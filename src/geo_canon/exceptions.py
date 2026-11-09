@@ -2,9 +2,33 @@
 GeoCanon Custom Exceptions
 
 Provides rich, actionable error messages that guide developers to solutions.
+
+Messages quote caller-supplied values escaped and shortened, and never repeat
+a phone number. GeoCanon's own lookups return ``None`` or ``False`` instead of
+raising :class:`JurisdictionNotFoundError`, :class:`DialCodeNotFoundError` or
+:class:`PhoneValidationError`; applications can raise them for consistent
+errors.
 """
 
 from __future__ import annotations
+
+_MAX_QUOTED_CHARS = 64
+
+
+def _quoted(value: object) -> str:
+    """Quote a caller's value for a message: escaped, and cut to a bounded length."""
+    text = str(value)
+    if len(text) > _MAX_QUOTED_CHARS:
+        text = text[:_MAX_QUOTED_CHARS] + "..."
+    return repr(text)
+
+
+def _phone_reference(phone: object) -> str:
+    """Refer to a phone number without repeating it: at most its last two digits."""
+    digits = [char for char in str(phone) if char in "0123456789"]
+    if len(digits) >= 6:
+        return "Phone number ending in " + "".join(digits[-2:])
+    return "Phone number"
 
 
 class GeoCanonError(Exception):
@@ -42,14 +66,18 @@ class ConfigurationError(GeoCanonError):
 
 
 class JurisdictionNotFoundError(GeoCanonError):
-    """Raised when a jurisdiction is not recognised."""
+    """
+    A jurisdiction is not recognised.
+
+    GeoCanon's lookups return ``None`` instead; raise it from application code.
+    """
 
     def __init__(self, jurisdiction: str, available: list[str] | None = None):
-        hint_parts = [f"'{jurisdiction}' is not a registered jurisdiction."]
+        hint_parts = [f"{_quoted(jurisdiction)} is not a registered jurisdiction."]
         if available:
             hint_parts.append(f"Available: {', '.join(available[:10])}...")
         super().__init__(
-            f"Jurisdiction not found: {jurisdiction}",
+            f"Jurisdiction not found: {_quoted(jurisdiction)}",
             hint=" ".join(hint_parts),
             docs_url="https://github.com/Tunet-xyz/geo_canon/blob/main/docs/jurisdictions.md",
         )
@@ -60,7 +88,7 @@ class TimezoneNotFoundError(GeoCanonError):
 
     def __init__(self, jurisdiction: str):
         super().__init__(
-            f"No timezone configured for jurisdiction: {jurisdiction}",
+            f"No timezone configured for jurisdiction: {_quoted(jurisdiction)}",
             hint="Add a GEOCANON.timezone_overrides entry or submit a PR to add this mapping.",
             docs_url="https://github.com/Tunet-xyz/geo_canon/blob/main/docs/timezones.md",
         )
@@ -72,25 +100,35 @@ class HolidaysNotAvailableError(GeoCanonError):
     def __init__(self):
         super().__init__(
             "The 'holidays' package is required for public holiday support.",
-            hint="Install with: pip install geocanon[holidays]",
+            hint='Install with: pip install "GeoCanon[holidays]"',
         )
 
 
 class DialCodeNotFoundError(GeoCanonError):
-    """Raised when a dial code is not recognised."""
+    """
+    A dial code is not recognised.
+
+    GeoCanon's lookups return ``None`` or ``False`` instead; raise it from
+    application code.
+    """
 
     def __init__(self, dial_code: str):
         super().__init__(
-            f"Dial code not found: {dial_code}",
+            f"Dial code not found: {_quoted(dial_code)}",
             hint="Ensure the dial code starts with '+' and is a valid international prefix.",
         )
 
 
 class PhoneValidationError(GeoCanonError):
-    """Raised when a phone number fails validation for its dial code."""
+    """
+    A phone number fails validation for its dial code.
+
+    GeoCanon's validators return ``False`` instead; raise it from application
+    code. The message names at most the number's last two digits.
+    """
 
     def __init__(self, phone: str, dial_code: str, expected_pattern: str):
         super().__init__(
-            f"Phone number '{phone}' is invalid for dial code {dial_code}",
+            f"{_phone_reference(phone)} is invalid for dial code {_quoted(dial_code)}",
             hint=f"Expected pattern: {expected_pattern}",
         )
