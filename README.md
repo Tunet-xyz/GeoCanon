@@ -226,7 +226,7 @@ evidence commands, including the dependency audit.
 See [CONTRIBUTING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/CONTRIBUTING.md) for the owner-reviewed contribution
 process and [VERSIONING.md](https://github.com/Tunet-xyz/geo_canon/blob/main/VERSIONING.md) for the shared SemVer and
 release policy. Report vulnerabilities privately as described in
-[SECURITY.md](https://github.com/Tunet-xyz/geo_canon/blob/main/SECURITY.md). CI workflows run only when the maintainer
+[SECURITY.md](https://github.com/Tunet-xyz/geo_canon/blob/main/SECURITY.md). CI workflows run only when the owner
 starts them, so include your local test results in pull requests. Everyone
 taking part follows the [code of conduct](https://github.com/Tunet-xyz/geo_canon/blob/main/CODE_OF_CONDUCT.md).
 

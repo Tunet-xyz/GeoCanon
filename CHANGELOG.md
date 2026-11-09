@@ -42,6 +42,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the tag, quotes the extras, names 0.1.0 as the upgrade path, drops the unused
   `default_language` from the example, and states what the middleware reads
   and what phone and postal checks prove.
+- The repository is now `Tunet-xyz/geo_canon` (the old `Tunet-xyz/GeoCanon` URL
+  redirects): project URLs, documentation links, and the README use it, and the
+  README names the other Tunet libraries. Install commands in the guides use
+  `pip install "GeoCanon[...]"`, and guide titles use sentence case.
 
 ## [1.0.0] - 2026-11-05 (tagged; not yet published to PyPI)
 

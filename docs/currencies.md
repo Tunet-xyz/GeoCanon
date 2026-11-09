@@ -107,10 +107,10 @@ The `format_currency` function automatically handles this.
 
 ## Locale-Aware Formatting
 
-Install `geocanon[locale]` to format currencies with Babel/CLDR conventions:
+Install `GeoCanon[locale]` to format currencies with Babel/CLDR conventions:
 
 ```bash
-pip install geocanon[locale]
+pip install "GeoCanon[locale]"
 ```
 
 ```python

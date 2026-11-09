@@ -1,4 +1,4 @@
-# Address Formats
+# Address formats
 
 Jurisdiction → postal address format mapping, postal-code validation, localised field labels, and address formatting.
 

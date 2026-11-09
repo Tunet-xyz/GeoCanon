@@ -1,4 +1,4 @@
-# Dial Codes
+# Dial codes
 
 International dialling codes with per-country phone number validation.
 
@@ -33,11 +33,11 @@ validate_phone("123", "+44")         # False
 
 ## Optional `phones` Extra
 
-Install `geocanon[phones]` to enable robust parsing and formatting via
+Install `GeoCanon[phones]` to enable robust parsing and formatting via
 `phonenumbers`:
 
 ```bash
-pip install geocanon[phones]
+pip install "GeoCanon[phones]"
 ```
 
 ### `validate_phone_number(phone, jurisdiction=None, *, region=None) -> bool`

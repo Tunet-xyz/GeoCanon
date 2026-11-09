@@ -1,4 +1,4 @@
-# Duration Formatting
+# Duration formatting
 
 i18n-aware, human-readable duration formatting.
 

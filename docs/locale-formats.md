@@ -1,4 +1,4 @@
-# Locale Formatting
+# Locale formatting
 
 Optional Babel-backed formatting helpers for numbers, currencies, dates, times,
 datetimes, percentages, and lists.
@@ -6,7 +6,7 @@ datetimes, percentages, and lists.
 Install the extra:
 
 ```bash
-pip install geocanon[locale]
+pip install "GeoCanon[locale]"
 ```
 
 GeoCanon still imports without Babel installed. When Babel is missing or a

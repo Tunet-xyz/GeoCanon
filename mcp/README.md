@@ -6,7 +6,7 @@ APIs, and optional extras, and to get guidance for settings, forms, and
 middleware that handle jurisdictions, addresses, phones, currencies, and
 locales. The server runs locally under the caller's control, makes no network
 connections, and needs no credentials or account. There is no hosted GeoCanon
-MCP service, and nothing here gives access to the maintainer's agents,
+MCP service, and nothing here gives access to the owner's agents,
 accounts, or infrastructure.
 
 ## Run

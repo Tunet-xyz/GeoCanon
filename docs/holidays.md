@@ -1,9 +1,9 @@
-# Public Holidays
+# Public holidays
 
 Detect public holidays for 140+ countries. Requires the `holidays` extra:
 
 ```bash
-pip install geocanon[holidays]
+pip install "GeoCanon[holidays]"
 ```
 
 ## Functions

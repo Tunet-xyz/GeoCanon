@@ -1,4 +1,4 @@
-# ISO Country Codes
+# ISO country codes
 
 Jurisdiction → ISO 3166-1 alpha-2, alpha-3, and numeric code mapping.
 
