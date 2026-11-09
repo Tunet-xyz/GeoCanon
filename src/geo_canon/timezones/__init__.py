@@ -4,7 +4,7 @@ GeoCanon — Timezones
 Jurisdiction → IANA timezone mapping and local-time retrieval.
 
 Uses ``zoneinfo`` by default, with an optional ``pytz`` fallback when IANA
-timezone data is unavailable, installed via ``pip install geocanon[timezones]``.
+timezone data is unavailable, installed via ``pip install "GeoCanon[timezones]"``.
 """
 
 from __future__ import annotations
@@ -243,15 +243,26 @@ def _get_zone_info(tz_name: str) -> Any:
 
 
 def _get_pytz_timezone(tz_name: str) -> Any:
-
     try:
         import pytz
-
-        return pytz.timezone(tz_name)
     except ImportError as err:
+        if _has_iana_data():
+            # zoneinfo has data, so the name itself is unknown: say that, as pytz would.
+            raise ZoneInfoNotFoundError(f"No time zone found with key {tz_name}") from None
         raise ImportError(
-            "IANA timezone data is unavailable. Install tzdata or GeoCanon[timezones]."
+            "IANA timezone data is unavailable. Install it with: "
+            'pip install tzdata, or pip install "GeoCanon[timezones]"'
         ) from err
+    return pytz.timezone(tz_name)
+
+
+def _has_iana_data() -> bool:
+    """Return whether ``zoneinfo`` can load any zone at all."""
+    try:
+        ZoneInfo("UTC")
+    except ZoneInfoNotFoundError:
+        return False
+    return True
 
 
 def get_timezone_name(jurisdiction: str) -> str:

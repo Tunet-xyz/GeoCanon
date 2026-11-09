@@ -96,7 +96,7 @@ def get_geocanon_settings() -> GeoCanonSettings:
     except ImportError as exc:
         raise ConfigurationError(
             "Django is required to use GeoCanon.",
-            hint="pip install Django>=4.2",
+            hint='pip install "Django>=4.2,<7"',
         ) from exc
 
     geocanon = getattr(django_settings, "GEOCANON", None)

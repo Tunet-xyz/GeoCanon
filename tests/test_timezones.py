@@ -74,6 +74,16 @@ class TestTimezones:
         monkeypatch.setitem(sys.modules, "pytz", None)
         with (
             patch("geo_canon.timezones.ZoneInfo", side_effect=ZoneInfoNotFoundError),
-            pytest.raises(ImportError, match=r"Install tzdata or GeoCanon\[timezones\]"),
+            pytest.raises(ImportError, match=r'pip install tzdata, or pip install "GeoCanon'),
         ):
             _get_zone_info("Europe/Bucharest")
+
+    def test_unknown_zone_without_pytz_is_reported_as_unknown(self, monkeypatch, settings):
+        # IANA data is installed (tzdata), so a bad override name must not be
+        # reported as missing data.
+        monkeypatch.setitem(sys.modules, "pytz", None)
+        with pytest.raises(ZoneInfoNotFoundError, match="Not/AZone"):
+            _get_zone_info("Not/AZone")
+        settings.GEOCANON = {"timezone_overrides": {"Romania": "Not/AZone"}}
+        with pytest.raises(ZoneInfoNotFoundError):
+            get_current_local_time("Romania")
