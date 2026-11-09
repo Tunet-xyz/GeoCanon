@@ -2,7 +2,7 @@
 GeoCanon — Public Holidays
 
 Jurisdiction-aware public holiday detection powered by the ``holidays``
-library (optional dependency, install via ``pip install geocanon[holidays]``).
+library (optional dependency, install via ``pip install "GeoCanon[holidays]"``).
 """
 
 from __future__ import annotations
@@ -27,164 +27,28 @@ def _require_holidays() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Jurisdiction name → holidays country class / instance
+# Jurisdiction name → holidays country class
 # ---------------------------------------------------------------------------
 
 
 def _build_registry() -> dict[str, Any]:
-    """Build the mapping lazily so the library is only imported when needed."""
+    """
+    Map every name in :mod:`geo_canon.iso_codes` to its ``holidays`` country class.
+
+    The class is looked up by ISO 3166-1 alpha-2 code, so canonical names and
+    their legacy aliases share one calendar. Countries the installed
+    ``holidays`` release does not cover are left out instead of failing.
+    """
     if not _HAS_HOLIDAYS:
         return {}
 
-    h = _holidays_lib
+    from ..iso_codes import JURISDICTION_ISO
+
+    supported = _holidays_lib.list_supported_countries()
     return {
-        "Afghanistan": h.AF,
-        "Albania": h.AL,
-        "Algeria": h.DZ,
-        "Andorra": h.AD,
-        "Angola": h.AO,
-        "Argentina": h.AR,
-        "Armenia": h.AM,
-        "Aruba": h.AW,
-        "Australia": h.AU,
-        "Austria": h.AT,
-        "Azerbaijan": h.AZ,
-        "Bahamas": h.BS,
-        "Bahrain": h.BH,
-        "Bangladesh": h.BD,
-        "Barbados": h.BB,
-        "Belarus": h.BY,
-        "Belgium": h.BE,
-        "Belize": h.BZ,
-        "Bolivia": h.BO,
-        "Bosnia and Herzegovina": h.BA,
-        "Botswana": h.BW,
-        "Brazil": h.BR,
-        "Brunei": h.BN,
-        "Bulgaria": h.BG,
-        "Burkina Faso": h.BF,
-        "Burundi": h.BI,
-        "Cambodia": h.KH,
-        "Cameroon": h.CM,
-        "Canada": h.CA,
-        "Chad": h.TD,
-        "Chile": h.CL,
-        "China": h.CN,
-        "Colombia": h.CO,
-        "Congo": h.CG,
-        "Costa Rica": h.CR,
-        "Croatia": h.HR,
-        "Cuba": h.CU,
-        "Curacao": h.CW,
-        "Cyprus": h.CY,
-        "Czech Republic": h.CZ,
-        "Denmark": h.DK,
-        "Djibouti": h.DJ,
-        "Dominica": h.DM,
-        "Dominican Republic": h.DO,
-        "Ecuador": h.EC,
-        "Egypt": h.EG,
-        "El Salvador": h.SV,
-        "Estonia": h.EE,
-        "Eswatini": h.SZ,
-        "Ethiopia": h.ET,
-        "Finland": h.FI,
-        "France": h.FR,
-        "Gabon": h.GA,
-        "Georgia": h.GE,
-        "Germany": h.DE,
-        "Ghana": h.GH,
-        "Greece": h.GR,
-        "Guatemala": h.GT,
-        "Haiti": h.HT,
-        "Honduras": h.HN,
-        "Hong Kong": h.HK,
-        "Hungary": h.HU,
-        "Iceland": h.IS,
-        "India": h.IN,
-        "Indonesia": h.ID,
-        "Iran": h.IR,
-        "Ireland": h.IE,
-        "Israel": h.IL,
-        "Italy": h.IT,
-        "Jamaica": h.JM,
-        "Japan": h.JP,
-        "Jordan": h.JO,
-        "Kazakhstan": h.KZ,
-        "Kenya": h.KE,
-        "Kuwait": h.KW,
-        "Kyrgyzstan": h.KG,
-        "Laos": h.LA,
-        "Latvia": h.LV,
-        "Lesotho": h.LS,
-        "Liechtenstein": h.LI,
-        "Lithuania": h.LT,
-        "Luxembourg": h.LU,
-        "Madagascar": h.MG,
-        "Malawi": h.MW,
-        "Malaysia": h.MY,
-        "Maldives": h.MV,
-        "Malta": h.MT,
-        "Marshall Islands": h.MH,
-        "Mauritania": h.MR,
-        "Mexico": h.MX,
-        "Moldova": h.MD,
-        "Monaco": h.MC,
-        "Montenegro": h.ME,
-        "Morocco": h.MA,
-        "Mozambique": h.MZ,
-        "Namibia": h.NA,
-        "Netherlands": h.NL,
-        "New Zealand": h.NZ,
-        "Nicaragua": h.NI,
-        "Nigeria": h.NG,
-        "North Macedonia": h.MK,
-        "Norway": h.NO,
-        "Pakistan": h.PK,
-        "Palau": h.PW,
-        "Panama": h.PA,
-        "Papua New Guinea": h.PG,
-        "Paraguay": h.PY,
-        "Peru": h.PE,
-        "Philippines": h.PH,
-        "Poland": h.PL,
-        "Portugal": h.PT,
-        "Romania": h.RO,
-        "Russia": h.RU,
-        "Saint Kitts and Nevis": h.KN,
-        "Samoa": h.WS,
-        "San Marino": h.SM,
-        "Saudi Arabia": h.SA,
-        "Serbia": h.RS,
-        "Seychelles": h.SC,
-        "Singapore": h.SG,
-        "Slovakia": h.SK,
-        "Slovenia": h.SI,
-        "South Africa": h.ZA,
-        "South Korea": h.KR,
-        "Spain": h.ES,
-        "Sri Lanka": h.LK,
-        "Sweden": h.SE,
-        "Switzerland": h.CH,
-        "Taiwan": h.TW,
-        "Tanzania": h.TZ,
-        "Thailand": h.TH,
-        "Timor-Leste": h.TL,
-        "Tonga": h.TO,
-        "Tunisia": h.TN,
-        "Turkey": h.TR,
-        "Ukraine": h.UA,
-        "United Arab Emirates": h.AE,
-        "United Kingdom": h.UK,
-        "United States": h.US,
-        "Uruguay": h.UY,
-        "Uzbekistan": h.UZ,
-        "Vanuatu": h.VU,
-        "Vatican City": h.VA,
-        "Venezuela": h.VE,
-        "Vietnam": h.VN,
-        "Zambia": h.ZM,
-        "Zimbabwe": h.ZW,
+        name: getattr(_holidays_lib, info.alpha_2)
+        for name, info in JURISDICTION_ISO.items()
+        if info.alpha_2 in supported
     }
 
 
@@ -254,6 +118,12 @@ def get_holidays_for_year(
 
 
 def get_supported_holiday_jurisdictions() -> list[str]:
-    """Return the list of jurisdictions that have holiday support."""
+    """
+    Return the names that have holiday support with the installed ``holidays``.
+
+    The list includes the legacy aliases that lookups accept (for example
+    ``"South Korea"`` next to ``"Korea (South)"``); filter it with
+    :func:`geo_canon.jurisdictions.is_valid_jurisdiction` for canonical names.
+    """
     _require_holidays()
     return sorted(_get_registry().keys())
