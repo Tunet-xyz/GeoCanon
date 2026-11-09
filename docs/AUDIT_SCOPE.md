@@ -6,7 +6,7 @@ are not release evidence.
 
 ## In scope
 
-- All code under `src/geo_canon` and `src/geocanon_mcp`: the lookups,
+- All code under `src/geo_canon`, including `geo_canon.mcp`: the lookups,
   validators, formatters, settings, Django forms and middleware, and the MCP
   server.
 - The bundled data, its stated sources, and its update policy.

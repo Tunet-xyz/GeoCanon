@@ -8,8 +8,8 @@
 | < 1.0   | :x:                |
 
 Security fixes ship as new 1.0.x releases on
-[PyPI](https://pypi.org/project/GeoCanon/). GeoCanon 1.0.0 is tagged (`v1.0.0`)
-but not yet published there; PyPI still serves 0.1.0, which is not supported.
+[PyPI](https://pypi.org/project/GeoCanon/). GeoCanon 1.x is not yet published there;
+PyPI still serves 0.1.0, which is not supported.
 
 ## Reporting a vulnerability
 

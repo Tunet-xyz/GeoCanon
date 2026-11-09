@@ -1,7 +1,7 @@
 # GeoCanon MCP server
 
-This directory holds GeoCanon's public agent contract and a dependency-free
-stdio MCP server for it. Agents can use it to discover GeoCanon's modules,
+This directory holds GeoCanon's public agent contract and a launcher for the
+packaged stdio MCP server. Agents can use it to discover GeoCanon's modules,
 APIs, and optional extras, and to get guidance for settings, forms, and
 middleware that handle jurisdictions, addresses, phones, currencies, and
 locales. The server runs locally under the caller's control, makes no network
@@ -15,6 +15,7 @@ After installing GeoCanon:
 
 ```bash
 geocanon-mcp
+python -m geo_canon.mcp     # the same server
 ```
 
 From a source checkout:
@@ -28,8 +29,8 @@ python mcp/server.py
 | File | Purpose |
 | --- | --- |
 | `README.md` | This guide. |
-| `agent-contract.json` | The public agent contract, byte-identical to the packaged `src/geocanon_mcp/agent-contract.json`. |
-| `server.py` | The dependency-free server, identical to the packaged `src/geocanon_mcp/server.py`. |
+| `agent-contract.json` | The public agent contract, byte-identical to the packaged `src/geo_canon/mcp/agent-contract.json`. |
+| `server.py` | Runs the packaged server, `geo_canon.mcp.server`, from a source checkout. |
 
 ## Methods and tools
 
@@ -59,7 +60,10 @@ The server reads one JSON-RPC message per line. It answers with a JSON-RPC
 error, and keeps serving, when a line is longer than 1,100,000 characters
 (newline included), is not valid UTF-8 JSON, repeats an object key, uses `NaN`
 or `Infinity`, has a number longer than 256 characters, or has an invalid
-request shape.
+request shape. `prompts/get` fills a template in one pass and rejects
+undeclared, missing, or non-string arguments; `tools/call` checks each tool's
+required arguments, types, and allowed values; error details are cut to 200
+characters.
 
 ## Boundaries
 

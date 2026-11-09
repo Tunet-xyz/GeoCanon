@@ -25,9 +25,9 @@ ship internationally from your first deploy.
 | Timezones | 190+ jurisdiction to IANA timezone mappings, using `zoneinfo` with a `pytz` fallback |
 | Languages | ISO 639-1 language choices (70+) and a default language per jurisdiction |
 | Duration | Human-readable durations that follow Django's active translation |
-| Holidays | National public holidays for 140+ jurisdictions through the `holidays` library |
-| Currencies | ISO 4217 currency mapping (170+ jurisdictions), symbols, and formatting |
-| Address formats | Postal address templates, postal-code validation, and field labels (170+ jurisdictions) |
+| Holidays | National public holidays through the `holidays` library, for every jurisdiction its installed release covers |
+| Currencies | ISO 4217 currency mapping for every jurisdiction, symbols, and formatting |
+| Address formats | Postal address templates, postal-code validation, and field labels for every jurisdiction |
 | Locale formatting | Optional Babel-backed number, currency, date, time, and list formatting |
 | Settings | A lightweight settings container, with optional Pydantic 2 validation |
 
@@ -43,17 +43,21 @@ The documented Python helpers, configuration, Django integration, and local MCP
 entry point form the stable 1.x API. GeoCanon supports Python 3.10–3.13 and
 Django 4.2–6.x (`Django<7`); use an upstream-supported Django release.
 
-GeoCanon 1.0.0 is tagged (`v1.0.0`) but not yet published to PyPI, which still
-serves 0.1.0. Until it is published, install 1.0.0 from the tag:
+GeoCanon 1.x is not on PyPI yet; PyPI still serves 0.1.0. The `v1.0.0` tag
+predates the fixes listed under Unreleased in the changelog, so until the next
+release is published, install from `main`:
 
 ```bash
-pip install "GeoCanon @ git+https://github.com/Tunet-xyz/geo_canon@v1.0.0"
+pip install "GeoCanon @ git+https://github.com/Tunet-xyz/geo_canon@main"
 ```
 
 Upgrading from 0.1.0, the only earlier release on PyPI, keeps its public names
-and bundled mappings and adds the `phones`, `locale`, and `validation` extras.
-An invalid configured timezone override now raises an error instead of being
-ignored. See the [changelog](https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md).
+and adds the `phones`, `locale`, and `validation` extras. Some data and checks
+are corrected: Jamaica and Trinidad and Tobago use the `+1` dial code (store
+`+1` and put the area code in the number), reverse ISO lookups return the
+canonical jurisdiction keys (legacy names still work), phone and postal-code
+checks accept ASCII only (normalize input first), and an invalid configured
+timezone override raises an error instead of being ignored. See the [changelog](https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md).
 
 ## Installation
 
@@ -181,8 +185,9 @@ makes no network connections, and needs no credentials or account. See
 ## Scope and limitations
 
 Bundled mappings are maintained release data rather than a live legal or
-standards feed, and coverage differs between modules: not every jurisdiction
-has a dial code, currency, address format, or holiday calendar. Review the
+standards feed. Every jurisdiction has a dial code, currency, address format,
+language, and timezone; holiday coverage depends on the installed `holidays`
+release. Review the
 [data provenance and update policy](https://github.com/Tunet-xyz/geo_canon/blob/main/docs/data-provenance.md) before using
 defaults for compliance, tax, postal, or other high-stakes decisions.
 
@@ -212,9 +217,9 @@ git clone https://github.com/Tunet-xyz/geo_canon.git
 cd geo_canon
 python -m pip install -e ".[all,dev]"
 python -m ruff check src tests
-python -m mypy src/geo_canon src/geocanon_mcp
+python -m mypy src/geo_canon
 python -m bandit -r src
-python -m pytest --cov=geo_canon --cov=geocanon_mcp --cov-branch
+python -m pytest --cov=geo_canon --cov-branch
 ```
 
 These are the checks the manual CI workflows run. The

@@ -1,6 +1,8 @@
 # Public holidays
 
-Detect public holidays for 140+ countries. Requires the `holidays` extra:
+Detect national public holidays for every jurisdiction the installed `holidays`
+release covers (all of them with recent releases). Requires the `holidays` extra,
+which needs `holidays` 0.66 or later:
 
 ```bash
 pip install "GeoCanon[holidays]"
@@ -26,4 +28,5 @@ holidays = get_holidays_for_year("United States", 2025)
 ```
 
 ### `get_supported_holiday_jurisdictions() -> list[str]`
-Returns the sorted list of jurisdictions with holiday support.
+Returns the sorted list of jurisdictions with holiday support, including legacy
+names such as "South Korea".

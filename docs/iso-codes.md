@@ -67,7 +67,8 @@ get_numeric_code("United States")  # "840"
 
 ### `get_jurisdiction_by_alpha2(code) → str | None`
 
-Reverse-lookup (case-insensitive):
+Reverse-lookup (case-insensitive). It returns GeoCanon's canonical jurisdiction
+key, for example `"Cote d'Ivoire"` for `"CI"`:
 
 ```python
 from geo_canon.iso_codes import get_jurisdiction_by_alpha2
@@ -92,8 +93,8 @@ The `iso_codes` module feeds into other GeoCanon modules:
 | Consumer | How it uses ISO codes |
 |----------|---------------------|
 | **Flags** | `FLAG_CSS_CLASS` is generated as `fi-{alpha_2.lower()}` |
-| **Dial Codes** | Separate table keyed by jurisdiction name; not every ISO name has an entry |
-| **Currencies** | Separate table keyed by jurisdiction name; not every ISO name has an entry |
+| **Dial Codes** | Separate table keyed by jurisdiction name, with an entry for every jurisdiction |
+| **Currencies** | Separate table keyed by jurisdiction name, with an entry for every jurisdiction |
 
 ```python
 # Example: get everything for a single jurisdiction

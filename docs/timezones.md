@@ -8,7 +8,8 @@ The fallback is used when the IANA timezone data is unavailable. Install
 `tzdata` or the `timezones` extra in stripped-down environments. Override zone
 names are not checked: `get_timezone_name` returns them unchanged, and an
 invalid name raises when `get_timezone_for_jurisdiction` or
-`get_current_local_time` uses it, without falling back to the built-in mapping.
+`get_current_local_time` uses it, without falling back to the built-in mapping
+(`ZoneInfoNotFoundError` when `pytz` is not installed).
 
 ## Functions
 

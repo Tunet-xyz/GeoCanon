@@ -24,7 +24,8 @@ get_dial_code("Unknown")  # None
 Returns `DIAL_CODE_CHOICES` — suitable for a Django `ChoiceField`.
 
 ### `validate_phone(phone: str, dial_code: str) -> bool`
-Validates that the national number matches the expected pattern for the dial code.
+Validates that the whole national number matches the pattern for the dial code.
+Only ASCII digits pass: a trailing newline or full-width digits fail.
 
 ```python
 validate_phone("7123456789", "+44")  # True (UK: 10 digits)

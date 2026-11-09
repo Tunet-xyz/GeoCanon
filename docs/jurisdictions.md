@@ -1,6 +1,9 @@
 # Jurisdictions
 
 GeoCanon ships with a canonical list of 190+ jurisdictions (countries and territories).
+Keys are ASCII, for example `"Cote d'Ivoire"` (shown as "Côte d'Ivoire"). Every
+lookup also accepts the legacy names "Cape Verde", "Congo", "Democratic
+Republic of Congo", "Ivory Coast", "North Korea", and "South Korea".
 
 ## Data
 

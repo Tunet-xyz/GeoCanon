@@ -19,7 +19,7 @@ A `NamedTuple` with four fields:
 
 | Registry | Type | Description |
 |----------|------|-------------|
-| `JURISDICTION_CURRENCY` | `dict[str, CurrencyInfo]` | Jurisdiction name → currency info (170+ entries) |
+| `JURISDICTION_CURRENCY` | `dict[str, CurrencyInfo]` | Jurisdiction name → currency info (200+ entries, including legacy names) |
 | `CURRENCY_BY_CODE` | `dict[str, CurrencyInfo]` | ISO 4217 code → currency info (deduplicated) |
 | `CURRENCY_CHOICES` | `list[tuple[str, str]]` | Sorted choices for Django ChoiceField |
 

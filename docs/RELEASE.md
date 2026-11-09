@@ -11,7 +11,7 @@ start one.
 
 1. Confirm one release identity: `version` in `pyproject.toml`,
    `geo_canon.__version__`, `server.version` in both copies of the MCP contract
-   (`mcp/agent-contract.json` and `src/geocanon_mcp/agent-contract.json`), the
+   (`mcp/agent-contract.json` and `src/geo_canon/mcp/agent-contract.json`), the
    dated `CHANGELOG.md` entry, and the supported-versions table in
    `SECURITY.md`.
 2. Review the compatibility impact, migration notes, and documentation, and the
@@ -25,15 +25,17 @@ boundaries, both without extras and with `[all]`:
 ```bash
 python -m pip install -e ".[all,dev]"
 python -m ruff check src tests
-python -m mypy src/geo_canon src/geocanon_mcp
+python -m mypy src/geo_canon
 python -m bandit -r src
-python -m pytest --cov=geo_canon --cov=geocanon_mcp --cov-branch
+python -m pytest --cov=geo_canon --cov-branch
 ```
 
 Audit the installed dependencies with `pip-audit` (the security workflow runs
 it with `--strict`), run `geocanon-mcp` and check that it keeps serving after a
 malformed message, inspect the source and history for secrets, and record any
-check you could not run.
+check you could not run. The owner also runs the manual
+`minimum-dependencies` job, the only CI check of the declared dependency
+floors (`requirements/minimum.txt`).
 
 ## 3. Build
 

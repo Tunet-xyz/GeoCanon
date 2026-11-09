@@ -21,7 +21,7 @@ A `NamedTuple` with six fields:
 
 | Registry | Type | Description |
 |----------|------|-------------|
-| `JURISDICTION_ADDRESS_FORMAT` | `dict[str, AddressFormat]` | Jurisdiction name → format (170+ entries) |
+| `JURISDICTION_ADDRESS_FORMAT` | `dict[str, AddressFormat]` | Jurisdiction name → format (200+ entries, including legacy names) |
 
 ## API Reference
 
@@ -98,7 +98,7 @@ is_state_required("France")         # False
 
 ### `format_address(jurisdiction, *, name, company, address1, address2, city, state, postal_code, country) → str`
 
-Format address fields according to the jurisdiction's conventions. All keyword arguments are optional strings. Empty lines are collapsed automatically. No registered template includes `{name}` or `{company}`, so those two arguments are dropped; they are printed only for a jurisdiction without a registered format, where the non-empty fields are joined one per line.
+Format address fields according to the jurisdiction's conventions. All keyword arguments are optional strings. Empty lines are collapsed and whitespace inside each line is normalized. `name` and `company` come first, or last for Japan, China, Russia, and Taiwan, which put the recipient at the end. A jurisdiction that requires a state shows it, and a jurisdiction without a registered format joins the non-empty fields one per line.
 
 ```python
 from geo_canon.address_formats import format_address

@@ -13,7 +13,7 @@ GeoCanon's data model follows these public standards and upstream datasets:
 | Timezone identifiers | [IANA Time Zone Database](https://www.iana.org/time-zones) | Default IANA timezone choices for jurisdiction lookups. |
 | Locale formatting | [Unicode CLDR](https://cldr.unicode.org/) through Babel | Optional locale-aware number, currency, date, time, and list formatting. |
 | Phone metadata | [Google libphonenumber](https://github.com/google/libphonenumber) through `phonenumbers` | Optional parsing, validation, number type detection, and display formatting. |
-| Public holidays | The optional [`holidays`](https://github.com/vacanza/holidays) package | Runtime holiday calculation for GeoCanon's fixed registry of 147 jurisdictions; dates and names come from the installed dependency version. |
+| Public holidays | The optional [`holidays`](https://github.com/vacanza/holidays) package | Runtime holiday calculation for every jurisdiction whose ISO code the installed `holidays` release (0.66 or later) supports; dates and names come from that release. |
 | Flag CSS classes | The ISO alpha-2 convention used by [`flag-icons`](https://github.com/lipis/flag-icons) | Generates CSS class names; GeoCanon does not bundle flag artwork. |
 
 The repository currently maintains the core jurisdiction, code, timezone, language, currency, dial-code, and address mappings directly. It does not automatically synchronize those tables from upstream services during installation or runtime.

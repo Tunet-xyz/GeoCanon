@@ -40,7 +40,7 @@ authoritative legal, postal, tax, or telecom source.
 | File or network access through input | Lookups use dictionary keys; timezone names come from the bundled map or settings; Babel sanitizes locale identifiers | Review settings overrides before deployment |
 | Untrusted jurisdiction in the session | The middleware reads only the session key or the configured default | Write only validated values (for example from `JurisdictionContextSwitchForm`) to the session, and escape `request.jurisdiction` when rendering it |
 | Wrong or stale reference data used for decisions | [Data provenance](data-provenance.md) and update policy; data changes are recorded in the changelog | Review defaults before compliance, tax, postal, or telecom decisions |
-| Hostile or oversized MCP input | Line and number size limits, strict JSON, error replies instead of crashes | Run the server only for a local client you trust |
+| Hostile or oversized MCP input | Line and number size limits, strict JSON, argument checks, error replies instead of crashes | Run the server only for a local client you trust |
 | Supply-chain substitution | Pinned workflow actions, hash-locked build tools, Trusted Publishing, owner-approved releases | Pin and verify releases; keep the optional dependencies updated |
 
 ## Required invariants
@@ -61,18 +61,17 @@ GeoCanon output in the host's templates; and authentication and authorization.
 
 ## Residual risks
 
-- Bundled data can be wrong or out of date, and coverage differs between
-  modules: not every jurisdiction has a dial code, currency, address format,
-  or holiday calendar.
-- Validators check format only. Python's Unicode rules apply, so a value that
-  passes may contain non-ASCII digits; normalize values before storing or
-  comparing them.
+- Bundled data can be wrong or out of date, and holiday coverage depends on the
+  installed `holidays` release.
+- Validators check format only, and only ASCII input passes; normalize user
+  input (for example full-width digits) before validating it.
 - The middleware does not validate the session value it copies to
   `request.jurisdiction`.
-- Error messages can contain the value that failed, which may be personal data
-  such as a phone number.
-- The MCP server has no authentication, echoes request content in its
-  replies, and can return replies much larger than the request.
+- Error messages can still contain part of a caller's value: other values are
+  escaped and cut to 64 characters, and phone numbers show at most their last
+  two digits.
+- The MCP server has no authentication and echoes request content in its
+  replies, with error details cut to 200 characters.
 - GeoCanon has not had an independent security audit.
 
 ## Review triggers

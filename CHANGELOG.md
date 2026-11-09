@@ -12,12 +12,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - A Contributor Covenant 2.1 code of conduct, and issue templates for bug
   reports and feature requests that send vulnerability reports to private
   reporting.
+- Jurisdiction key `"Cote d'Ivoire"` (shown as "Côte d'Ivoire"), for 197
+  jurisdictions; choice labels sort ignoring accents.
+- Every jurisdiction has a dial code, currency, address format, language, and
+  timezone. The legacy names Cape Verde, Congo, Democratic Republic of Congo,
+  Ivory Coast, North Korea, and South Korea are accepted everywhere and resolve
+  to the same data; Aruba, Curacao, and Palestine (ISO table only) gain a dial
+  code, language, and timezone.
+- 18 dial-code choices (Belize, Bhutan, Bolivia, Curaçao, Guatemala, Kiribati,
+  Kosovo, Marshall Islands, Micronesia, Nauru, Palau, Palestine, Samoa, Sao Tome
+  and Principe, Solomon Islands, Timor-Leste, Tuvalu, Vanuatu); every choice
+  has a phone pattern.
+- Dzongkha (`dz`), Bhutan's default language, for 74 language choices.
+- `python -m geo_canon.mcp` runs the MCP server.
 
 ### Changed
 
 - The Product URL points at `www.tunet.xyz`, which serves the product page.
-- Documentation: timezone and language counts match the bundled data (197 and
-  73), `default_language`, `holiday_country_overrides` and `enable_form_widgets`
+- Documentation: timezone and language counts match the bundled data,
+  `default_language`, `holiday_country_overrides` and `enable_form_widgets`
   are marked as reserved settings that 1.x accepts but does not use, and the
   MCP and contribution notes are written for outside readers.
 - The security policy uses the layout shared by the Tunet libraries: private
@@ -30,24 +43,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   index, the same sections in the release procedure and MCP README, and new
   threat model, security assurance, audit scope, and secure-development
   documents. Guides are corrected against the code: examples say which output
-  needs the `locale` or `phones` extra, `format_address` drops `name` and
-  `company` for registered templates, Italy has its own address template, both
-  settings containers reject unknown fields, override timezone names are
-  checked only when used, and holiday coverage is GeoCanon's registry of 147
-  jurisdictions with national holidays only.
+  needs the `locale` or `phones` extra, Italy has its own address template,
+  both settings containers reject unknown fields, override timezone names are
+  checked only when used, and holidays are national holidays only.
 - README sections follow the order the Tunet libraries share: features, version
   status, installation, quick start, usage, MCP server, scope and limitations,
   documentation, development, contributing, and license, with PyPI, Python, and
-  license badges. It says 1.0.0 is not yet on PyPI and how to install it from
-  the tag, quotes the extras, names 0.1.0 as the upgrade path, drops the unused
+  license badges. It says 1.x is not yet on PyPI and how to install it from
+  `main`, quotes the extras, names 0.1.0 as the upgrade path, drops the unused
   `default_language` from the example, and states what the middleware reads
   and what phone and postal checks prove.
 - The repository is now `Tunet-xyz/geo_canon` (the old `Tunet-xyz/GeoCanon` URL
   redirects): project URLs, documentation links, and the README use it, and the
   README names the other Tunet libraries. Install commands in the guides use
   `pip install "GeoCanon[...]"`, and guide titles use sentence case.
+- The `holidays` extra requires `holidays>=0.66`. Holiday coverage is every
+  jurisdiction whose ISO code the installed release supports (all 197 with
+  holidays 0.108), and `get_supported_holiday_jurisdictions()` includes the
+  legacy names.
+- Reverse ISO lookups return canonical keys: `get_jurisdiction_by_alpha2("CG")`
+  is `"Congo (Congo-Brazzaville)"` (was `"Congo"`) and `"CI"` is
+  `"Cote d'Ivoire"` (was `"Ivory Coast"`); the same applies to alpha-3 codes
+  and `get_country_by_iso`.
+- Jamaica and Trinidad and Tobago use the `+1` dial code (were `+876` and
+  `+868`). Store `+1` and put the area code in the number.
+- `validate_phone` and `validate_postal_code` match the whole value and accept
+  only ASCII digits, letters, and whitespace: trailing newlines, full-width or
+  Arabic-Indic digits, the Kelvin sign, and no-break spaces now fail. Normalize
+  input before validating it.
+- `format_address` places `name` and `company` for every registered template,
+  China's template shows the postal code, the 18 jurisdictions that require a
+  state show it, and whitespace inside each line is normalized.
+- `format_currency_locale(..., currency_code=...)` uses the requested currency's
+  symbol, decimals, and code when Babel is missing or rejects the locale.
+- Exception messages show at most the last two digits of a phone number and
+  quote other caller values escaped and cut to 64 characters.
+- Without `pytz`, an unknown timezone name raises `ZoneInfoNotFoundError`;
+  `ImportError` is kept for a system with no IANA timezone data.
+- `import geo_canon` no longer imports Django; names load on first use.
+- The MCP server moved to `geo_canon.mcp` (the `geocanon-mcp` command is
+  unchanged). `prompts/get` fills a template in one pass and rejects
+  undeclared, missing, or non-string arguments; `tools/call` checks each tool's
+  required arguments, types, and allowed values; tool descriptions say the
+  tools return contract guidance; error details are cut to 200 characters.
+- Django classifiers list 4.2, 5.2, and 6.1, and the package declares
+  `Typing :: Typed`.
 
-## [1.0.0] - 2026-11-05 (tagged; not yet published to PyPI)
+### Removed
+
+- The `("+876", "Jamaica (+876)")` dial-code choice and the `+876` and `+868`
+  phone patterns.
+- The top-level `geocanon_mcp` module, which only installs from the `v1.0.0`
+  tag contained.
+- `AGENTS.md`, `CLAUDE.md`, and `.github` from the sdist.
+
+## [1.0.0] - 2026-11-05 (tagged; not published to PyPI)
 
 ### Changed
 

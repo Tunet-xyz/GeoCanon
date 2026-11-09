@@ -55,7 +55,9 @@ format_currency_locale(1234.5, "Germany")
 ```
 
 Pass `currency_code` to format a different currency in the jurisdiction's
-locale. The override needs the `locale` extra and a locale Babel can resolve:
+locale. Without Babel, or for a locale Babel cannot resolve, the fallback uses
+the requested currency's symbol and decimals and adds its code (for example
+`"€1,234.50 EUR"`):
 
 ```python
 format_currency_locale(1234.5, "United States", currency_code="EUR")

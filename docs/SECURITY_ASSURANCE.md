@@ -13,7 +13,8 @@ certification.
 | The jurisdiction form accepts only known jurisdictions | `jurisdictions/forms.py` | `tests/test_forms.py` |
 | Settings load from Django with defaults and overrides | `settings.py` | `tests/test_settings.py` |
 | Optional features fall back without their extras | `locale_formats`, phone helpers | `tests/test_locale_formats.py`, `tests/test_import.py` |
-| The MCP server is bounded and read-only | `geocanon_mcp/server.py` | `tests/test_mcp_server.py` |
+| The MCP server is bounded, read-only, and checks its arguments | `geo_canon/mcp/server.py` | `tests/test_mcp_server.py` |
+| The declared dependency floors work | `requirements/minimum.txt` | `tests/test_dependency_floors.py`, the `minimum-dependencies` job |
 | One release identity across metadata and both MCP contracts | `pyproject.toml`, the contracts | `tests/test_release_identity.py` |
 | No code evaluation or unsafe calls | the whole package | Bandit |
 
@@ -29,11 +30,11 @@ Run from a clean checkout of the revision being assessed:
 ```bash
 python -m pip install -e ".[all,dev]"
 python -m ruff check src tests
-python -m mypy src/geo_canon src/geocanon_mcp
+python -m mypy src/geo_canon
 python -m bandit -r src
 python -m pip freeze --exclude GeoCanon > audit-requirements.txt
 python -m pip_audit --strict --disable-pip --no-deps -r audit-requirements.txt
-python -m pytest --cov=geo_canon --cov=geocanon_mcp --cov-branch
+python -m pytest --cov=geo_canon --cov-branch
 ```
 
 Repeat the tests without extras to cover the fallbacks.
@@ -45,7 +46,7 @@ a schedule. Record which of them ran for the assessed commit.
 
 | Workflow | What it runs |
 | --- | --- |
-| `tests.yaml` | Ruff, mypy, and pytest with branch coverage |
+| `tests.yaml` | Ruff, mypy, and pytest with branch coverage; a separate job runs the tests at the declared dependency floors |
 | `security.yaml` | Bandit and a strict dependency audit |
 | `publish.yaml` | The same checks, a hash-locked build with checksums, and PyPI publication |
 
