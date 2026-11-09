@@ -19,7 +19,8 @@ from ..exceptions import TimezoneNotFoundError
 
 # ---------------------------------------------------------------------------
 # Built-in jurisdiction → IANA timezone mapping
-# Covers all 196 jurisdictions.  Users can extend via GEOCANON.timezone_overrides.
+# Covers every jurisdiction, plus the legacy aliases and ISO-only names the other
+# modules accept.  Users can extend it via GEOCANON.timezone_overrides.
 # ---------------------------------------------------------------------------
 
 TIMEZONE_MAP: dict[str, str] = {
@@ -31,6 +32,7 @@ TIMEZONE_MAP: dict[str, str] = {
     "Antigua and Barbuda": "America/Antigua",
     "Argentina": "America/Argentina/Buenos_Aires",
     "Armenia": "Asia/Yerevan",
+    "Aruba": "America/Aruba",
     "Australia": "Australia/Sydney",
     "Austria": "Europe/Vienna",
     "Azerbaijan": "Asia/Baku",
@@ -55,19 +57,24 @@ TIMEZONE_MAP: dict[str, str] = {
     "Cambodia": "Asia/Phnom_Penh",
     "Cameroon": "Africa/Douala",
     "Canada": "America/Toronto",
+    "Cape Verde": "Atlantic/Cape_Verde",
     "Central African Republic": "Africa/Bangui",
     "Chad": "Africa/Ndjamena",
     "Chile": "America/Santiago",
     "China": "Asia/Shanghai",
     "Colombia": "America/Bogota",
     "Comoros": "Indian/Comoro",
+    "Congo": "Africa/Brazzaville",
     "Congo (Congo-Brazzaville)": "Africa/Brazzaville",
     "Congo (DRC)": "Africa/Kinshasa",
     "Costa Rica": "America/Costa_Rica",
+    "Cote d'Ivoire": "Africa/Abidjan",
     "Croatia": "Europe/Zagreb",
     "Cuba": "America/Havana",
+    "Curacao": "America/Curacao",
     "Cyprus": "Asia/Nicosia",
     "Czech Republic": "Europe/Prague",
+    "Democratic Republic of Congo": "Africa/Kinshasa",
     "Denmark": "Europe/Copenhagen",
     "Djibouti": "Africa/Djibouti",
     "Dominica": "America/Dominica",
@@ -106,6 +113,7 @@ TIMEZONE_MAP: dict[str, str] = {
     "Ireland": "Europe/Dublin",
     "Israel": "Asia/Jerusalem",
     "Italy": "Europe/Rome",
+    "Ivory Coast": "Africa/Abidjan",
     "Jamaica": "America/Jamaica",
     "Japan": "Asia/Tokyo",
     "Jordan": "Asia/Amman",
@@ -152,11 +160,13 @@ TIMEZONE_MAP: dict[str, str] = {
     "Nicaragua": "America/Managua",
     "Niger": "Africa/Niamey",
     "Nigeria": "Africa/Lagos",
+    "North Korea": "Asia/Pyongyang",
     "North Macedonia": "Europe/Skopje",
     "Norway": "Europe/Oslo",
     "Oman": "Asia/Muscat",
     "Pakistan": "Asia/Karachi",
     "Palau": "Pacific/Palau",
+    "Palestine": "Asia/Hebron",
     "Panama": "America/Panama",
     "Papua New Guinea": "Pacific/Port_Moresby",
     "Paraguay": "America/Asuncion",

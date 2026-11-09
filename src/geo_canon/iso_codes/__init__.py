@@ -14,6 +14,8 @@ from typing import NamedTuple
 from django.utils.functional import Promise
 from django.utils.translation import gettext_lazy as _
 
+from ..jurisdictions import JURISDICTION_NAMES
+
 # ---------------------------------------------------------------------------
 # Data structure
 # ---------------------------------------------------------------------------
@@ -77,6 +79,7 @@ JURISDICTION_ISO: dict[str, ISOCountryInfo] = {
     "Congo (Congo-Brazzaville)": ISOCountryInfo("CG", "COG", "178", _("Congo (Congo-Brazzaville)")),
     "Congo (DRC)": ISOCountryInfo("CD", "COD", "180", _("Congo (DRC)")),
     "Costa Rica": ISOCountryInfo("CR", "CRI", "188", _("Costa Rica")),
+    "Cote d'Ivoire": ISOCountryInfo("CI", "CIV", "384", _("Côte d'Ivoire")),
     "Croatia": ISOCountryInfo("HR", "HRV", "191", _("Croatia")),
     "Cuba": ISOCountryInfo("CU", "CUB", "192", _("Cuba")),
     "Curacao": ISOCountryInfo("CW", "CUW", "531", _("Curaçao")),
@@ -253,11 +256,17 @@ ISO_ALPHA2_TO_JURISDICTION: dict[str, str] = {}
 ISO_ALPHA3_TO_JURISDICTION: dict[str, str] = {}
 
 for _name, _info in JURISDICTION_ISO.items():
-    # First writer wins — keeps canonical name for shared codes
-    if _info.alpha_2 not in ISO_ALPHA2_TO_JURISDICTION:
-        ISO_ALPHA2_TO_JURISDICTION[_info.alpha_2] = _name
-    if _info.alpha_3 not in ISO_ALPHA3_TO_JURISDICTION:
-        ISO_ALPHA3_TO_JURISDICTION[_info.alpha_3] = _name
+    # A canonical jurisdiction key wins over a legacy alias that shares its code
+    # ("Congo (Congo-Brazzaville)" over "Congo"); otherwise the first name wins.
+    for _index, _code in (
+        (ISO_ALPHA2_TO_JURISDICTION, _info.alpha_2),
+        (ISO_ALPHA3_TO_JURISDICTION, _info.alpha_3),
+    ):
+        _current = _index.get(_code)
+        if _current is None or (
+            _name in JURISDICTION_NAMES and _current not in JURISDICTION_NAMES
+        ):
+            _index[_code] = _name
 
 
 # ---------------------------------------------------------------------------

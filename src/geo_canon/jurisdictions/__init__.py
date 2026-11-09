@@ -7,6 +7,7 @@ names, Django form integration, and a context-switching form.
 
 from __future__ import annotations
 
+import unicodedata
 from typing import TYPE_CHECKING, Any
 
 from django.utils.translation import gettext_lazy as _
@@ -22,6 +23,13 @@ if TYPE_CHECKING:
 
 def _lazy_source_text(value: Any) -> str:
     return value._args[0] if hasattr(value, "_args") and value._args else str(value)
+
+
+def _sort_key(value: Any) -> tuple[str, str]:
+    """Sort English labels alphabetically, ignoring accents ("Côte" sorts as "Cote")."""
+    text = _lazy_source_text(value)
+    folded = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode("ascii")
+    return folded, text
 
 
 JURISDICTIONS: list[tuple[str, Any]] = sorted(
@@ -67,6 +75,7 @@ JURISDICTIONS: list[tuple[str, Any]] = sorted(
         ("Congo (Congo-Brazzaville)", _("Congo (Congo-Brazzaville)")),
         ("Congo (DRC)", _("Congo (DRC)")),
         ("Costa Rica", _("Costa Rica")),
+        ("Cote d'Ivoire", _("Côte d'Ivoire")),
         ("Croatia", _("Croatia")),
         ("Cuba", _("Cuba")),
         ("Cyprus", _("Cyprus")),
@@ -223,7 +232,7 @@ JURISDICTIONS: list[tuple[str, Any]] = sorted(
         ("Zambia", _("Zambia")),
         ("Zimbabwe", _("Zimbabwe")),
     ],
-    key=lambda x: _lazy_source_text(x[1]),
+    key=lambda x: _sort_key(x[1]),
 )
 
 # Flat set for O(1) lookups

@@ -96,6 +96,9 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Algeria": AddressFormat(_TPL_DE, _("Province"), _("Postal Code"), False, r"^\d{5}$", "16000"),
     "Andorra": AddressFormat(_TPL_DE, _("Parish"), _("Postal Code"), False, r"^AD\d{3}$", "AD500"),
     "Angola": AddressFormat(_TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""),
+    "Antigua and Barbuda": AddressFormat(
+        _TPL_DEFAULT, _("Parish"), _("Postal Code"), False, "", ""
+    ),
     "Argentina": AddressFormat(
         _TPL_US, _("Province"), _("Postal Code"), True, r"^[A-Z]\d{4}[A-Z]{3}$", "C1420ABC"
     ),
@@ -137,6 +140,9 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Bulgaria": AddressFormat(_TPL_DE, _("Province"), _("Postal Code"), False, r"^\d{4}$", "1000"),
     "Burkina Faso": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
     "Burundi": AddressFormat(_TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""),
+    "Cabo Verde": AddressFormat(
+        _TPL_DEFAULT, _("Island"), _("Postal Code"), False, r"^\d{4}$", "7600"
+    ),
     "Cambodia": AddressFormat(
         _TPL_DEFAULT, _("Province"), _("Postal Code"), False, r"^\d{5,6}$", "12000"
     ),
@@ -160,9 +166,14 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     ),
     "Comoros": AddressFormat(_TPL_DEFAULT, _("Island"), _("Postal Code"), False, "", ""),
     "Congo": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
+    "Congo (Congo-Brazzaville)": AddressFormat(
+        _TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""
+    ),
+    "Congo (DRC)": AddressFormat(_TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""),
     "Costa Rica": AddressFormat(
         _TPL_DEFAULT, _("Province"), _("Postal Code"), True, r"^\d{4,5}$", "10101"
     ),
+    "Cote d'Ivoire": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
     "Croatia": AddressFormat(_TPL_DE, _("County"), _("Postal Code"), False, r"^\d{5}$", "10000"),
     "Cuba": AddressFormat(
         _TPL_DEFAULT, _("Province"), _("Postal Code"), False, r"^\d{5}$", "10400"
@@ -219,10 +230,15 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Greece": AddressFormat(
         _TPL_DE, _("Region"), _("Postal Code"), False, r"^\d{3}\s?\d{2}$", "105 57"
     ),
+    "Grenada": AddressFormat(_TPL_DEFAULT, _("Parish"), _("Postal Code"), False, "", ""),
     "Guatemala": AddressFormat(
         _TPL_DEFAULT, _("Department"), _("Postal Code"), False, r"^\d{5}$", "01001"
     ),
     "Guinea": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, r"^\d{3}$", "001"),
+    "Guinea-Bissau": AddressFormat(
+        _TPL_DEFAULT, _("Region"), _("Postal Code"), False, r"^\d{4}$", "1000"
+    ),
+    "Guyana": AddressFormat(_TPL_DEFAULT, _("Region"), _("Postal Code"), False, "", ""),
     "Haiti": AddressFormat(
         _TPL_DEFAULT, _("Department"), _("Postal Code"), False, r"^\d{4}$", "6110"
     ),
@@ -280,6 +296,12 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
         _TPL_DE, _("Region"), _("Postal Code"), False, r"^\d{6}$", "010000"
     ),
     "Kenya": AddressFormat(_TPL_DEFAULT, _("County"), _("Postal Code"), False, r"^\d{5}$", "00100"),
+    "Kiribati": AddressFormat(_TPL_DEFAULT, _("Island"), _("Postal Code"), False, "", ""),
+    "Korea (North)": AddressFormat(_TPL_DEFAULT, _("Province"), _("Postal Code"), False, "", ""),
+    "Korea (South)": AddressFormat(
+        _TPL_KR, _("Province"), _("Postal Code"), True, r"^\d{5}$", "03051"
+    ),
+    "Kosovo": AddressFormat(_TPL_DE, _("District"), _("Postal Code"), False, r"^\d{5}$", "10000"),
     "Kuwait": AddressFormat(
         _TPL_DE, _("Governorate"), _("Postal Code"), False, r"^\d{5}$", "13001"
     ),
@@ -325,6 +347,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
         _TPL_DEFAULT, _("District"), _("Postal Code"), False, r"^\d{5}$", "71602"
     ),
     "Mexico": AddressFormat(_TPL_US, _("State"), _("C.P."), True, r"^\d{5}$", "06600"),
+    "Micronesia": AddressFormat(_TPL_US, _("State"), _("ZIP Code"), False, r"^\d{5}$", "96941"),
     "Moldova": AddressFormat(
         _TPL_DE, _("Region"), _("Postal Code"), False, r"^MD-?\d{4}$", "MD-2001"
     ),
@@ -345,6 +368,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Namibia": AddressFormat(
         _TPL_DEFAULT, _("Region"), _("Postal Code"), False, r"^\d{5}$", "10001"
     ),
+    "Nauru": AddressFormat(_TPL_DEFAULT, _("District"), _("Postal Code"), False, "", ""),
     "Nepal": AddressFormat(
         _TPL_DEFAULT, _("Province"), _("Postal Code"), False, r"^\d{5}$", "44600"
     ),
@@ -398,11 +422,18 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Saint Kitts and Nevis": AddressFormat(
         _TPL_DEFAULT, _("Parish"), _("Postal Code"), False, "", ""
     ),
+    "Saint Lucia": AddressFormat(_TPL_DEFAULT, _("District"), _("Postal Code"), False, "", ""),
+    "Saint Vincent and the Grenadines": AddressFormat(
+        _TPL_DEFAULT, _("Parish"), _("Postal Code"), False, "", ""
+    ),
     "Samoa": AddressFormat(
         _TPL_DEFAULT, _("District"), _("Postal Code"), False, r"^WS\d{4}$", "WS1382"
     ),
     "San Marino": AddressFormat(
         _TPL_DE, _("Municipality"), _("Postal Code"), False, r"^4789\d$", "47890"
+    ),
+    "Sao Tome and Principe": AddressFormat(
+        _TPL_DEFAULT, _("District"), _("Postal Code"), False, "", ""
     ),
     "Saudi Arabia": AddressFormat(
         _TPL_DEFAULT, _("Region"), _("Postal Code"), False, r"^\d{5}(-\d{4})?$", "11564"
@@ -473,6 +504,7 @@ JURISDICTION_ADDRESS_FORMAT: dict[str, AddressFormat] = {
     "Turkmenistan": AddressFormat(
         _TPL_DE, _("Region"), _("Postal Code"), False, r"^\d{6}$", "744000"
     ),
+    "Tuvalu": AddressFormat(_TPL_DEFAULT, _("Island"), _("Postal Code"), False, "", ""),
     "Uganda": AddressFormat(_TPL_DEFAULT, _("District"), _("Postal Code"), False, "", ""),
     "Ukraine": AddressFormat(_TPL_DE, _("Region"), _("Postal Code"), False, r"^\d{5}$", "01001"),
     "United Arab Emirates": AddressFormat(

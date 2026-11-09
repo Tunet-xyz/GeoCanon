@@ -37,7 +37,10 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+880", _("Bangladesh (+880)")),
     ("+375", _("Belarus (+375)")),
     ("+32", _("Belgium (+32)")),
+    ("+501", _("Belize (+501)")),
     ("+229", _("Benin (+229)")),
+    ("+975", _("Bhutan (+975)")),
+    ("+591", _("Bolivia (+591)")),
     ("+387", _("Bosnia and Herzegovina (+387)")),
     ("+267", _("Botswana (+267)")),
     ("+55", _("Brazil (+55)")),
@@ -61,6 +64,7 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+506", _("Costa Rica (+506)")),
     ("+385", _("Croatia (+385)")),
     ("+53", _("Cuba (+53)")),
+    ("+599", _("Curaçao (+599)")),
     ("+357", _("Cyprus (+357)")),
     ("+420", _("Czech Republic (+420)")),
     ("+45", _("Denmark (+45)")),
@@ -86,6 +90,7 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+350", _("Gibraltar (+350)")),
     ("+30", _("Greece (+30)")),
     ("+299", _("Greenland (+299)")),
+    ("+502", _("Guatemala (+502)")),
     ("+224", _("Guinea (+224)")),
     ("+245", _("Guinea-Bissau (+245)")),
     ("+592", _("Guyana (+592)")),
@@ -102,11 +107,12 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+972", _("Israel (+972)")),
     ("+39", _("Italy (+39)")),
     ("+225", _("Ivory Coast (+225)")),
-    ("+876", _("Jamaica (+876)")),
     ("+81", _("Japan (+81)")),
     ("+962", _("Jordan (+962)")),
     ("+7", _("Kazakhstan / Russia (+7)")),
     ("+254", _("Kenya (+254)")),
+    ("+686", _("Kiribati (+686)")),
+    ("+383", _("Kosovo (+383)")),
     ("+965", _("Kuwait (+965)")),
     ("+996", _("Kyrgyzstan (+996)")),
     ("+856", _("Laos (+856)")),
@@ -125,9 +131,11 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+960", _("Maldives (+960)")),
     ("+223", _("Mali (+223)")),
     ("+356", _("Malta (+356)")),
+    ("+692", _("Marshall Islands (+692)")),
     ("+222", _("Mauritania (+222)")),
     ("+230", _("Mauritius (+230)")),
     ("+52", _("Mexico (+52)")),
+    ("+691", _("Micronesia (+691)")),
     ("+373", _("Moldova (+373)")),
     ("+377", _("Monaco (+377)")),
     ("+976", _("Mongolia (+976)")),
@@ -136,6 +144,7 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+258", _("Mozambique (+258)")),
     ("+95", _("Myanmar (+95)")),
     ("+264", _("Namibia (+264)")),
+    ("+674", _("Nauru (+674)")),
     ("+977", _("Nepal (+977)")),
     ("+31", _("Netherlands (+31)")),
     ("+64", _("New Zealand (+64)")),
@@ -147,6 +156,8 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+47", _("Norway (+47)")),
     ("+968", _("Oman (+968)")),
     ("+92", _("Pakistan (+92)")),
+    ("+680", _("Palau (+680)")),
+    ("+970", _("Palestine (+970)")),
     ("+507", _("Panama (+507)")),
     ("+675", _("Papua New Guinea (+675)")),
     ("+595", _("Paraguay (+595)")),
@@ -159,7 +170,9 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+40", _("Romania (+40)")),
     ("+250", _("Rwanda (+250)")),
     ("+290", _("Saint Helena (+290)")),
+    ("+685", _("Samoa (+685)")),
     ("+378", _("San Marino (+378)")),
+    ("+239", _("Sao Tome and Principe (+239)")),
     ("+966", _("Saudi Arabia (+966)")),
     ("+221", _("Senegal (+221)")),
     ("+381", _("Serbia (+381)")),
@@ -168,6 +181,7 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+65", _("Singapore (+65)")),
     ("+421", _("Slovakia (+421)")),
     ("+386", _("Slovenia (+386)")),
+    ("+677", _("Solomon Islands (+677)")),
     ("+252", _("Somalia (+252)")),
     ("+27", _("South Africa (+27)")),
     ("+82", _("South Korea (+82)")),
@@ -183,17 +197,20 @@ DIAL_CODE_CHOICES: list[tuple[str, str | Promise]] = [
     ("+992", _("Tajikistan (+992)")),
     ("+255", _("Tanzania (+255)")),
     ("+66", _("Thailand (+66)")),
+    ("+670", _("Timor-Leste (+670)")),
     ("+228", _("Togo (+228)")),
     ("+676", _("Tonga (+676)")),
     ("+216", _("Tunisia (+216)")),
     ("+90", _("Turkey (+90)")),
     ("+993", _("Turkmenistan (+993)")),
+    ("+688", _("Tuvalu (+688)")),
     ("+256", _("Uganda (+256)")),
     ("+380", _("Ukraine (+380)")),
     ("+971", _("United Arab Emirates (+971)")),
     ("+44", _("United Kingdom (+44)")),
     ("+598", _("Uruguay (+598)")),
     ("+998", _("Uzbekistan (+998)")),
+    ("+678", _("Vanuatu (+678)")),
     ("+58", _("Venezuela (+58)")),
     ("+84", _("Vietnam (+84)")),
     ("+967", _("Yemen (+967)")),
@@ -211,16 +228,22 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Algeria": "+213",
     "Andorra": "+376",
     "Angola": "+244",
+    "Antigua and Barbuda": "+1",
     "Argentina": "+54",
     "Armenia": "+374",
+    "Aruba": "+297",
     "Australia": "+61",
     "Austria": "+43",
     "Azerbaijan": "+994",
+    "Bahamas": "+1",
     "Bahrain": "+973",
     "Bangladesh": "+880",
+    "Barbados": "+1",
     "Belarus": "+375",
     "Belgium": "+32",
+    "Belize": "+501",
     "Benin": "+229",
+    "Bhutan": "+975",
     "Bolivia": "+591",
     "Bosnia and Herzegovina": "+387",
     "Botswana": "+267",
@@ -229,6 +252,7 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Bulgaria": "+359",
     "Burkina Faso": "+226",
     "Burundi": "+257",
+    "Cabo Verde": "+238",
     "Cambodia": "+855",
     "Cameroon": "+237",
     "Canada": "+1",
@@ -240,14 +264,19 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Colombia": "+57",
     "Comoros": "+269",
     "Congo": "+242",
+    "Congo (Congo-Brazzaville)": "+242",
+    "Congo (DRC)": "+243",
     "Costa Rica": "+506",
+    "Cote d'Ivoire": "+225",
     "Croatia": "+385",
     "Cuba": "+53",
+    "Curacao": "+599",
     "Cyprus": "+357",
     "Czech Republic": "+420",
     "Democratic Republic of Congo": "+243",
     "Denmark": "+45",
     "Djibouti": "+253",
+    "Dominica": "+1",
     "Dominican Republic": "+1",
     "Ecuador": "+593",
     "Egypt": "+20",
@@ -266,6 +295,7 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Germany": "+49",
     "Ghana": "+233",
     "Greece": "+30",
+    "Grenada": "+1",
     "Guatemala": "+502",
     "Guinea": "+224",
     "Guinea-Bissau": "+245",
@@ -282,11 +312,16 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Ireland": "+353",
     "Israel": "+972",
     "Italy": "+39",
-    "Jamaica": "+876",
+    "Ivory Coast": "+225",
+    "Jamaica": "+1",
     "Japan": "+81",
     "Jordan": "+962",
     "Kazakhstan": "+7",
     "Kenya": "+254",
+    "Kiribati": "+686",
+    "Korea (North)": "+850",
+    "Korea (South)": "+82",
+    "Kosovo": "+383",
     "Kuwait": "+965",
     "Kyrgyzstan": "+996",
     "Laos": "+856",
@@ -304,9 +339,11 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Maldives": "+960",
     "Mali": "+223",
     "Malta": "+356",
+    "Marshall Islands": "+692",
     "Mauritania": "+222",
     "Mauritius": "+230",
     "Mexico": "+52",
+    "Micronesia": "+691",
     "Moldova": "+373",
     "Monaco": "+377",
     "Mongolia": "+976",
@@ -315,6 +352,7 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Mozambique": "+258",
     "Myanmar": "+95",
     "Namibia": "+264",
+    "Nauru": "+674",
     "Nepal": "+977",
     "Netherlands": "+31",
     "New Zealand": "+64",
@@ -326,6 +364,8 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Norway": "+47",
     "Oman": "+968",
     "Pakistan": "+92",
+    "Palau": "+680",
+    "Palestine": "+970",
     "Panama": "+507",
     "Papua New Guinea": "+675",
     "Paraguay": "+595",
@@ -337,6 +377,12 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Romania": "+40",
     "Russia": "+7",
     "Rwanda": "+250",
+    "Saint Kitts and Nevis": "+1",
+    "Saint Lucia": "+1",
+    "Saint Vincent and the Grenadines": "+1",
+    "Samoa": "+685",
+    "San Marino": "+378",
+    "Sao Tome and Principe": "+239",
     "Saudi Arabia": "+966",
     "Senegal": "+221",
     "Serbia": "+381",
@@ -345,6 +391,7 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Singapore": "+65",
     "Slovakia": "+421",
     "Slovenia": "+386",
+    "Solomon Islands": "+677",
     "Somalia": "+252",
     "South Africa": "+27",
     "South Korea": "+82",
@@ -360,12 +407,14 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "Tajikistan": "+992",
     "Tanzania": "+255",
     "Thailand": "+66",
+    "Timor-Leste": "+670",
     "Togo": "+228",
     "Tonga": "+676",
-    "Trinidad and Tobago": "+868",
+    "Trinidad and Tobago": "+1",
     "Tunisia": "+216",
     "Turkey": "+90",
     "Turkmenistan": "+993",
+    "Tuvalu": "+688",
     "Uganda": "+256",
     "Ukraine": "+380",
     "United Arab Emirates": "+971",
@@ -373,6 +422,8 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
     "United States": "+1",
     "Uruguay": "+598",
     "Uzbekistan": "+998",
+    "Vanuatu": "+678",
+    "Vatican City": "+39",
     "Venezuela": "+58",
     "Vietnam": "+84",
     "Yemen": "+967",
@@ -400,10 +451,14 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+880": re.compile(r"^\d{10}$"),  # Bangladesh
     "+375": re.compile(r"^\d{9}$"),  # Belarus
     "+32": re.compile(r"^\d{9}$"),  # Belgium
+    "+501": re.compile(r"^\d{7}$"),  # Belize
     "+229": re.compile(r"^\d{8}$"),  # Benin
+    "+975": re.compile(r"^\d{7,8}$"),  # Bhutan
+    "+591": re.compile(r"^\d{8}$"),  # Bolivia
     "+387": re.compile(r"^\d{8}$"),  # Bosnia and Herzegovina
     "+267": re.compile(r"^\d{7,8}$"),  # Botswana
     "+55": re.compile(r"^\d{10,11}$"),  # Brazil
+    "+246": re.compile(r"^\d{7}$"),  # British Indian Ocean Territory
     "+673": re.compile(r"^\d{7}$"),  # Brunei
     "+359": re.compile(r"^\d{9}$"),  # Bulgaria
     "+226": re.compile(r"^\d{8}$"),  # Burkina Faso
@@ -423,6 +478,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+506": re.compile(r"^\d{8}$"),  # Costa Rica
     "+385": re.compile(r"^\d{8,9}$"),  # Croatia
     "+53": re.compile(r"^\d{8}$"),  # Cuba
+    "+599": re.compile(r"^\d{7,8}$"),  # Curaçao
     "+357": re.compile(r"^\d{8}$"),  # Cyprus
     "+420": re.compile(r"^\d{9}$"),  # Czech Republic
     "+45": re.compile(r"^\d{8}$"),  # Denmark
@@ -448,6 +504,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+350": re.compile(r"^\d{8}$"),  # Gibraltar
     "+30": re.compile(r"^\d{10}$"),  # Greece
     "+299": re.compile(r"^\d{6}$"),  # Greenland
+    "+502": re.compile(r"^\d{8}$"),  # Guatemala
     "+224": re.compile(r"^\d{9}$"),  # Guinea
     "+245": re.compile(r"^\d{7}$"),  # Guinea-Bissau
     "+592": re.compile(r"^\d{7}$"),  # Guyana
@@ -464,11 +521,12 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+972": re.compile(r"^\d{9}$"),  # Israel
     "+39": re.compile(r"^\d{9,10}$"),  # Italy
     "+225": re.compile(r"^\d{10}$"),  # Ivory Coast
-    "+876": re.compile(r"^\d{7}$"),  # Jamaica
     "+81": re.compile(r"^\d{10}$"),  # Japan
     "+962": re.compile(r"^\d{9}$"),  # Jordan
     "+7": re.compile(r"^\d{10}$"),  # Kazakhstan / Russia
     "+254": re.compile(r"^\d{9}$"),  # Kenya
+    "+686": re.compile(r"^(?:\d{5}|\d{8})$"),  # Kiribati
+    "+383": re.compile(r"^\d{8,9}$"),  # Kosovo
     "+965": re.compile(r"^\d{8}$"),  # Kuwait
     "+996": re.compile(r"^\d{9}$"),  # Kyrgyzstan
     "+856": re.compile(r"^\d{8}$"),  # Laos
@@ -480,15 +538,18 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+423": re.compile(r"^\d{7}$"),  # Liechtenstein
     "+370": re.compile(r"^\d{8}$"),  # Lithuania
     "+352": re.compile(r"^\d{8,9}$"),  # Luxembourg
+    "+853": re.compile(r"^\d{8}$"),  # Macau
     "+261": re.compile(r"^\d{9}$"),  # Madagascar
     "+265": re.compile(r"^\d{9}$"),  # Malawi
     "+60": re.compile(r"^\d{9,10}$"),  # Malaysia
     "+960": re.compile(r"^\d{7}$"),  # Maldives
     "+223": re.compile(r"^\d{8}$"),  # Mali
     "+356": re.compile(r"^\d{8}$"),  # Malta
+    "+692": re.compile(r"^\d{7}$"),  # Marshall Islands
     "+222": re.compile(r"^\d{8}$"),  # Mauritania
     "+230": re.compile(r"^\d{8}$"),  # Mauritius
     "+52": re.compile(r"^\d{10}$"),  # Mexico
+    "+691": re.compile(r"^\d{7}$"),  # Micronesia
     "+373": re.compile(r"^\d{8}$"),  # Moldova
     "+377": re.compile(r"^\d{8}$"),  # Monaco
     "+976": re.compile(r"^\d{8}$"),  # Mongolia
@@ -497,6 +558,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+258": re.compile(r"^\d{9}$"),  # Mozambique
     "+95": re.compile(r"^\d{9,10}$"),  # Myanmar
     "+264": re.compile(r"^\d{9}$"),  # Namibia
+    "+674": re.compile(r"^\d{7}$"),  # Nauru
     "+977": re.compile(r"^\d{10}$"),  # Nepal
     "+31": re.compile(r"^\d{9}$"),  # Netherlands
     "+64": re.compile(r"^\d{8,9}$"),  # New Zealand
@@ -508,6 +570,8 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+47": re.compile(r"^\d{8}$"),  # Norway
     "+968": re.compile(r"^\d{8}$"),  # Oman
     "+92": re.compile(r"^\d{10}$"),  # Pakistan
+    "+680": re.compile(r"^\d{7}$"),  # Palau
+    "+970": re.compile(r"^\d{8,9}$"),  # Palestine
     "+507": re.compile(r"^\d{8}$"),  # Panama
     "+675": re.compile(r"^\d{8}$"),  # Papua New Guinea
     "+595": re.compile(r"^\d{9}$"),  # Paraguay
@@ -516,8 +580,13 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+48": re.compile(r"^\d{9}$"),  # Poland
     "+351": re.compile(r"^\d{9}$"),  # Portugal
     "+974": re.compile(r"^\d{8}$"),  # Qatar
+    "+262": re.compile(r"^\d{9}$"),  # Réunion
     "+40": re.compile(r"^\d{9}$"),  # Romania
     "+250": re.compile(r"^\d{9}$"),  # Rwanda
+    "+290": re.compile(r"^\d{4,5}$"),  # Saint Helena
+    "+685": re.compile(r"^\d{5,7}$"),  # Samoa
+    "+378": re.compile(r"^\d{8,10}$"),  # San Marino
+    "+239": re.compile(r"^\d{7}$"),  # Sao Tome and Principe
     "+966": re.compile(r"^\d{9}$"),  # Saudi Arabia
     "+221": re.compile(r"^\d{9}$"),  # Senegal
     "+381": re.compile(r"^\d{9}$"),  # Serbia
@@ -526,6 +595,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+65": re.compile(r"^\d{8}$"),  # Singapore
     "+421": re.compile(r"^\d{9}$"),  # Slovakia
     "+386": re.compile(r"^\d{8}$"),  # Slovenia
+    "+677": re.compile(r"^(?:\d{5}|\d{7})$"),  # Solomon Islands
     "+252": re.compile(r"^\d{8}$"),  # Somalia
     "+27": re.compile(r"^\d{9}$"),  # South Africa
     "+82": re.compile(r"^\d{9,10}$"),  # South Korea
@@ -541,18 +611,20 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+992": re.compile(r"^\d{9}$"),  # Tajikistan
     "+255": re.compile(r"^\d{9}$"),  # Tanzania
     "+66": re.compile(r"^\d{9}$"),  # Thailand
+    "+670": re.compile(r"^\d{7,8}$"),  # Timor-Leste
     "+228": re.compile(r"^\d{8}$"),  # Togo
     "+676": re.compile(r"^\d{5}$"),  # Tonga
-    "+868": re.compile(r"^\d{7}$"),  # Trinidad and Tobago
     "+216": re.compile(r"^\d{8}$"),  # Tunisia
     "+90": re.compile(r"^\d{10}$"),  # Turkey
     "+993": re.compile(r"^\d{8}$"),  # Turkmenistan
+    "+688": re.compile(r"^\d{5,7}$"),  # Tuvalu
     "+256": re.compile(r"^\d{9}$"),  # Uganda
     "+380": re.compile(r"^\d{9}$"),  # Ukraine
     "+971": re.compile(r"^\d{9}$"),  # UAE
     "+44": re.compile(r"^\d{10}$"),  # United Kingdom
     "+598": re.compile(r"^\d{8}$"),  # Uruguay
     "+998": re.compile(r"^\d{9}$"),  # Uzbekistan
+    "+678": re.compile(r"^(?:\d{5}|\d{7})$"),  # Vanuatu
     "+58": re.compile(r"^\d{10}$"),  # Venezuela
     "+84": re.compile(r"^\d{9,10}$"),  # Vietnam
     "+967": re.compile(r"^\d{9}$"),  # Yemen
