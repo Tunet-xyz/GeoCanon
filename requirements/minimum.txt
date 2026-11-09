@@ -1,0 +1,9 @@
+# The lowest versions pyproject.toml accepts. The minimum-dependencies job in
+# .github/workflows/tests.yaml installs GeoCanon[all] with these constraints,
+# and tests/test_dependency_floors.py keeps them equal to the declared floors.
+Django==4.2.*
+holidays==0.66
+pytz==2023.3
+phonenumbers==8.13.*
+Babel==2.14.*
+pydantic==2.0.*
