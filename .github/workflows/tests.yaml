@@ -26,27 +26,19 @@ jobs:
         python -m pip install --upgrade pip
         pip install .[all,dev]
     
-    - name: Lint with ruff
+    - name: Lint
       run: |
         python -m ruff check src tests
     
-    - name: Type check with mypy
+    - name: Type check
       run: |
         python -m mypy src/geo_canon
     
-    - name: Run tests with coverage
+    - name: Test
       run: |
         export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-        pytest tests/ --cov=geo_canon --cov-branch --cov-report=xml --cov-report=term-missing
+        pytest tests/ --cov=geo_canon --cov-branch --cov-report=term-missing
     
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
-      if: matrix.python-version == '3.11'
-      with:
-        files: ./coverage.xml
-        fail_ci_if_error: false
-        verbose: true
-
   minimum-dependencies:
     if: github.event_name == 'workflow_dispatch' && github.actor == 'bezu-1' && github.triggering_actor == 'bezu-1'
     runs-on: ubuntu-latest

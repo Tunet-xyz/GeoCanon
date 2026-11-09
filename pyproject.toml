@@ -7,9 +7,9 @@ packages = ["src/geo_canon"]
 
 [tool.hatch.build.targets.sdist]
 include = [
-  "/src", "/tests", "/docs", "/mcp", "/requirements", "/.github",
+  "/src", "/tests", "/docs", "/mcp", "/requirements",
   "/README.md", "/LICENSE", "/CHANGELOG.md", "/SECURITY.md",
-  "/VERSIONING.md", "/CONTRIBUTING.md", "/AGENTS.md", "/CLAUDE.md",
+  "/VERSIONING.md", "/CONTRIBUTING.md", "/CODE_OF_CONDUCT.md",
   "/pyproject.toml",
 ]
 
@@ -60,17 +60,6 @@ dependencies = [
   "Django>=4.2,<7",
 ]
 
-[project.urls]
-Homepage = "https://github.com/Tunet-xyz/geo_canon"
-Product = "https://www.tunet.xyz/engineering/geo-canon/"
-Documentation = "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md"
-Repository = "https://github.com/Tunet-xyz/geo_canon"
-Issues = "https://github.com/Tunet-xyz/geo_canon/issues"
-Changelog = "https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md"
-
-[project.scripts]
-geocanon-mcp = "geo_canon.mcp.server:main"
-
 [project.optional-dependencies]
 holidays = ["holidays>=0.66"]
 timezones = ["pytz>=2023.3"]
@@ -96,6 +85,17 @@ dev = [
   "django-stubs>=4.2.0",
   "tomli>=2; python_version < '3.11'",
 ]
+
+[project.urls]
+Homepage = "https://github.com/Tunet-xyz/geo_canon"
+Product = "https://www.tunet.xyz/engineering/geo-canon/"
+Documentation = "https://github.com/Tunet-xyz/geo_canon/blob/main/docs/README.md"
+Repository = "https://github.com/Tunet-xyz/geo_canon"
+Issues = "https://github.com/Tunet-xyz/geo_canon/issues"
+Changelog = "https://github.com/Tunet-xyz/geo_canon/blob/main/CHANGELOG.md"
+
+[project.scripts]
+geocanon-mcp = "geo_canon.mcp.server:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
