@@ -25,7 +25,13 @@ except ImportError:  # pragma: no cover - exercised by fallback tests
         """Fallback exception used when Babel is not installed."""
 
 
-from geo_canon.currencies import format_currency, get_currency_code
+from geo_canon.currencies import (
+    CurrencyInfo,
+    _format_with_currency,
+    format_currency,
+    get_currency_by_code,
+    get_currency_code,
+)
 from geo_canon.iso_codes import get_alpha2
 from geo_canon.languages import get_language_for_jurisdiction
 
@@ -106,7 +112,13 @@ def format_currency_locale(
     locale: str | None = None,
     language: str | None = None,
 ) -> str:
-    """Format currency for *jurisdiction* using Babel when available."""
+    """
+    Format currency for *jurisdiction* using Babel when available.
+
+    Without Babel, or when Babel rejects the locale, the amount is formatted
+    with GeoCanon's own data: in the jurisdiction's currency, or in
+    *currency_code* followed by that code when one is given.
+    """
     code = currency_code or get_currency_code(jurisdiction)
     resolved_locale = _resolve_locale(jurisdiction, locale, language)
 
@@ -116,7 +128,14 @@ def format_currency_locale(
         except (UnknownLocaleError, ValueError):
             pass
 
-    return format_currency(amount, jurisdiction, include_code=currency_code is not None)
+    if currency_code is None:
+        return format_currency(amount, jurisdiction)
+    info = get_currency_by_code(currency_code)
+    if info is None:
+        # A code GeoCanon has no data for: two decimal places and the code.
+        unknown = CurrencyInfo(currency_code.upper(), currency_code.upper(), "", 2)
+        return _format_with_currency(amount, unknown, use_symbol=False, include_code=True)
+    return _format_with_currency(amount, info, use_symbol=True, include_code=True)
 
 
 def format_date_locale(

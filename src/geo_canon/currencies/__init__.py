@@ -353,7 +353,17 @@ def format_currency(
     if info is None:
         # Fallback: plain number with 2 decimal places
         return f"{amount:,.2f}"
+    return _format_with_currency(amount, info, use_symbol=use_symbol, include_code=include_code)
 
+
+def _format_with_currency(
+    amount: int | float | Decimal,
+    info: CurrencyInfo,
+    *,
+    use_symbol: bool,
+    include_code: bool,
+) -> str:
+    """Format *amount* in the currency *info* describes (shared by the locale fallback)."""
     # Round to the currency's minor unit precision
     quantized = Decimal(str(amount)).quantize(
         Decimal(10) ** -info.decimal_places,

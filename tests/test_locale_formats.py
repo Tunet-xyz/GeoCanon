@@ -40,6 +40,32 @@ class TestLocaleFallbacks:
         assert format_percent_locale(0.125, "United States") == "12%"
         assert format_currency_locale(1234.5, "United States") == "$1,234.50"
 
+    def test_currency_code_override_without_babel(self, monkeypatch):
+        import geo_canon.locale_formats as locale_formats
+
+        monkeypatch.setattr(locale_formats, "_babel_numbers", None)
+
+        assert format_currency_locale(1234.5, "United States", currency_code="EUR") == (
+            "€1,234.50 EUR"
+        )
+        assert format_currency_locale(1234.5, "United States", currency_code="USD") == (
+            "$1,234.50 USD"
+        )
+        assert format_currency_locale(1234.5, "Romania", currency_code="jpy") == "¥1,235 JPY"
+        assert format_currency_locale(1234.5, "Narnia", currency_code="EUR") == "€1,234.50 EUR"
+        assert format_currency_locale(1234.565, "Narnia", currency_code="XYZ") == (
+            "1,234.57 XYZ"
+        )
+
+    def test_currency_code_override_when_babel_rejects_the_locale(self):
+        import pytest
+
+        pytest.importorskip("babel")
+
+        assert format_currency_locale(
+            1234.5, "Tajikistan", currency_code="EUR", locale="xx_XX"
+        ) == "€1,234.50 EUR"
+
     def test_date_fallbacks_without_babel(self, monkeypatch):
         import geo_canon.locale_formats as locale_formats
 
