@@ -1,5 +1,7 @@
 """Tests for geo_canon.dial_codes"""
 
+import pytest
+
 from geo_canon.dial_codes import (
     DIAL_CODE_CHOICES,
     PHONE_PATTERNS,
@@ -54,6 +56,17 @@ class TestPhoneValidation:
     def test_unknown_dial_code(self):
         assert validate_phone("1234", "+999") is False
 
+    def test_benin_numbers_are_01_and_eight_digits(self):
+        assert validate_phone("0197123456", "+229") is True
+        assert validate_phone("97123456", "+229") is False
+        assert validate_phone("1197123456", "+229") is False
+
+    def test_italian_fixed_lines_keep_their_0(self):
+        assert validate_phone("0612345678", "+39") is True
+        assert validate_phone("03311234567", "+39") is True
+        assert validate_phone("3123456789", "+39") is True
+        assert validate_phone("31234567", "+39") is False
+
     def test_phone_patterns_all_compiled(self):
         import re
 
@@ -79,6 +92,64 @@ class TestPhoneValidation:
         arabic_indic = "٠٧١٢٣٤٥٦٧٨٩"
         assert validate_phone_number(arabic_indic, "United Kingdom") is False
         assert validate_phone_number("07123 456789\n", "United Kingdom") is True
+
+
+class TestFallbackTrunkPrefixes:
+    """Without phonenumbers, the fallback drops only the country's own trunk prefix."""
+
+    @pytest.fixture(autouse=True)
+    def _without_phonenumbers(self, monkeypatch):
+        import geo_canon.dial_codes as dial_codes
+
+        monkeypatch.setattr(dial_codes, "_phonenumbers", None)
+
+    @pytest.mark.parametrize(
+        ("number", "jurisdiction"),
+        [
+            # No trunk prefix: a leading 0 is part of the number.
+            ("+225 07 12 34 56 78", "Cote d'Ivoire"),
+            ("+2250512345678", "Cote d'Ivoire"),
+            ("01 23 45 67 89", "Ivory Coast"),
+            ("+229 01 97 12 34 56", "Benin"),
+            ("01 97 12 34 56", "Benin"),
+            ("+242 06 123 4567", "Congo (Congo-Brazzaville)"),
+            ("+226 01 23 45 67", "Burkina Faso"),
+            ("+39 06 1234 5678", "Italy"),
+            ("+39 0331 1234567", "Italy"),
+            ("+241 06 03 12 34", "Gabon"),
+            # The trunk prefix is dropped, whatever its digits.
+            ("020 7946 0958", "United Kingdom"),
+            ("+44 (0)20 7946 0958", "United Kingdom"),
+            ("1 (650) 253-0000", "United States"),
+            ("8 (912) 345-67-89", "Russia"),
+            ("8 (7172) 12 34 56", "Kazakhstan"),
+            ("06 1 234 5678", "Hungary"),
+            ("06 30 123 4567", "Hungary"),
+            ("+36 1 234 5678", "Hungary"),
+            ("8 029 123 45 67", "Belarus"),
+            ("029 123 45 67", "Belarus"),
+            ("8 612 34567", "Lithuania"),
+            ("0 612 34567", "Lithuania"),
+            # An 8 that starts the number itself stays.
+            ("+7 812 123-45-67", "Russia"),
+            ("8 800 555 35 35", "Russia"),
+        ],
+    )
+    def test_accepts(self, number, jurisdiction):
+        assert validate_phone_number(number, jurisdiction) is True
+
+    @pytest.mark.parametrize(
+        ("number", "jurisdiction"),
+        [
+            ("+229 97 12 34 56", "Benin"),  # 8-digit numbers ended on 2024-11-30
+            ("0612345678", "Spain"),  # Spain has no trunk prefix
+            ("012345678", "France"),  # the trunk 0 is not one of the nine digits
+            ("0712345678", "United Kingdom"),
+            ("02 1234 5678", "United States"),
+        ],
+    )
+    def test_rejects(self, number, jurisdiction):
+        assert validate_phone_number(number, jurisdiction) is False
 
 
 class TestPhoneNumbersExtra:

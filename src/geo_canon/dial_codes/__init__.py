@@ -436,8 +436,16 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
 # ---------------------------------------------------------------------------
 
 
-def _national_number(pattern: str) -> re.Pattern[str]:
-    """Compile a national-number pattern in which ``\\d`` matches only 0-9."""
+def _national_number(pattern: str, *, may_start_with_0: bool = False) -> re.Pattern[str]:
+    """
+    Compile a national-number pattern in which ``\\d`` matches only 0-9.
+
+    The number cannot start with 0 unless *may_start_with_0* says so, as in
+    Italy, Côte d'Ivoire and Benin. Elsewhere a leading 0 is a trunk prefix
+    the caller should have dropped, or a stray digit.
+    """
+    if not may_start_with_0:
+        pattern = "^(?!0)" + pattern.removeprefix("^")
     return re.compile(pattern, re.ASCII)
 
 
@@ -458,7 +466,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+375": _national_number(r"^\d{9}$"),  # Belarus
     "+32": _national_number(r"^\d{9}$"),  # Belgium
     "+501": _national_number(r"^\d{7}$"),  # Belize
-    "+229": _national_number(r"^\d{8}$"),  # Benin
+    "+229": _national_number(r"^01\d{8}$", may_start_with_0=True),  # Benin (01 since 2024-11-30)
     "+975": _national_number(r"^\d{7,8}$"),  # Bhutan
     "+591": _national_number(r"^\d{8}$"),  # Bolivia
     "+387": _national_number(r"^\d{8}$"),  # Bosnia and Herzegovina
@@ -467,7 +475,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+246": _national_number(r"^\d{7}$"),  # British Indian Ocean Territory
     "+673": _national_number(r"^\d{7}$"),  # Brunei
     "+359": _national_number(r"^\d{9}$"),  # Bulgaria
-    "+226": _national_number(r"^\d{8}$"),  # Burkina Faso
+    "+226": _national_number(r"^\d{8}$", may_start_with_0=True),  # Burkina Faso
     "+257": _national_number(r"^\d{8}$"),  # Burundi
     "+855": _national_number(r"^\d{8,9}$"),  # Cambodia
     "+237": _national_number(r"^\d{9}$"),  # Cameroon
@@ -479,7 +487,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+86": _national_number(r"^\d{11}$"),  # China
     "+57": _national_number(r"^\d{10}$"),  # Colombia
     "+269": _national_number(r"^\d{7}$"),  # Comoros
-    "+242": _national_number(r"^\d{9}$"),  # Congo
+    "+242": _national_number(r"^\d{9}$", may_start_with_0=True),  # Congo
     "+243": _national_number(r"^\d{9}$"),  # DR Congo
     "+506": _national_number(r"^\d{8}$"),  # Costa Rica
     "+385": _national_number(r"^\d{8,9}$"),  # Croatia
@@ -502,7 +510,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+679": _national_number(r"^\d{7}$"),  # Fiji
     "+358": _national_number(r"^\d{9,10}$"),  # Finland
     "+33": _national_number(r"^\d{9}$"),  # France
-    "+241": _national_number(r"^\d{7}$"),  # Gabon
+    "+241": _national_number(r"^\d{7,8}$", may_start_with_0=True),  # Gabon
     "+220": _national_number(r"^\d{7}$"),  # Gambia
     "+995": _national_number(r"^\d{9}$"),  # Georgia
     "+49": _national_number(r"^\d{10,11}$"),  # Germany
@@ -517,7 +525,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+509": _national_number(r"^\d{8}$"),  # Haiti
     "+504": _national_number(r"^\d{8}$"),  # Honduras
     "+852": _national_number(r"^\d{8}$"),  # Hong Kong
-    "+36": _national_number(r"^\d{9}$"),  # Hungary
+    "+36": _national_number(r"^\d{8,9}$"),  # Hungary
     "+354": _national_number(r"^\d{7}$"),  # Iceland
     "+91": _national_number(r"^\d{10}$"),  # India
     "+62": _national_number(r"^\d{9,11}$"),  # Indonesia
@@ -525,8 +533,8 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+964": _national_number(r"^\d{10}$"),  # Iraq
     "+353": _national_number(r"^\d{9}$"),  # Ireland
     "+972": _national_number(r"^\d{9}$"),  # Israel
-    "+39": _national_number(r"^\d{9,10}$"),  # Italy
-    "+225": _national_number(r"^\d{10}$"),  # Ivory Coast
+    "+39": _national_number(r"^(?:0\d{5,11}|[1-9]\d{8,9})$", may_start_with_0=True),  # Italy
+    "+225": _national_number(r"^\d{10}$", may_start_with_0=True),  # Ivory Coast
     "+81": _national_number(r"^\d{10}$"),  # Japan
     "+962": _national_number(r"^\d{9}$"),  # Jordan
     "+7": _national_number(r"^\d{10}$"),  # Kazakhstan / Russia
@@ -591,7 +599,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+250": _national_number(r"^\d{9}$"),  # Rwanda
     "+290": _national_number(r"^\d{4,5}$"),  # Saint Helena
     "+685": _national_number(r"^\d{5,7}$"),  # Samoa
-    "+378": _national_number(r"^\d{8,10}$"),  # San Marino
+    "+378": _national_number(r"^\d{8,10}$", may_start_with_0=True),  # San Marino
     "+239": _national_number(r"^\d{7}$"),  # Sao Tome and Principe
     "+966": _national_number(r"^\d{9}$"),  # Saudi Arabia
     "+221": _national_number(r"^\d{9}$"),  # Senegal
@@ -614,7 +622,7 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+41": _national_number(r"^\d{9}$"),  # Switzerland
     "+963": _national_number(r"^\d{9}$"),  # Syria
     "+886": _national_number(r"^\d{9}$"),  # Taiwan
-    "+992": _national_number(r"^\d{9}$"),  # Tajikistan
+    "+992": _national_number(r"^\d{9}$", may_start_with_0=True),  # Tajikistan
     "+255": _national_number(r"^\d{9}$"),  # Tanzania
     "+66": _national_number(r"^\d{9}$"),  # Thailand
     "+670": _national_number(r"^\d{7,8}$"),  # Timor-Leste
@@ -640,6 +648,122 @@ PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
 
 
 # ---------------------------------------------------------------------------
+# Trunk prefixes: what callers dial before a national number inside the
+# country, such as the UK's 0 or Russia's 8, from libphonenumber's national
+# prefix data. A dial code that is not listed has none, so a leading 0 there
+# is part of the number, as in Italy, Côte d'Ivoire and Benin.
+# ---------------------------------------------------------------------------
+
+_TRUNK_PREFIXES: dict[str, tuple[str, ...]] = {
+    "+93": ("0",),  # Afghanistan
+    "+355": ("0",),  # Albania
+    "+213": ("0",),  # Algeria
+    "+54": ("0",),  # Argentina
+    "+374": ("0",),  # Armenia
+    "+61": ("0",),  # Australia
+    "+43": ("0",),  # Austria
+    "+994": ("0",),  # Azerbaijan
+    "+880": ("0",),  # Bangladesh
+    "+375": ("0", "80", "8"),  # Belarus (8 then the area code's 0, or 0)
+    "+32": ("0",),  # Belgium
+    "+591": ("0",),  # Bolivia
+    "+387": ("0",),  # Bosnia and Herzegovina
+    "+55": ("0",),  # Brazil
+    "+359": ("0",),  # Bulgaria
+    "+855": ("0",),  # Cambodia
+    "+1": ("1",),  # North American Numbering Plan
+    "+86": ("0",),  # China
+    "+57": ("0",),  # Colombia
+    "+243": ("0",),  # DR Congo
+    "+385": ("0",),  # Croatia
+    "+53": ("0",),  # Cuba
+    "+593": ("0",),  # Ecuador
+    "+20": ("0",),  # Egypt
+    "+291": ("0",),  # Eritrea
+    "+251": ("0",),  # Ethiopia
+    "+358": ("0",),  # Finland
+    "+33": ("0",),  # France
+    "+995": ("0",),  # Georgia
+    "+49": ("0",),  # Germany
+    "+233": ("0",),  # Ghana
+    "+36": ("06",),  # Hungary
+    "+91": ("0",),  # India
+    "+62": ("0",),  # Indonesia
+    "+98": ("0",),  # Iran
+    "+964": ("0",),  # Iraq
+    "+353": ("0",),  # Ireland
+    "+972": ("0",),  # Israel
+    "+81": ("0",),  # Japan
+    "+962": ("0",),  # Jordan
+    "+7": ("8",),  # Kazakhstan / Russia
+    "+254": ("0",),  # Kenya
+    "+686": ("0",),  # Kiribati
+    "+383": ("0",),  # Kosovo
+    "+996": ("0",),  # Kyrgyzstan
+    "+856": ("0",),  # Laos
+    "+961": ("0",),  # Lebanon
+    "+231": ("0",),  # Liberia
+    "+218": ("0",),  # Libya
+    "+423": ("0",),  # Liechtenstein
+    "+370": ("0", "8"),  # Lithuania (0, formerly 8)
+    "+261": ("0",),  # Madagascar
+    "+265": ("0",),  # Malawi
+    "+60": ("0",),  # Malaysia
+    "+692": ("1",),  # Marshall Islands
+    "+373": ("0",),  # Moldova
+    "+377": ("0",),  # Monaco
+    "+976": ("0",),  # Mongolia
+    "+382": ("0",),  # Montenegro
+    "+212": ("0",),  # Morocco
+    "+95": ("0",),  # Myanmar
+    "+264": ("0",),  # Namibia
+    "+977": ("0",),  # Nepal
+    "+31": ("0",),  # Netherlands
+    "+64": ("0",),  # New Zealand
+    "+234": ("0",),  # Nigeria
+    "+850": ("0",),  # North Korea
+    "+389": ("0",),  # North Macedonia
+    "+92": ("0",),  # Pakistan
+    "+970": ("0",),  # Palestine
+    "+595": ("0",),  # Paraguay
+    "+51": ("0",),  # Peru
+    "+63": ("0",),  # Philippines
+    "+262": ("0",),  # Réunion
+    "+40": ("0",),  # Romania
+    "+250": ("0",),  # Rwanda
+    "+966": ("0",),  # Saudi Arabia
+    "+381": ("0",),  # Serbia
+    "+232": ("0",),  # Sierra Leone
+    "+421": ("0",),  # Slovakia
+    "+386": ("0",),  # Slovenia
+    "+252": ("0",),  # Somalia
+    "+27": ("0",),  # South Africa
+    "+82": ("0",),  # South Korea
+    "+211": ("0",),  # South Sudan
+    "+94": ("0",),  # Sri Lanka
+    "+249": ("0",),  # Sudan
+    "+46": ("0",),  # Sweden
+    "+41": ("0",),  # Switzerland
+    "+963": ("0",),  # Syria
+    "+886": ("0",),  # Taiwan
+    "+255": ("0",),  # Tanzania
+    "+66": ("0",),  # Thailand
+    "+90": ("0",),  # Turkey
+    "+993": ("8",),  # Turkmenistan
+    "+256": ("0",),  # Uganda
+    "+380": ("0",),  # Ukraine
+    "+971": ("0",),  # UAE
+    "+44": ("0",),  # United Kingdom
+    "+598": ("0",),  # Uruguay
+    "+58": ("0",),  # Venezuela
+    "+84": ("0",),  # Vietnam
+    "+967": ("0",),  # Yemen
+    "+260": ("0",),  # Zambia
+    "+263": ("0",),  # Zimbabwe
+}
+
+
+# ---------------------------------------------------------------------------
 # Public helpers
 # ---------------------------------------------------------------------------
 
@@ -661,9 +785,11 @@ def get_dial_code(country: str) -> str | None:
 
 def validate_phone(phone: str, dial_code: str) -> bool:
     """
-    Validate that *phone* (national digits only, no leading zero) matches the
-    expected pattern for *dial_code*.
+    Validate that *phone* matches the expected pattern for *dial_code*.
 
+    *phone* is the national number in digits only, without the trunk prefix
+    dialled inside the country (the UK's leading 0, Russia's 8). A leading 0
+    that belongs to the number stays, as in Italy, Côte d'Ivoire and Benin.
     The whole string must match, and only the ASCII digits 0-9 count as
     digits. Returns ``True`` when valid, ``False`` otherwise.
 
@@ -714,9 +840,14 @@ def _national_digits_for_fallback(phone: str, dial_code: str) -> str:
     if phone.strip().startswith("+") and digits.startswith(calling_code):
         digits = digits[len(calling_code) :]
 
-    if digits.startswith("0"):
-        digits = digits[1:]
-
+    for prefix in _TRUNK_PREFIXES.get(dial_code, ()):
+        if digits.startswith(prefix):
+            national = digits[len(prefix) :]
+            # Where the trunk prefix is 0, no national number starts with 0. A 1 or
+            # an 8 can also start the number itself (Russian area codes start with
+            # 8), so it is dropped only when the digits after it form a valid number.
+            if prefix.startswith("0") or validate_phone(national, dial_code):
+                return national
     return digits
 
 
@@ -731,7 +862,9 @@ def validate_phone_number(
 
     ``jurisdiction`` is converted to its ISO-3166 alpha-2 region code.  When
     the optional dependency is not installed, this falls back to GeoCanon's
-    lightweight dial-code regex validation for known jurisdictions.
+    lightweight dial-code regex validation for known jurisdictions: it drops
+    the country code after a ``+`` and the country's trunk prefix, if the
+    country has one, and checks the remaining digits with :func:`validate_phone`.
     """
     if _phonenumbers is not None:
         parsed = _parse_phone_number(phone, jurisdiction, region)

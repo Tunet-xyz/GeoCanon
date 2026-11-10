@@ -38,6 +38,9 @@ LEGACY_ALIASES = {
 # ISO 3166 entries that every lookup accepts but the jurisdiction list leaves out.
 ISO_ONLY = {"Aruba", "Curacao", "Palestine"}
 ACCEPTED_NAMES = JURISDICTION_NAMES | set(LEGACY_ALIASES) | ISO_ONLY
+# Dial codes whose national numbers can start with 0 (Italy, Côte d'Ivoire, Burkina
+# Faso, Benin, Gabon, Congo, San Marino, Tajikistan). Every other pattern refuses it.
+ZERO_LED_DIAL_CODES = {"+39", "+225", "+226", "+229", "+241", "+242", "+378", "+992"}
 
 TABLES = {
     "address formats": JURISDICTION_ADDRESS_FORMAT,
@@ -123,6 +126,22 @@ def test_every_dial_code_has_one_choice_and_a_pattern():
     assert sorted(set(COUNTRY_DIAL_CODE.values()) - set(choice_codes)) == []
 
 
+def test_only_countries_whose_numbers_start_with_0_accept_a_leading_0():
+    for code, pattern in PHONE_PATTERNS.items():
+        accepts_leading_0 = any(pattern.fullmatch("0" + "1" * n) for n in range(17))
+        assert accepts_leading_0 is (code in ZERO_LED_DIAL_CODES), code
+
+
+def test_trunk_prefixes_are_digits_for_dial_codes_with_a_pattern():
+    from geo_canon.dial_codes import _TRUNK_PREFIXES
+
+    assert sorted(set(_TRUNK_PREFIXES) - set(PHONE_PATTERNS)) == []
+    assert sorted(set(_TRUNK_PREFIXES) & ZERO_LED_DIAL_CODES) == []
+    for code, prefixes in _TRUNK_PREFIXES.items():
+        assert prefixes, code
+        assert all(prefix.isascii() and prefix.isdigit() for prefix in prefixes), code
+
+
 @pytest.mark.parametrize(
     "name",
     [
@@ -152,6 +171,8 @@ def test_north_american_numbering_plan_countries_use_plus_one(name):
         ("+591 7123 4567", "Bolivia"),
         ("+82 10 1234 5678", "Korea (South)"),
         ("+225 27 22 12 34 56", "Cote d'Ivoire"),
+        ("+225 07 12 34 56 78", "Cote d'Ivoire"),
+        ("+229 01 97 12 34 56", "Benin"),
     ],
 )
 def test_fallback_validation_accepts_well_formed_numbers(monkeypatch, number, jurisdiction):
