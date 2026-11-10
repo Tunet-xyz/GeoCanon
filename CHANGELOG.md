@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   has a phone pattern.
 - Dzongkha (`dz`), Bhutan's default language, for 74 language choices.
 - `python -m geo_canon.mcp` runs the MCP server.
+- A CodeQL workflow (`codeql.yaml`) with the security-extended queries, which
+  only the owner starts, and weekly Dependabot updates for pip and GitHub
+  Actions dependencies, as in the other Tunet libraries.
 
 ### Changed
 

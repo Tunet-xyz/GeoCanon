@@ -42,12 +42,14 @@ Repeat the tests without extras to cover the fallbacks.
 ## Workflow evidence
 
 The GitHub workflows are manual: only the owner starts them, and none runs on
-a schedule. Record which of them ran for the assessed commit.
+a schedule (Dependabot checks dependencies weekly). Record which of them ran
+for the assessed commit.
 
 | Workflow | What it runs |
 | --- | --- |
 | `tests.yaml` | Ruff, mypy, and pytest with branch coverage; a separate job runs the tests at the declared dependency floors |
 | `security.yaml` | Bandit and a strict dependency audit |
+| `codeql.yaml` | CodeQL with the security-extended queries |
 | `publish.yaml` | The same checks, a hash-locked build with checksums, and PyPI publication |
 
 Keep the workflow URLs and logs, commit SHA, and release checksums as the
