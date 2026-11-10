@@ -29,10 +29,20 @@ Validates that the whole national number matches the pattern for the dial code.
 Only ASCII digits pass: a trailing newline or full-width digits fail.
 
 Pass the number without the trunk prefix dialled inside the country, such as
-the UK's leading 0 or Russia's 8. A leading 0 passes only where it is part of
-the number: Italy and Vatican City (`+39`), Côte d'Ivoire (`+225`), Burkina
-Faso (`+226`), Benin (`+229`), Gabon (`+241`), Congo (`+242`), San Marino
-(`+378`), and Tajikistan (`+992`).
+the UK's leading 0 or Russia's 8. A leading 0 passes only for the dial codes
+whose numbers can start with one, in most of them only toll-free, premium-rate,
+or UAN numbers: Italy and Vatican City (`+39`), Norway (`+47`), Côte d'Ivoire
+(`+225`), Burkina Faso (`+226`), Niger (`+227`), Benin (`+229`), Gabon (`+241`),
+Congo (`+242`), Botswana (`+267`), Eswatini (`+268`), San Marino (`+378`),
+Belize (`+501`), Panama (`+507`), Tonga (`+676`), Fiji (`+679`), Macau
+(`+853`), Qatar (`+974`), and Tajikistan (`+992`).
+
+Each pattern allows the lengths libphonenumber gives valid numbers in the
+regions with that dial code: every fixed-line and mobile length, and other
+number types' lengths unless a region also uses that length for local numbers
+dialled without the area code. A length check cannot tell number types apart,
+so a malformed number whose length fits another type passes: a UK mobile one
+digit short has 9 digits, like some UK fixed lines.
 
 ```python
 validate_phone("7123456789", "+44")   # True (UK: 10 digits)
@@ -74,9 +84,20 @@ valid number, so Russian area codes that start with 8 are kept.
 validate_phone_number("8 (912) 345-67-89", "Russia")  # True, with or without the extra
 ```
 
-The fallback patterns are approximations, mostly digit counts, and reject some
-real numbers, such as many German, Swedish, and Japanese fixed lines. Install
-the `phones` extra when validity matters.
+Without the extra, these real numbers still fail:
+
+- Numbers that start with 0 where the trunk prefix is 0: 00-led international
+  freephone numbers in Japan, Korea, Indonesia, India, Thailand, Uruguay, and
+  Bulgaria, and Rwanda's 06 fixed lines.
+- Numbers of other types with a length the region also uses for local numbers,
+  such as Canada's 310-xxxx, Brazil's 9-digit 0800, Pakistan's 0800 and 0900,
+  and service numbers in Albania, Croatia, Iran, Uruguay, and Zimbabwe.
+- Argentina's national mobile form `011 15-...`, which only `phonenumbers`
+  rewrites.
+
+Gabon (`^\d{7,8}$`) and San Marino (`^\d{8,10}$`) keep patterns that allow a
+few lengths libphonenumber rules out. The fallback checks digits and lengths
+only; install the `phones` extra when validity matters.
 
 ### `format_phone_number(phone, jurisdiction=None, *, region=None, phone_format="E164") -> str | None`
 

@@ -87,13 +87,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   has no trunk prefix, such as Spain's `"0612345678"`, now fails, as it does
   with `phonenumbers`.
 - Phone patterns refuse a leading 0 except for the dial codes whose numbers can
-  start with one (`+39`, `+225`, `+226`, `+229`, `+241`, `+242`, `+378`,
+  start with one (`+39`, `+47`, `+225`, `+226`, `+227`, `+229`, `+241`, `+242`,
+  `+267`, `+268`, `+378`, `+501`, `+507`, `+676`, `+679`, `+853`, `+974`,
   `+992`), so `validate_phone("0123456789", "+44")` is now `False`: pass the
   national number without its trunk prefix. Benin's pattern is `^01\d{8}$`, for
   the ten-digit numbers in use since 2024-11-30; put `01` in front of stored
-  eight-digit numbers. Hungary accepts its 8-digit fixed lines, Gabon its
-  8-digit numbers, and Italy's fixed lines keep their leading 0 and have 6 to
-  12 digits.
+  eight-digit numbers.
+- Phone patterns allow the lengths libphonenumber gives valid numbers in each
+  dial code's regions, instead of one or two lengths per country: every
+  fixed-line and mobile length, and other number types' lengths unless a region
+  also uses that length for local numbers dialled without the area code.
+  Without the `phones` extra, German, Swedish, and Japanese fixed lines,
+  Guinea-Bissau, Laos, Liberia, Monaco, and Tonga mobiles, and most toll-free
+  numbers now validate, and so do the 0800-style toll-free, premium-rate, and
+  UAN numbers of Belize, Botswana, Eswatini, Fiji, Macau, Niger, Norway,
+  Panama, Qatar, and Tonga. US and Canadian numbers still need 10 digits, and
+  no number that validated before fails. A length check cannot tell number
+  types apart, so a malformed number with another type's length now passes: a
+  UK mobile one digit short has 9 digits, like some UK fixed lines. The
+  [dial-codes guide](docs/dial-codes.md) lists the numbers the fallback still
+  rejects.
 - `format_address` places `name` and `company` for every registered template,
   China's template shows the postal code, the 18 jurisdictions that require a
   state show it, and whitespace inside each line is normalized.
