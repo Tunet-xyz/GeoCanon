@@ -33,9 +33,10 @@ python -m pytest --cov=geo_canon --cov-branch
 Audit the installed dependencies with `pip-audit` (the security workflow runs
 it with `--strict`), run `geocanon-mcp` and check that it keeps serving after a
 malformed message, inspect the source and history for secrets, and record any
-check you could not run. The owner also runs the manual
-`minimum-dependencies` job, the only CI check of the declared dependency
-floors (`requirements/minimum.txt`).
+check you could not run. The owner runs the manual test, security, and CodeQL
+workflows on the release commit; the test workflow's `minimum-dependencies`
+job is the only CI check of the declared dependency floors
+(`requirements/minimum.txt`).
 
 ## 3. Build
 
@@ -45,6 +46,10 @@ export SOURCE_DATE_EPOCH="$(git show -s --format=%ct HEAD)"
 python -m build --no-isolation
 python -m twine check dist/*
 ```
+
+`requirements/build.txt` is the hash-locked output of the `uv pip compile`
+command in its header. Dependabot leaves it and `requirements/build.in` alone,
+so to update the release tools, edit `build.in` and run that command again.
 
 Record SHA-256 checksums, inspect both archives (the MIT license and SPDX
 metadata, `py.typed`, and the MCP contract; no flag artwork or third-party
