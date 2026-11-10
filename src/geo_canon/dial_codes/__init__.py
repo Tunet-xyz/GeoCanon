@@ -432,7 +432,14 @@ COUNTRY_DIAL_CODE: dict[str, str] = {
 }
 
 # ---------------------------------------------------------------------------
-# Per-dial-code phone-number validation patterns (national digits only)
+# Per-dial-code phone-number validation patterns (national digits only).
+# The lengths follow libphonenumber (phonenumbers 9.0.43) across every region
+# with the dial code: all fixed-line and mobile lengths, plus the lengths of
+# other number types (toll free, premium rate, ...) unless a region uses that
+# length for local numbers dialled without the area code. Numbers that start
+# with 0 have their own lengths, and only where the country has no trunk
+# prefix; elsewhere the fallback drops a leading 0 as the trunk prefix.
+# Gabon and San Marino keep the wider lengths they allowed before.
 # ---------------------------------------------------------------------------
 
 
@@ -441,8 +448,9 @@ def _national_number(pattern: str, *, may_start_with_0: bool = False) -> re.Patt
     Compile a national-number pattern in which ``\\d`` matches only 0-9.
 
     The number cannot start with 0 unless *may_start_with_0* says so, as in
-    Italy, Côte d'Ivoire and Benin. Elsewhere a leading 0 is a trunk prefix
-    the caller should have dropped, or a stray digit.
+    Italy, Côte d'Ivoire and Benin, or Belize's 0800 toll-free numbers.
+    Elsewhere a leading 0 is a trunk prefix the caller should have dropped,
+    or a stray digit.
     """
     if not may_start_with_0:
         pattern = "^(?!0)" + pattern.removeprefix("^")
@@ -451,199 +459,199 @@ def _national_number(pattern: str, *, may_start_with_0: bool = False) -> re.Patt
 
 PHONE_PATTERNS: dict[str, re.Pattern[str]] = {
     "+93": _national_number(r"^\d{9}$"),  # Afghanistan
-    "+355": _national_number(r"^\d{9}$"),  # Albania
-    "+213": _national_number(r"^\d{9}$"),  # Algeria
-    "+376": _national_number(r"^\d{6}$"),  # Andorra
+    "+355": _national_number(r"^\d{8,9}$"),  # Albania
+    "+213": _national_number(r"^\d{8,9}$"),  # Algeria
+    "+376": _national_number(r"^(?:\d{6}|\d{8,9})$"),  # Andorra
     "+244": _national_number(r"^\d{9}$"),  # Angola
-    "+54": _national_number(r"^\d{10}$"),  # Argentina
+    "+54": _national_number(r"^\d{10,11}$"),  # Argentina
     "+374": _national_number(r"^\d{8}$"),  # Armenia
     "+297": _national_number(r"^\d{7}$"),  # Aruba
-    "+61": _national_number(r"^\d{9}$"),  # Australia
-    "+43": _national_number(r"^\d{10,11}$"),  # Austria
+    "+61": _national_number(r"^(?:\d{5,7}|\d{9,10}|\d{12})$"),  # Australia
+    "+43": _national_number(r"^\d{4,13}$"),  # Austria
     "+994": _national_number(r"^\d{9}$"),  # Azerbaijan
     "+973": _national_number(r"^\d{8}$"),  # Bahrain
-    "+880": _national_number(r"^\d{10}$"),  # Bangladesh
-    "+375": _national_number(r"^\d{9}$"),  # Belarus
-    "+32": _national_number(r"^\d{9}$"),  # Belgium
-    "+501": _national_number(r"^\d{7}$"),  # Belize
+    "+880": _national_number(r"^\d{6,10}$"),  # Bangladesh
+    "+375": _national_number(r"^\d{8,11}$"),  # Belarus
+    "+32": _national_number(r"^\d{8,9}$"),  # Belgium
+    "+501": _national_number(r"^(?:0\d{10}|[1-9]\d{6})$", may_start_with_0=True),  # Belize
     "+229": _national_number(r"^01\d{8}$", may_start_with_0=True),  # Benin (01 since 2024-11-30)
     "+975": _national_number(r"^\d{7,8}$"),  # Bhutan
-    "+591": _national_number(r"^\d{8}$"),  # Bolivia
-    "+387": _national_number(r"^\d{8}$"),  # Bosnia and Herzegovina
-    "+267": _national_number(r"^\d{7,8}$"),  # Botswana
+    "+591": _national_number(r"^\d{8,9}$"),  # Bolivia
+    "+387": _national_number(r"^\d{8,9}$"),  # Bosnia and Herzegovina
+    "+267": _national_number(r"^(?:0\d{9}|[1-9](?:\d{6,7}|\d{9}))$", may_start_with_0=True),  # Botswana
     "+55": _national_number(r"^\d{10,11}$"),  # Brazil
     "+246": _national_number(r"^\d{7}$"),  # British Indian Ocean Territory
     "+673": _national_number(r"^\d{7}$"),  # Brunei
-    "+359": _national_number(r"^\d{9}$"),  # Bulgaria
+    "+359": _national_number(r"^\d{6,9}$"),  # Bulgaria
     "+226": _national_number(r"^\d{8}$", may_start_with_0=True),  # Burkina Faso
     "+257": _national_number(r"^\d{8}$"),  # Burundi
-    "+855": _national_number(r"^\d{8,9}$"),  # Cambodia
-    "+237": _national_number(r"^\d{9}$"),  # Cameroon
+    "+855": _national_number(r"^\d{8,10}$"),  # Cambodia
+    "+237": _national_number(r"^\d{8,9}$"),  # Cameroon
     "+1": _national_number(r"^\d{10}$"),  # Canada / United States
     "+238": _national_number(r"^\d{7}$"),  # Cape Verde
     "+236": _national_number(r"^\d{8}$"),  # Central African Republic
     "+235": _national_number(r"^\d{8}$"),  # Chad
-    "+56": _national_number(r"^\d{9}$"),  # Chile
-    "+86": _national_number(r"^\d{11}$"),  # China
-    "+57": _national_number(r"^\d{10}$"),  # Colombia
+    "+56": _national_number(r"^\d{9,11}$"),  # Chile
+    "+86": _national_number(r"^\d{7,12}$"),  # China
+    "+57": _national_number(r"^(?:\d{8}|\d{10,11})$"),  # Colombia
     "+269": _national_number(r"^\d{7}$"),  # Comoros
     "+242": _national_number(r"^\d{9}$", may_start_with_0=True),  # Congo
-    "+243": _national_number(r"^\d{9}$"),  # DR Congo
-    "+506": _national_number(r"^\d{8}$"),  # Costa Rica
+    "+243": _national_number(r"^\d{7,10}$"),  # DR Congo
+    "+506": _national_number(r"^(?:\d{8}|\d{10})$"),  # Costa Rica
     "+385": _national_number(r"^\d{8,9}$"),  # Croatia
-    "+53": _national_number(r"^\d{8}$"),  # Cuba
+    "+53": _national_number(r"^(?:\d{6,8}|\d{10})$"),  # Cuba
     "+599": _national_number(r"^\d{7,8}$"),  # Curaçao
     "+357": _national_number(r"^\d{8}$"),  # Cyprus
-    "+420": _national_number(r"^\d{9}$"),  # Czech Republic
+    "+420": _national_number(r"^\d{9,12}$"),  # Czech Republic
     "+45": _national_number(r"^\d{8}$"),  # Denmark
     "+253": _national_number(r"^\d{8}$"),  # Djibouti
-    "+593": _national_number(r"^\d{9}$"),  # Ecuador
-    "+20": _national_number(r"^\d{10}$"),  # Egypt
-    "+503": _national_number(r"^\d{8}$"),  # El Salvador
+    "+593": _national_number(r"^\d{8,11}$"),  # Ecuador
+    "+20": _national_number(r"^\d{8,10}$"),  # Egypt
+    "+503": _national_number(r"^(?:\d{7,8}|\d{11})$"),  # El Salvador
     "+240": _national_number(r"^\d{9}$"),  # Equatorial Guinea
     "+291": _national_number(r"^\d{7}$"),  # Eritrea
-    "+372": _national_number(r"^\d{7,8}$"),  # Estonia
-    "+268": _national_number(r"^\d{8}$"),  # Eswatini
+    "+372": _national_number(r"^(?:\d{7,8}|\d{10})$"),  # Estonia
+    "+268": _national_number(r"^(?:0\d{7}|[1-9]\d{7,8})$", may_start_with_0=True),  # Eswatini
     "+251": _national_number(r"^\d{9}$"),  # Ethiopia
     "+500": _national_number(r"^\d{5}$"),  # Falkland Islands
     "+298": _national_number(r"^\d{6}$"),  # Faroe Islands
-    "+679": _national_number(r"^\d{7}$"),  # Fiji
-    "+358": _national_number(r"^\d{9,10}$"),  # Finland
+    "+679": _national_number(r"^(?:0\d{10}|[1-9]\d{6})$", may_start_with_0=True),  # Fiji
+    "+358": _national_number(r"^\d{5,12}$"),  # Finland
     "+33": _national_number(r"^\d{9}$"),  # France
     "+241": _national_number(r"^\d{7,8}$", may_start_with_0=True),  # Gabon
-    "+220": _national_number(r"^\d{7}$"),  # Gambia
+    "+220": _national_number(r"^(?:\d{7}|\d{9})$"),  # Gambia
     "+995": _national_number(r"^\d{9}$"),  # Georgia
-    "+49": _national_number(r"^\d{10,11}$"),  # Germany
-    "+233": _national_number(r"^\d{9}$"),  # Ghana
+    "+49": _national_number(r"^\d{5,15}$"),  # Germany
+    "+233": _national_number(r"^\d{8,9}$"),  # Ghana
     "+350": _national_number(r"^\d{8}$"),  # Gibraltar
-    "+30": _national_number(r"^\d{10}$"),  # Greece
+    "+30": _national_number(r"^\d{10,12}$"),  # Greece
     "+299": _national_number(r"^\d{6}$"),  # Greenland
-    "+502": _national_number(r"^\d{8}$"),  # Guatemala
-    "+224": _national_number(r"^\d{9}$"),  # Guinea
-    "+245": _national_number(r"^\d{7}$"),  # Guinea-Bissau
+    "+502": _national_number(r"^(?:\d{8}|\d{11})$"),  # Guatemala
+    "+224": _national_number(r"^\d{8,9}$"),  # Guinea
+    "+245": _national_number(r"^(?:\d{7}|\d{9})$"),  # Guinea-Bissau
     "+592": _national_number(r"^\d{7}$"),  # Guyana
     "+509": _national_number(r"^\d{8}$"),  # Haiti
-    "+504": _national_number(r"^\d{8}$"),  # Honduras
-    "+852": _national_number(r"^\d{8}$"),  # Hong Kong
+    "+504": _national_number(r"^(?:\d{8}|\d{11})$"),  # Honduras
+    "+852": _national_number(r"^(?:\d{5,9}|\d{11})$"),  # Hong Kong
     "+36": _national_number(r"^\d{8,9}$"),  # Hungary
-    "+354": _national_number(r"^\d{7}$"),  # Iceland
-    "+91": _national_number(r"^\d{10}$"),  # India
-    "+62": _national_number(r"^\d{9,11}$"),  # Indonesia
-    "+98": _national_number(r"^\d{10}$"),  # Iran
-    "+964": _national_number(r"^\d{10}$"),  # Iraq
-    "+353": _national_number(r"^\d{9}$"),  # Ireland
-    "+972": _national_number(r"^\d{9}$"),  # Israel
-    "+39": _national_number(r"^(?:0\d{5,11}|[1-9]\d{8,9})$", may_start_with_0=True),  # Italy
+    "+354": _national_number(r"^(?:\d{7}|\d{9})$"),  # Iceland
+    "+91": _national_number(r"^\d{9,13}$"),  # India
+    "+62": _national_number(r"^\d{7,12}$"),  # Indonesia
+    "+98": _national_number(r"^(?:\d{6,7}|\d{10})$"),  # Iran
+    "+964": _national_number(r"^\d{8,10}$"),  # Iraq
+    "+353": _national_number(r"^\d{7,10}$"),  # Ireland
+    "+972": _national_number(r"^\d{8,12}$"),  # Israel
+    "+39": _national_number(r"^(?:0\d{5,11}|[1-9](?:\d{5}|\d{7,11}))$", may_start_with_0=True),  # Italy
     "+225": _national_number(r"^\d{10}$", may_start_with_0=True),  # Ivory Coast
-    "+81": _national_number(r"^\d{10}$"),  # Japan
-    "+962": _national_number(r"^\d{9}$"),  # Jordan
-    "+7": _national_number(r"^\d{10}$"),  # Kazakhstan / Russia
-    "+254": _national_number(r"^\d{9}$"),  # Kenya
+    "+81": _national_number(r"^\d{9,10}$"),  # Japan
+    "+962": _national_number(r"^\d{8,9}$"),  # Jordan
+    "+7": _national_number(r"^(?:\d{10}|\d{14})$"),  # Kazakhstan / Russia
+    "+254": _national_number(r"^\d{7,10}$"),  # Kenya
     "+686": _national_number(r"^(?:\d{5}|\d{8})$"),  # Kiribati
-    "+383": _national_number(r"^\d{8,9}$"),  # Kosovo
-    "+965": _national_number(r"^\d{8}$"),  # Kuwait
-    "+996": _national_number(r"^\d{9}$"),  # Kyrgyzstan
-    "+856": _national_number(r"^\d{8}$"),  # Laos
+    "+383": _national_number(r"^\d{8,12}$"),  # Kosovo
+    "+965": _national_number(r"^\d{7,8}$"),  # Kuwait
+    "+996": _national_number(r"^\d{9,10}$"),  # Kyrgyzstan
+    "+856": _national_number(r"^\d{8,10}$"),  # Laos
     "+371": _national_number(r"^\d{8}$"),  # Latvia
     "+961": _national_number(r"^\d{7,8}$"),  # Lebanon
     "+266": _national_number(r"^\d{8}$"),  # Lesotho
-    "+231": _national_number(r"^\d{7,8}$"),  # Liberia
+    "+231": _national_number(r"^\d{7,9}$"),  # Liberia
     "+218": _national_number(r"^\d{9}$"),  # Libya
-    "+423": _national_number(r"^\d{7}$"),  # Liechtenstein
+    "+423": _national_number(r"^(?:\d{7}|\d{9})$"),  # Liechtenstein
     "+370": _national_number(r"^\d{8}$"),  # Lithuania
-    "+352": _national_number(r"^\d{8,9}$"),  # Luxembourg
-    "+853": _national_number(r"^\d{8}$"),  # Macau
+    "+352": _national_number(r"^\d{4,11}$"),  # Luxembourg
+    "+853": _national_number(r"^(?:0\d{6}|[1-9]\d{7})$", may_start_with_0=True),  # Macau
     "+261": _national_number(r"^\d{9}$"),  # Madagascar
-    "+265": _national_number(r"^\d{9}$"),  # Malawi
-    "+60": _national_number(r"^\d{9,10}$"),  # Malaysia
-    "+960": _national_number(r"^\d{7}$"),  # Maldives
+    "+265": _national_number(r"^(?:\d{7}|\d{9})$"),  # Malawi
+    "+60": _national_number(r"^\d{8,10}$"),  # Malaysia
+    "+960": _national_number(r"^(?:\d{7}|\d{10})$"),  # Maldives
     "+223": _national_number(r"^\d{8}$"),  # Mali
     "+356": _national_number(r"^\d{8}$"),  # Malta
     "+692": _national_number(r"^\d{7}$"),  # Marshall Islands
     "+222": _national_number(r"^\d{8}$"),  # Mauritania
-    "+230": _national_number(r"^\d{8}$"),  # Mauritius
+    "+230": _national_number(r"^(?:\d{7,8}|\d{10})$"),  # Mauritius
     "+52": _national_number(r"^\d{10}$"),  # Mexico
     "+691": _national_number(r"^\d{7}$"),  # Micronesia
     "+373": _national_number(r"^\d{8}$"),  # Moldova
-    "+377": _national_number(r"^\d{8}$"),  # Monaco
-    "+976": _national_number(r"^\d{8}$"),  # Mongolia
-    "+382": _national_number(r"^\d{8}$"),  # Montenegro
+    "+377": _national_number(r"^\d{8,9}$"),  # Monaco
+    "+976": _national_number(r"^\d{8,10}$"),  # Mongolia
+    "+382": _national_number(r"^\d{8,9}$"),  # Montenegro
     "+212": _national_number(r"^\d{9}$"),  # Morocco
-    "+258": _national_number(r"^\d{9}$"),  # Mozambique
-    "+95": _national_number(r"^\d{9,10}$"),  # Myanmar
-    "+264": _national_number(r"^\d{9}$"),  # Namibia
+    "+258": _national_number(r"^\d{8,9}$"),  # Mozambique
+    "+95": _national_number(r"^\d{6,10}$"),  # Myanmar
+    "+264": _national_number(r"^\d{8,9}$"),  # Namibia
     "+674": _national_number(r"^\d{7}$"),  # Nauru
-    "+977": _national_number(r"^\d{10}$"),  # Nepal
-    "+31": _national_number(r"^\d{9}$"),  # Netherlands
-    "+64": _national_number(r"^\d{8,9}$"),  # New Zealand
+    "+977": _national_number(r"^(?:\d{8}|\d{10,11})$"),  # Nepal
+    "+31": _national_number(r"^\d{5,11}$"),  # Netherlands
+    "+64": _national_number(r"^(?:\d{5,6}|\d{8,10})$"),  # New Zealand
     "+505": _national_number(r"^\d{8}$"),  # Nicaragua
-    "+227": _national_number(r"^\d{8}$"),  # Niger
-    "+234": _national_number(r"^\d{10}$"),  # Nigeria
-    "+850": _national_number(r"^\d{10}$"),  # North Korea
+    "+227": _national_number(r"^\d{8}$", may_start_with_0=True),  # Niger
+    "+234": _national_number(r"^\d{10,14}$"),  # Nigeria
+    "+850": _national_number(r"^(?:\d{8}|\d{10})$"),  # North Korea
     "+389": _national_number(r"^\d{8}$"),  # North Macedonia
-    "+47": _national_number(r"^\d{8}$"),  # Norway
-    "+968": _national_number(r"^\d{8}$"),  # Oman
-    "+92": _national_number(r"^\d{10}$"),  # Pakistan
+    "+47": _national_number(r"^(?:0\d{4}|[1-9]\d{7})$", may_start_with_0=True),  # Norway
+    "+968": _national_number(r"^\d{7,9}$"),  # Oman
+    "+92": _national_number(r"^\d{9,12}$"),  # Pakistan
     "+680": _national_number(r"^\d{7}$"),  # Palau
-    "+970": _national_number(r"^\d{8,9}$"),  # Palestine
-    "+507": _national_number(r"^\d{8}$"),  # Panama
-    "+675": _national_number(r"^\d{8}$"),  # Papua New Guinea
-    "+595": _national_number(r"^\d{9}$"),  # Paraguay
-    "+51": _national_number(r"^\d{9}$"),  # Peru
-    "+63": _national_number(r"^\d{10}$"),  # Philippines
-    "+48": _national_number(r"^\d{9}$"),  # Poland
+    "+970": _national_number(r"^\d{8,10}$"),  # Palestine
+    "+507": _national_number(r"^(?:0\d{10}|[1-9](?:\d{6,7}|\d{9}))$", may_start_with_0=True),  # Panama
+    "+675": _national_number(r"^\d{7,8}$"),  # Papua New Guinea
+    "+595": _national_number(r"^\d{7,11}$"),  # Paraguay
+    "+51": _national_number(r"^\d{8,9}$"),  # Peru
+    "+63": _national_number(r"^(?:\d{6}|\d{8,13})$"),  # Philippines
+    "+48": _national_number(r"^\d{6,10}$"),  # Poland
     "+351": _national_number(r"^\d{9}$"),  # Portugal
-    "+974": _national_number(r"^\d{8}$"),  # Qatar
+    "+974": _national_number(r"^(?:0\d{10}|[1-9]\d{6,8})$", may_start_with_0=True),  # Qatar
     "+262": _national_number(r"^\d{9}$"),  # Réunion
-    "+40": _national_number(r"^\d{9}$"),  # Romania
+    "+40": _national_number(r"^(?:\d{6}|\d{9})$"),  # Romania
     "+250": _national_number(r"^\d{9}$"),  # Rwanda
     "+290": _national_number(r"^\d{4,5}$"),  # Saint Helena
-    "+685": _national_number(r"^\d{5,7}$"),  # Samoa
+    "+685": _national_number(r"^(?:\d{5,7}|\d{10})$"),  # Samoa
     "+378": _national_number(r"^\d{8,10}$", may_start_with_0=True),  # San Marino
     "+239": _national_number(r"^\d{7}$"),  # Sao Tome and Principe
-    "+966": _national_number(r"^\d{9}$"),  # Saudi Arabia
+    "+966": _national_number(r"^\d{9,10}$"),  # Saudi Arabia
     "+221": _national_number(r"^\d{9}$"),  # Senegal
-    "+381": _national_number(r"^\d{9}$"),  # Serbia
+    "+381": _national_number(r"^\d{7,12}$"),  # Serbia
     "+248": _national_number(r"^\d{7}$"),  # Seychelles
     "+232": _national_number(r"^\d{8}$"),  # Sierra Leone
-    "+65": _national_number(r"^\d{8}$"),  # Singapore
-    "+421": _national_number(r"^\d{9}$"),  # Slovakia
-    "+386": _national_number(r"^\d{8}$"),  # Slovenia
+    "+65": _national_number(r"^(?:\d{8}|\d{10,11})$"),  # Singapore
+    "+421": _national_number(r"^(?:\d{6,7}|\d{9})$"),  # Slovakia
+    "+386": _national_number(r"^(?:\d{5,6}|\d{8})$"),  # Slovenia
     "+677": _national_number(r"^(?:\d{5}|\d{7})$"),  # Solomon Islands
-    "+252": _national_number(r"^\d{8}$"),  # Somalia
-    "+27": _national_number(r"^\d{9}$"),  # South Africa
-    "+82": _national_number(r"^\d{9,10}$"),  # South Korea
+    "+252": _national_number(r"^\d{6,9}$"),  # Somalia
+    "+27": _national_number(r"^\d{5,10}$"),  # South Africa
+    "+82": _national_number(r"^(?:\d{5,6}|\d{8,11})$"),  # South Korea
     "+211": _national_number(r"^\d{9}$"),  # South Sudan
     "+34": _national_number(r"^\d{9}$"),  # Spain
     "+94": _national_number(r"^\d{9}$"),  # Sri Lanka
     "+249": _national_number(r"^\d{9}$"),  # Sudan
-    "+597": _national_number(r"^\d{7}$"),  # Suriname
-    "+46": _national_number(r"^\d{9}$"),  # Sweden
-    "+41": _national_number(r"^\d{9}$"),  # Switzerland
-    "+963": _national_number(r"^\d{9}$"),  # Syria
-    "+886": _national_number(r"^\d{9}$"),  # Taiwan
+    "+597": _national_number(r"^\d{6,7}$"),  # Suriname
+    "+46": _national_number(r"^(?:\d{6,10}|\d{12})$"),  # Sweden
+    "+41": _national_number(r"^(?:\d{9}|\d{12})$"),  # Switzerland
+    "+963": _national_number(r"^\d{8,9}$"),  # Syria
+    "+886": _national_number(r"^\d{7,11}$"),  # Taiwan
     "+992": _national_number(r"^\d{9}$", may_start_with_0=True),  # Tajikistan
     "+255": _national_number(r"^\d{9}$"),  # Tanzania
-    "+66": _national_number(r"^\d{9}$"),  # Thailand
+    "+66": _national_number(r"^\d{8,10}$"),  # Thailand
     "+670": _national_number(r"^\d{7,8}$"),  # Timor-Leste
     "+228": _national_number(r"^\d{8}$"),  # Togo
-    "+676": _national_number(r"^\d{5}$"),  # Tonga
+    "+676": _national_number(r"^(?:0\d{6}|[1-9](?:\d{4}|\d{6}))$", may_start_with_0=True),  # Tonga
     "+216": _national_number(r"^\d{8}$"),  # Tunisia
-    "+90": _national_number(r"^\d{10}$"),  # Turkey
+    "+90": _national_number(r"^(?:\d{7}|\d{10}|\d{12,13})$"),  # Turkey
     "+993": _national_number(r"^\d{8}$"),  # Turkmenistan
     "+688": _national_number(r"^\d{5,7}$"),  # Tuvalu
     "+256": _national_number(r"^\d{9}$"),  # Uganda
-    "+380": _national_number(r"^\d{9}$"),  # Ukraine
-    "+971": _national_number(r"^\d{9}$"),  # UAE
-    "+44": _national_number(r"^\d{10}$"),  # United Kingdom
-    "+598": _national_number(r"^\d{8}$"),  # Uruguay
+    "+380": _national_number(r"^\d{9,10}$"),  # Ukraine
+    "+971": _national_number(r"^(?:\d{5,6}|\d{8,12})$"),  # UAE
+    "+44": _national_number(r"^\d{9,10}$"),  # United Kingdom
+    "+598": _national_number(r"^(?:\d{4,5}|\d{8})$"),  # Uruguay
     "+998": _national_number(r"^\d{9}$"),  # Uzbekistan
     "+678": _national_number(r"^(?:\d{5}|\d{7})$"),  # Vanuatu
     "+58": _national_number(r"^\d{10}$"),  # Venezuela
-    "+84": _national_number(r"^\d{9,10}$"),  # Vietnam
-    "+967": _national_number(r"^\d{9}$"),  # Yemen
+    "+84": _national_number(r"^\d{7,10}$"),  # Vietnam
+    "+967": _national_number(r"^\d{7,9}$"),  # Yemen
     "+260": _national_number(r"^\d{9}$"),  # Zambia
-    "+263": _national_number(r"^\d{9}$"),  # Zimbabwe
+    "+263": _national_number(r"^\d{9,10}$"),  # Zimbabwe
 }
 
 

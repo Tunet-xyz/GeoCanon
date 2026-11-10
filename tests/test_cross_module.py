@@ -38,9 +38,28 @@ LEGACY_ALIASES = {
 # ISO 3166 entries that every lookup accepts but the jurisdiction list leaves out.
 ISO_ONLY = {"Aruba", "Curacao", "Palestine"}
 ACCEPTED_NAMES = JURISDICTION_NAMES | set(LEGACY_ALIASES) | ISO_ONLY
-# Dial codes whose national numbers can start with 0 (Italy, Côte d'Ivoire, Burkina
-# Faso, Benin, Gabon, Congo, San Marino, Tajikistan). Every other pattern refuses it.
-ZERO_LED_DIAL_CODES = {"+39", "+225", "+226", "+229", "+241", "+242", "+378", "+992"}
+# Dial codes whose national numbers can start with 0, in countries with no trunk prefix
+# to confuse that 0 with. Every other pattern refuses a leading 0.
+ZERO_LED_DIAL_CODES = {
+    "+39",  # Italy, Vatican City
+    "+47",  # Norway: 0[235-9]xxx UAN numbers
+    "+225",  # Côte d'Ivoire
+    "+226",  # Burkina Faso
+    "+227",  # Niger: 08 toll-free and 09 premium-rate numbers
+    "+229",  # Benin
+    "+241",  # Gabon
+    "+242",  # Congo
+    "+267",  # Botswana: 0800 toll-free numbers
+    "+268",  # Eswatini: 0800 toll-free numbers
+    "+378",  # San Marino
+    "+501",  # Belize: 0800 toll-free numbers
+    "+507",  # Panama: 00800 toll-free numbers
+    "+676",  # Tonga: 0800 toll-free numbers
+    "+679",  # Fiji: 0800 toll-free numbers
+    "+853",  # Macau: 0800 toll-free numbers
+    "+974",  # Qatar: 0080x toll-free numbers
+    "+992",  # Tajikistan
+}
 
 TABLES = {
     "address formats": JURISDICTION_ADDRESS_FORMAT,

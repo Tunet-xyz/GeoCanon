@@ -65,7 +65,7 @@ class TestPhoneValidation:
         assert validate_phone("0612345678", "+39") is True
         assert validate_phone("03311234567", "+39") is True
         assert validate_phone("3123456789", "+39") is True
-        assert validate_phone("31234567", "+39") is False
+        assert validate_phone("3123456", "+39") is False
 
     def test_phone_patterns_all_compiled(self):
         import re
@@ -144,12 +144,130 @@ class TestFallbackTrunkPrefixes:
             ("+229 97 12 34 56", "Benin"),  # 8-digit numbers ended on 2024-11-30
             ("0612345678", "Spain"),  # Spain has no trunk prefix
             ("012345678", "France"),  # the trunk 0 is not one of the nine digits
-            ("0712345678", "United Kingdom"),
+            ("071234567", "United Kingdom"),  # UK numbers have 9 or 10 digits
             ("02 1234 5678", "United States"),
+            ("253-0000", "United States"),  # a local number without its area code
         ],
     )
     def test_rejects(self, number, jurisdiction):
         assert validate_phone_number(number, jurisdiction) is False
+
+
+class TestLibphonenumberLengths:
+    """
+    The fallback patterns allow the lengths libphonenumber gives each dial code.
+
+    tests/phone_examples.json freezes libphonenumber 9.0.43's data, so these tests
+    give the same answer whichever phonenumbers version is installed, if any.
+    """
+
+    # Gabon and San Marino keep lengths they allowed before; libphonenumber has fewer.
+    WIDER_THAN_LIBPHONENUMBER = {"+241", "+378"}
+
+    @staticmethod
+    def _data() -> dict:
+        import json
+        from pathlib import Path
+
+        return json.loads(Path(__file__).with_name("phone_examples.json").read_text("utf-8"))
+
+    def test_the_data_covers_every_dial_code(self):
+        data = self._data()
+        assert sorted(data["lengths"]) == sorted(PHONE_PATTERNS)
+        assert sorted(data["national_numbers"]) == sorted(PHONE_PATTERNS)
+
+    def test_patterns_allow_the_libphonenumber_lengths_and_no_others(self):
+        for code, lengths in self._data()["lengths"].items():
+            pattern = PHONE_PATTERNS[code]
+            starts_with_0 = [n for n in range(2, 21) if pattern.fullmatch("01" + "5" * (n - 2))]
+            other = [n for n in range(1, 21) if pattern.fullmatch("5" * n)]
+            if code in self.WIDER_THAN_LIBPHONENUMBER:
+                assert set(lengths["starts_with_0"]) <= set(starts_with_0), code
+                assert set(lengths["other"]) <= set(other), code
+            else:
+                assert starts_with_0 == lengths["starts_with_0"], code
+                assert other == lengths["other"], code
+
+    def test_example_national_numbers_validate(self):
+        failures = [
+            (code, number)
+            for code, numbers in self._data()["national_numbers"].items()
+            for number in numbers
+            if not validate_phone(number, code)
+        ]
+        assert failures == []
+
+    def test_examples_pass_the_fallback_as_people_write_them(self, monkeypatch):
+        import geo_canon.dial_codes as dial_codes
+
+        monkeypatch.setattr(dial_codes, "_phonenumbers", None)
+        failures = [
+            (jurisdiction, text)
+            for jurisdiction, texts in self._data()["written"].items()
+            for text in texts
+            if not validate_phone_number(text, jurisdiction)
+        ]
+        assert failures == []
+
+    @pytest.mark.parametrize(
+        ("number", "jurisdiction"),
+        [
+            ("+49 3012", "Germany"),  # German numbers have 5 to 15 digits
+            ("+46 81234", "Sweden"),
+            ("+81 3 1234 567", "Japan"),
+            ("+245 95 501 234", "Guinea-Bissau"),
+            ("+856 20 2312 34567", "Laos"),
+            ("+377 6 12 34 56 789", "Monaco"),
+            ("+676 771 51234", "Tonga"),
+        ],
+    )
+    def test_wrong_lengths_still_fail(self, monkeypatch, number, jurisdiction):
+        import geo_canon.dial_codes as dial_codes
+
+        monkeypatch.setattr(dial_codes, "_phonenumbers", None)
+        assert validate_phone_number(number, jurisdiction) is False
+
+    @pytest.mark.parametrize(
+        ("number", "dial_code"),
+        [
+            ("30123456", "+49"),  # Berlin fixed line
+            ("8123456", "+46"),  # Stockholm fixed line
+            ("312345678", "+81"),  # Tokyo fixed line
+            ("955012345", "+245"),  # Guinea-Bissau mobile
+            ("2023123456", "+856"),  # Laos mobile
+            ("770123456", "+231"),  # Liberia mobile
+            ("612345678", "+377"),  # Monaco mobile
+            ("7715123", "+676"),  # Tonga mobile
+            ("8001234567890", "+49"),  # German toll-free
+        ],
+    )
+    def test_real_numbers_of_other_lengths(self, number, dial_code):
+        assert validate_phone(number, dial_code) is True
+
+    @pytest.mark.parametrize(
+        ("number", "jurisdiction"),
+        [
+            ("+501 0800 123 4123", "Belize"),
+            ("0800 012 345", "Botswana"),
+            ("02000", "Norway"),
+            ("+227 08 12 34 56", "Niger"),
+            ("0800 222", "Tonga"),
+        ],
+    )
+    def test_a_leading_0_stays_where_there_is_no_trunk_prefix(
+        self, monkeypatch, number, jurisdiction
+    ):
+        import geo_canon.dial_codes as dial_codes
+
+        monkeypatch.setattr(dial_codes, "_phonenumbers", None)
+        assert validate_phone_number(number, jurisdiction) is True
+
+    def test_local_only_lengths_stay_out(self):
+        # A length that libphonenumber only knows for local numbers dialled without the
+        # area code stays out, even where a rare number type uses it (Canada's 310-1234).
+        assert validate_phone("2530000", "+1") is False
+        assert validate_phone("3101234", "+1") is False
+        assert validate_phone("9460958", "+44") is False
 
 
 class TestPhoneNumbersExtra:
