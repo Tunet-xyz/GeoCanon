@@ -61,7 +61,7 @@ JURISDICTION_CURRENCY: dict[str, CurrencyInfo] = {
     "Botswana": CurrencyInfo("BWP", _("Botswanan Pula"), "P", 2),
     "Brazil": CurrencyInfo("BRL", _("Brazilian Real"), "R$", 2),
     "Brunei": CurrencyInfo("BND", _("Brunei Dollar"), "B$", 2),
-    "Bulgaria": CurrencyInfo("BGN", _("Bulgarian Lev"), "лв", 2),
+    "Bulgaria": CurrencyInfo("EUR", _("Euro"), "€", 2),
     "Burkina Faso": CurrencyInfo("XOF", _("West African CFA Franc"), "CFA", 0),
     "Burundi": CurrencyInfo("BIF", _("Burundian Franc"), "FBu", 0),
     "Cabo Verde": CurrencyInfo("CVE", _("Cape Verdean Escudo"), "$", 2),
@@ -82,7 +82,7 @@ JURISDICTION_CURRENCY: dict[str, CurrencyInfo] = {
     "Cote d'Ivoire": CurrencyInfo("XOF", _("West African CFA Franc"), "CFA", 0),
     "Croatia": CurrencyInfo("EUR", _("Euro"), "€", 2),
     "Cuba": CurrencyInfo("CUP", _("Cuban Peso"), "$", 2),
-    "Curacao": CurrencyInfo("ANG", _("Netherlands Antillean Guilder"), "ƒ", 2),
+    "Curacao": CurrencyInfo("XCG", _("Caribbean Guilder"), "Cg", 2),
     "Cyprus": CurrencyInfo("EUR", _("Euro"), "€", 2),
     "Czech Republic": CurrencyInfo("CZK", _("Czech Koruna"), "Kč", 2),
     "Democratic Republic of Congo": CurrencyInfo("CDF", _("Congolese Franc"), "FC", 2),
@@ -240,23 +240,38 @@ JURISDICTION_CURRENCY: dict[str, CurrencyInfo] = {
     "Vietnam": CurrencyInfo("VND", _("Vietnamese Đồng"), "₫", 0),
     "Yemen": CurrencyInfo("YER", _("Yemeni Rial"), "﷼", 2),
     "Zambia": CurrencyInfo("ZMW", _("Zambian Kwacha"), "ZK", 2),
-    "Zimbabwe": CurrencyInfo("ZWL", _("Zimbabwean Dollar"), "Z$", 2),
+    "Zimbabwe": CurrencyInfo("ZWG", _("Zimbabwe Gold"), "ZiG", 2),
 }
 
 
 # ---------------------------------------------------------------------------
-# ISO 4217 code → CurrencyInfo (deduplicated — many jurisdictions share EUR)
+# Withdrawn currencies: no jurisdiction uses them any more, but stored amounts
+# may still name them, so get_currency_by_code() keeps resolving them.
+# CURRENCY_CHOICES leaves them out.
 # ---------------------------------------------------------------------------
 
-CURRENCY_BY_CODE: dict[str, CurrencyInfo] = {}
+_WITHDRAWN_CURRENCIES: dict[str, CurrencyInfo] = {
+    "ANG": CurrencyInfo("ANG", _("Netherlands Antillean Guilder"), "ƒ", 2),  # XCG from 2025-03-31
+    "BGN": CurrencyInfo("BGN", _("Bulgarian Lev"), "лв", 2),  # EUR from 2026-01-01
+    "ZWL": CurrencyInfo("ZWL", _("Zimbabwean Dollar"), "Z$", 2),  # ZWG from April 2024
+}
+
+
+# ---------------------------------------------------------------------------
+# ISO 4217 code → CurrencyInfo (deduplicated — many jurisdictions share EUR):
+# the currencies in use, then the withdrawn ones
+# ---------------------------------------------------------------------------
+
+_CURRENT_BY_CODE: dict[str, CurrencyInfo] = {}
 for _info in JURISDICTION_CURRENCY.values():
-    if _info.code not in CURRENCY_BY_CODE:
-        CURRENCY_BY_CODE[_info.code] = _info
+    _CURRENT_BY_CODE.setdefault(_info.code, _info)
+
+CURRENCY_BY_CODE: dict[str, CurrencyInfo] = {**_CURRENT_BY_CODE, **_WITHDRAWN_CURRENCIES}
 
 
 # ---------------------------------------------------------------------------
-# Django form choices sorted by currency name. Keep labels lazy so importing
-# geo_canon does not require Django settings to be configured.
+# Django form choices for the currencies in use, sorted by currency name. Keep
+# labels lazy so importing geo_canon does not require Django settings.
 # ---------------------------------------------------------------------------
 
 
@@ -266,7 +281,7 @@ def _lazy_source_text(value: Any) -> str:
 
 CURRENCY_CHOICES: list[tuple[str, str | Promise]] = [
     (info.code, format_lazy("{} ({})", info.name, info.code))
-    for info in sorted(CURRENCY_BY_CODE.values(), key=lambda item: _lazy_source_text(item.name))
+    for info in sorted(_CURRENT_BY_CODE.values(), key=lambda item: _lazy_source_text(item.name))
 ]
 
 
@@ -314,6 +329,8 @@ def get_currency_choices() -> list[tuple[str, str | Promise]]:
     """
     Return a list of ``(code, label)`` tuples suitable for a Django
     ``ChoiceField``.  Deduplicated and sorted alphabetically by label.
+    Only currencies a jurisdiction uses today are offered; withdrawn ones
+    such as ``BGN`` are left out.
     """
     return list(CURRENCY_CHOICES)
 
@@ -321,6 +338,9 @@ def get_currency_choices() -> list[tuple[str, str | Promise]]:
 def get_currency_by_code(code: str) -> CurrencyInfo | None:
     """
     Look up a currency by its ISO 4217 code.
+
+    Withdrawn codes such as ``BGN`` still resolve, so stored amounts can be
+    shown in the currency they were recorded in.
 
     >>> from geo_canon.currencies import get_currency_by_code
     >>> get_currency_by_code("EUR").symbol

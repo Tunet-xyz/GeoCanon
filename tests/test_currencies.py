@@ -3,6 +3,7 @@
 from decimal import Decimal
 
 from geo_canon.currencies import (
+    _WITHDRAWN_CURRENCIES,
     CURRENCY_BY_CODE,
     CURRENCY_CHOICES,
     JURISDICTION_CURRENCY,
@@ -168,3 +169,39 @@ class TestFormatCurrency:
     def test_decimal_input(self):
         result = format_currency(Decimal("99.999"), "United States")
         assert result == "$100.00"
+
+
+class TestReplacedCurrencies:
+    """Bulgaria, Zimbabwe and Curacao replaced their currencies in 2024-2026."""
+
+    def test_bulgaria_uses_the_euro(self):
+        assert get_currency_for_jurisdiction("Bulgaria") == get_currency_for_jurisdiction("Germany")
+        assert format_currency(1234.5, "Bulgaria") == "€1,234.50"
+
+    def test_zimbabwe_uses_zimbabwe_gold(self):
+        info = get_currency_for_jurisdiction("Zimbabwe")
+        assert info is not None
+        assert (info.code, info.symbol, info.decimal_places) == ("ZWG", "ZiG", 2)
+        assert str(info.name) == "Zimbabwe Gold"
+
+    def test_curacao_uses_the_caribbean_guilder(self):
+        info = get_currency_for_jurisdiction("Curacao")
+        assert info is not None
+        assert (info.code, info.symbol, info.decimal_places) == ("XCG", "Cg", 2)
+        assert str(info.name) == "Caribbean Guilder"
+
+    def test_no_jurisdiction_uses_a_withdrawn_currency(self):
+        in_use = {info.code for info in JURISDICTION_CURRENCY.values()}
+        assert sorted(in_use & set(_WITHDRAWN_CURRENCIES)) == []
+
+    def test_withdrawn_codes_still_resolve_for_stored_amounts(self):
+        for code in ("BGN", "ZWL", "ANG"):
+            assert get_currency_by_code(code) == _WITHDRAWN_CURRENCIES[code]
+            assert get_currency_by_code(code.lower()) == _WITHDRAWN_CURRENCIES[code]
+        assert get_currency_by_code("BGN").symbol == "лв"
+
+    def test_choices_offer_only_currencies_in_use(self):
+        choice_codes = {code for code, _label in CURRENCY_CHOICES}
+        assert {"EUR", "ZWG", "XCG"} <= choice_codes
+        assert sorted(choice_codes & set(_WITHDRAWN_CURRENCIES)) == []
+        assert choice_codes == {info.code for info in JURISDICTION_CURRENCY.values()}

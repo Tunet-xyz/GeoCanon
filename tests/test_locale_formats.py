@@ -56,6 +56,11 @@ class TestLocaleFallbacks:
         assert format_currency_locale(1234.565, "Narnia", currency_code="XYZ") == (
             "1,234.57 XYZ"
         )
+        # A stored amount in a withdrawn currency keeps its own symbol and code.
+        assert format_currency_locale(1234.5, "Bulgaria", currency_code="BGN") == (
+            "лв1,234.50 BGN"
+        )
+        assert format_currency_locale(1234.5, "Bulgaria") == "€1,234.50"
 
     def test_currency_code_override_when_babel_rejects_the_locale(self):
         import pytest
