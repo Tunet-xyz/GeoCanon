@@ -43,32 +43,32 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "Django>=4.2,<7",
+  "Django>=5.2.19,<7",
 ]
 
 [project.optional-dependencies]
-holidays = ["holidays>=0.66"]
-timezones = ["pytz>=2023.3"]
-phones = ["phonenumbers>=8.13"]
-locale = ["Babel>=2.14"]
-validation = ["pydantic>=2,<3"]
+holidays = ["holidays>=0.107"]
+timezones = ["pytz>=2026.6"]
+phones = ["phonenumbers>=9.0.43"]
+locale = ["Babel>=2.18.0"]
+validation = ["pydantic>=2.14.3,<3"]
 all = [
-  "holidays>=0.66",
-  "pytz>=2023.3",
-  "phonenumbers>=8.13",
-  "Babel>=2.14",
-  "pydantic>=2,<3",
+  "holidays>=0.107",
+  "pytz>=2026.6",
+  "phonenumbers>=9.0.43",
+  "Babel>=2.18.0",
+  "pydantic>=2.14.3,<3",
 ]
 dev = [
-  "bandit>=1.7",
+  "bandit>=1.9.4",
   "build>=1.5",
-  "pip-audit>=2.7",
-  "pytest>=7.0.0",
-  "pytest-cov>=4.0.0",
-  "pytest-django>=4.5.0",
-  "mypy>=1.0.0",
-  "ruff>=0.1.0",
-  "django-stubs>=4.2.0",
+  "pip-audit>=2.10.1",
+  "pytest>=9.2.0",
+  "pytest-cov>=7.1.0",
+  "pytest-django>=4.14.0",
+  "mypy>=2.4.1",
+  "ruff>=0.17.4",
+  "django-stubs>=6.0.9",
   "tomli>=2; python_version < '3.11'",
 ]
 
