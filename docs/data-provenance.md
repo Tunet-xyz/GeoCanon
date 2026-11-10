@@ -18,6 +18,8 @@ GeoCanon's data model follows these public standards and upstream datasets:
 
 The repository currently maintains the core jurisdiction, code, timezone, language, currency, dial-code, and address mappings directly. It does not automatically synchronize those tables from upstream services during installation or runtime.
 
+The trunk prefixes that the phone fallback drops come from libphonenumber's national-prefix metadata (checked against `phonenumbers` 9.0.43), and the fallback patterns follow numbering changes such as Benin's move to ten-digit numbers on 2024-11-30. On 2026-11-10 the currency table was checked against ISO 4217 and the CLDR 47 territory currencies, and updated for Zimbabwe's ZWG (April 2024), Curaçao's XCG (2025-03-31), and Bulgaria's euro (2026-01-01); the [currencies guide](currencies.md#withdrawn-currencies) lists the conversion rates from the issuing central banks.
+
 ## Update policy
 
 - Review bundled mappings before each minor release and record material additions, removals, and renames in `CHANGELOG.md`.
@@ -34,6 +36,7 @@ Corrections should include a primary-source reference in the pull request or iss
 - Postal formats and labels vary within jurisdictions and change over time. Validate addresses through an authoritative delivery provider when deliverability matters.
 - Holiday coverage and naming depend on the installed `holidays` version. GeoCanon asks for national holidays only; it does not pass subdivisions.
 - Phone validity and formatting depend on `phonenumbers` metadata; a syntactically valid number is not proof that the number exists or belongs to a user.
+- Without the `phones` extra, phone checks use GeoCanon's own patterns, which are approximations (mostly digit counts) and reject some real numbers.
 - Locale formatting is presentation logic, not tax, accounting, accessibility, or legal advice.
 - Jurisdiction names and boundaries can be disputed. Applications with policy or legal consequences should maintain their own reviewed overrides and decision records.
 

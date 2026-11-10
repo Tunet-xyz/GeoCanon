@@ -74,11 +74,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   only ASCII digits, letters, and whitespace: trailing newlines, full-width or
   Arabic-Indic digits, the Kelvin sign, and no-break spaces now fail. Normalize
   input before validating it.
+- Without the `phones` extra, `validate_phone_number` drops only the country's
+  own trunk prefix, from libphonenumber's national-prefix data, instead of any
+  leading 0: 0 in most countries, 1 in the `+1` countries and the Marshall
+  Islands, 8 in Russia, Kazakhstan, and Turkmenistan, 06 in Hungary, 0 or the
+  older 8 in Lithuania, and 0, 80, or 8 in Belarus. A 1 or an 8 is dropped
+  only when the digits after it form a valid number, so `+7 812 ...` keeps its
+  area code. Numbers whose leading 0 is part of the number now validate
+  (Côte d'Ivoire, Benin, Congo's 06 mobiles, and the 0-led mobiles of Burkina
+  Faso and Tajikistan), and so do national numbers written with their trunk
+  prefix, such as `"8 (912) 345-67-89"`. A stray leading 0 where the country
+  has no trunk prefix, such as Spain's `"0612345678"`, now fails, as it does
+  with `phonenumbers`.
+- Phone patterns refuse a leading 0 except for the dial codes whose numbers can
+  start with one (`+39`, `+225`, `+226`, `+229`, `+241`, `+242`, `+378`,
+  `+992`), so `validate_phone("0123456789", "+44")` is now `False`: pass the
+  national number without its trunk prefix. Benin's pattern is `^01\d{8}$`, for
+  the ten-digit numbers in use since 2024-11-30; put `01` in front of stored
+  eight-digit numbers. Hungary accepts its 8-digit fixed lines, Gabon its
+  8-digit numbers, and Italy's fixed lines keep their leading 0 and have 6 to
+  12 digits.
 - `format_address` places `name` and `company` for every registered template,
   China's template shows the postal code, the 18 jurisdictions that require a
   state show it, and whitespace inside each line is normalized.
 - `format_currency_locale(..., currency_code=...)` uses the requested currency's
   symbol, decimals, and code when Babel is missing or rejects the locale.
+- Bulgaria uses the euro (`EUR`) since 2026-01-01, Zimbabwe uses Zimbabwe Gold
+  (`ZWG`, "ZiG") since April 2024, and Curaçao uses the Caribbean guilder
+  (`XCG`, "Cg") since 2025-03-31, instead of `BGN`, `ZWL`, and `ANG`.
+  `get_currency_code()`, `format_currency()`, and the other jurisdiction
+  lookups return the new currencies.
+- `CURRENCY_CHOICES` and `get_currency_choices()` offer only the currencies in
+  use: `ZWG` and `XCG` are new, and `BGN`, `ZWL`, and `ANG` are gone.
+  `CURRENCY_BY_CODE` and `get_currency_by_code()` still resolve the withdrawn
+  codes, with their old names, symbols, and decimals, so stored amounts keep
+  their currency. A Django field whose choices come from `CURRENCY_CHOICES`
+  needs a new migration, and a ModelForm, the admin, or `full_clean()` then
+  rejects a stored `BGN`, `ZWL`, or `ANG`: convert it, or add the old code to
+  the field's choices. The
+  [currencies guide](docs/currencies.md#withdrawn-currencies) gives the
+  conversion rates.
 - Exception messages show at most the last two digits of a phone number and
   quote other caller values escaped and cut to 64 characters.
 - Without `pytz`, an unknown timezone name raises `ZoneInfoNotFoundError`;
