@@ -176,7 +176,8 @@ GeoCanon includes a local stdio MCP server:
 geocanon-mcp
 ```
 
-From a source checkout, run `python mcp/server.py`. Its tools return guidance
+`python -m geo_canon.mcp` starts the same server. From a source checkout, run
+`python mcp/server.py`. Its tools return guidance
 for settings, forms, middleware, and locale workflows; the calling agent writes
 any code, for a person to review. It runs locally under the caller's control,
 makes no network connections, and needs no credentials or account. See
