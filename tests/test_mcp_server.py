@@ -1,5 +1,6 @@
 """Regression checks for the local public-contract protocol boundary."""
 
+import io
 import json
 import os
 import subprocess
@@ -8,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from geo_canon.mcp.server import MAX_MESSAGE_CHARS, handle, load_contract, parse_message
+from geo_canon.mcp.server import MAX_MESSAGE_CHARS, handle, load_contract, main, parse_message
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ENV = {**os.environ, "PYTHONPATH": str(ROOT / "src")}
@@ -160,10 +161,26 @@ def test_tool_results_say_they_return_contract_guidance():
         assert not tool["description"].startswith(("Generate", "Draft")), tool["name"]
 
 
-def test_error_details_are_bounded():
+def test_error_details_are_bounded(monkeypatch, capsys):
     reply = call("tools/call", {"name": "x" * 100_000, "arguments": {}})
     assert reply["error"]["code"] == -32602
     assert len(reply["error"]["message"]) < 400
+
+    unknown_method = call("m" * 1000, {})
+    assert unknown_method["error"] == {
+        "code": -32601,
+        "message": "Method not found: " + "m" * 200 + "...",
+    }
+
+    key = "k" * 1000
+    monkeypatch.setattr(sys, "stdin", io.StringIO(f'{{"{key}":1,"{key}":2}}\n'))
+    main()
+    duplicate = json.loads(capsys.readouterr().out)
+    assert duplicate["error"] == {
+        "code": -32700,
+        "message": "Parse error",
+        "data": {"detail": ("Duplicate JSON object key: " + key)[:200] + "..."},
+    }
 
 
 @pytest.mark.parametrize(

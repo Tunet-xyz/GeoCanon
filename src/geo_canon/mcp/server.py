@@ -352,7 +352,7 @@ def handle(message: object, contract: dict[str, Any]) -> dict[str, Any] | None:
                 raise TypeError("prompt name and arguments have invalid types")
             response = result(request_id, get_prompt(contract, name, dict(arguments)))
         else:
-            response = error(request_id, -32601, f"Method not found: {method}")
+            response = error(request_id, -32601, f"Method not found: {_shorten(method)}")
     except (KeyError, TypeError, ValueError) as exc:
         response = error(request_id, -32602, f"Unknown or invalid parameter: {_shorten(exc)}")
     except Exception as exc:  # pragma: no cover - defensive protocol boundary
@@ -379,7 +379,7 @@ def main() -> None:
         try:
             message = parse_message(line)
         except (json.JSONDecodeError, RecursionError, TypeError, ValueError) as exc:
-            write_message(error(None, -32700, "Parse error", {"detail": str(exc)}))
+            write_message(error(None, -32700, "Parse error", {"detail": _shorten(exc)}))
             continue
         response = handle(message, contract)
         if response is not None:
